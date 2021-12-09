@@ -28,5 +28,5 @@ $(':header').each((index, element) => {
   $(element).prepend(`<span class="section-num">${sectionNumber}</span>`);
 
   // Add section id to <section>s
-  console.log($(element).parent().prop('id', `section-${sectionNumber.replace('.', '-')}`));
+  $(element).parent().prop('id', `section-${sectionNumber.replace('.', '-')}`);
 });
