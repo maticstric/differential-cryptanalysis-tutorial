@@ -27,5 +27,5 @@ $(':header').each((index, element) => {
   sectionNumber = sectionNumber.slice(0, -1);
 
   // Add in the section number
-  element.innerHTML = element.innerHTML.replace(/<\/span>/, `${sectionNumber}</span>&emsp;`);
+  element.innerHTML = element.innerHTML.replace(/<\/span>/, `${sectionNumber}</span>`);
 });
