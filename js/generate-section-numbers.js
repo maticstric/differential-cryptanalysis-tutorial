@@ -24,6 +24,11 @@ $(':header').each((index, element) => {
 
   sectionNumber = sectionNumber.slice(0, -1);
 
+  // Add section-title span around the section title
+  $(element).contents().filter(function(){
+    return this.nodeType === 3;
+  }).wrap('<span class="section-title"></span>');
+
   // Add in the section number
   $(element).prepend(`<span class="section-num">${sectionNumber}</span>`);
 
