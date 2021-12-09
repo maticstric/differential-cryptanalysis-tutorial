@@ -1,8 +1,6 @@
 // Section levels for tags h2-h6 (h1 won't be used)
 sectionLevelNumbers = [0, 0, 0, 0, 0]
 
-$(':header').prepend('<span class="section-num"></span>');
-
 $(':header').each((index, element) => {
   let level = Number(element.nodeName[1]);
 
@@ -27,5 +25,8 @@ $(':header').each((index, element) => {
   sectionNumber = sectionNumber.slice(0, -1);
 
   // Add in the section number
-  element.innerHTML = element.innerHTML.replace(/<\/span>/, `${sectionNumber}</span>`);
+  $(element).prepend(`<span class="section-num">${sectionNumber}</span>`);
+
+  // Add section id to <section>s
+  console.log($(element).parent().prop('id', `section-${sectionNumber.replace('.', '-')}`));
 });
