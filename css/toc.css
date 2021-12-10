@@ -60,5 +60,9 @@
 }
 
 #toc > ol > li > ol > li > ol > li > div.section-header {
+  font-size: 0.9em;
+}
+
+#toc > ol > li > ol > li > ol > li > ol > li > div.section-header {
   font-size: 0.8em;
 }

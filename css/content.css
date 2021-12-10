@@ -2,8 +2,8 @@ h1 { font-size: 3em; }
 h2 { font-size: 2em; }
 h3 { font-size: 1.5em; }
 h4 { font-size: 1.3em; }
-h5 { font-size: 1em; }
-h5 { font-size: 0.8em; }
+h5 { font-size: 1.1em; }
+h6 { font-size: 1em; }
 
 #content {
   flex: 4;
