@@ -1,3 +1,64 @@
+#toc {
+  align-self: flex-start;
+  position: sticky;
+  top: 1em;
+  flex: 1;
+  min-width: 15em;
+  background: var(--second-background);
+  border: 2px solid var(--border);
+  margin-right: 2em;
+}
+
 #toc ol {
   list-style-type: none;
+}
+
+#toc > ol {
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+#toc span.section-num {
+  color: var(--second-text);
+  margin-right: 0.3em;
+}
+
+#toc span.section-title {
+  display: inline-flex;
+  align-items: center;
+}
+
+#toc span.section-num,
+#toc span.section-title {
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  padding-right: 0.2em;
+  padding-left: 0.4em;
+}
+
+#toc div.section-header {
+  display: flex;
+}
+
+#toc div.section-header > a {
+  color: var(--text);
+  text-decoration: none;
+  flex: 1;
+}
+
+#toc div.section-header > a:hover {
+  background: var(--toc-hover);
+}
+
+#toc > ol > li > div.section-header {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+#toc > ol > li > ol > li > div.section-header {
+  font-size: 1em;
+}
+
+#toc > ol > li > ol > li > ol > li > div.section-header {
+  font-size: 0.8em;
 }

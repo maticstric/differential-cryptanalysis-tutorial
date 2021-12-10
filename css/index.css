@@ -1,13 +1,6 @@
 body {
   display: flex;
-}
-
-#toc {
-  position: sticky;
-  flex: 1;
-  min-width: 15em;
-}
-
-#content {
-  flex: 4;  
+  background: var(--background);
+  font-family: monospace;
+  color: var(--text);
 }

@@ -1,7 +1,8 @@
 let tocOl = $('nav#toc > ol');
 
 // previous parent for each h tag level (h2 - h6). Used so you know where to return to if sections go up a level
-let previousParent = [tocOl, null, null, null, null]; 
+let previousOlParent = [tocOl, null, null, null, null];
+let previousLi = null;
 let previousLevel = 2;
 
 $(':header').each((index, element) => {
@@ -9,11 +10,11 @@ $(':header').each((index, element) => {
 
   for (let i = 2; i <= 6; i++) {
     if (level === i) {
-      parent = previousParent[i - 2];
+      parent = previousOlParent[i - 2];
 
       if (previousLevel === i - 1) {
-        let ol = $('<ol></ol>'); 
-        previousParent[i - 3].append(ol);
+        let ol = $('<ol></ol>');
+        previousLi.append(ol);
         parent = ol;
       }
     }
@@ -23,16 +24,21 @@ $(':header').each((index, element) => {
   let sectionTitle = $(element).html().match('<span class="section-title">.*?</span>')[0];
 
   let li = $('<li></li>');
-  li.append(sectionNum);
+  let div = $('<div></div>');
+  div.prop('class', 'section-header');
+
+  li.append(div);
+  div.append(sectionNum);
 
   let a = $('<a></a>');
   a.prop('href', `#${$(element).parent().prop('id')}`);
   a.append(sectionTitle);
 
-  li.append(a);
+  div.append(a);
 
   parent.append(li);
 
   previousLevel = level;
-  previousParent[level - 2] = li;
+  previousLi = li;
+  previousOlParent[level - 2] = li.parent();
 });
