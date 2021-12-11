@@ -1,6 +1,5 @@
 <svg version="1.1" viewBox="40 45 481 815" xmlns="http://www.w3.org/2000/svg">
   <!-- original viewBox="0 0 600 905" -->
-  <link xmlns="http://www.w3.org/1999/xhtml" rel="stylesheet" href="index.css" type="text/css" />
   <g stroke="black" stroke-width="2.5">
     <!-- round 1 key input -->
     <line x1="90" y1="45" x2="90" y2="80" />
