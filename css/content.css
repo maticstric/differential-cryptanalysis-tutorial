@@ -14,9 +14,17 @@ h6 { font-size: 1em; }
   color: var(--second-text);
 }
 
-#content img {
+#content img:not(#logo) {
   border: 2px solid var(--border);
   background: var(--second-background);
   padding: 1.5em;
   align: right;
+}
+
+#content > header > img#logo {
+  margin-right: 3em;
+}
+
+#content > header {
+  display: flex;
 }

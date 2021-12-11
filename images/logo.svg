@@ -1,0 +1,23 @@
+<svg version="1.1" viewBox="0 0 104 104" xmlns="http://www.w3.org/2000/svg">
+  <!-- original viewBox="0 0 104 104" -->
+  <mask id="hole">
+    <rect width="100%" height="100%" fill="white" />
+    <circle r="8" cx="79" cy="25" fill="black" />
+  </mask>
+  <g fill="#8b6dcf">
+    <!-- C --> 
+    <path d="M 0 0 H 25 V 25 H 50 V 50 H 0 Z" />
+
+    <!-- O -->
+    <path d="M 54 0 H 104 V 23 H 79 V 27 H 104 V 50 H 54 Z" mask="url(#hole)" />
+    <circle r="4" cx="79" cy="25" />
+
+    <!-- D -->
+    <path d="M 0 54 H 50 V 104 H 0 V 81 H 27 V 77 H 0 Z" />
+
+    <!-- E -->
+    <path fill-rule="nonzero"
+          d="M 54 54 H 104 V 104 H 54 Z
+             M 75 75 V 83 H 83 V 75 Z" />
+  </g>
+</svg>

@@ -1,12 +1,9 @@
 #toc {
-  align-self: flex-start;
   position: sticky;
   top: 1em;
-  flex: 1;
-  min-width: 15em;
   background: var(--second-background);
   border: 2px solid var(--border);
-  margin-right: 2em;
+  margin-left: 1em;
 }
 
 #toc ol {
@@ -20,7 +17,7 @@
 
 #toc span.section-num {
   color: var(--second-text);
-  margin-right: 0.3em;
+  margin-right: 0.1em;
 }
 
 #toc span.section-title {
