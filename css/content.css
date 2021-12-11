@@ -13,3 +13,10 @@ h6 { font-size: 1em; }
   margin-right: 0.5em;
   color: var(--second-text);
 }
+
+#content img {
+  border: 2px solid var(--border);
+  background: var(--second-background);
+  padding: 1.5em;
+  align: right;
+}

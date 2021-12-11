@@ -1,0 +1,67 @@
+<svg version="1.1" viewBox="51 45 110 245" xmlns="http://www.w3.org/2000/svg">
+  <!-- original viewBox="0 0 600 905" -->
+  <link xmlns="http://www.w3.org/1999/xhtml" rel="stylesheet" href="index.css" type="text/css" />
+  <g stroke="black" stroke-width="2.5">
+    <!-- round 1 key input -->
+    <line x1="90" y1="45" x2="90" y2="80" />
+    <line x1="110" y1="45" x2="110" y2="80" />
+    <line x1="130" y1="45" x2="130" y2="80" />
+    <line x1="150" y1="45" x2="150" y2="80" />
+
+    <!-- round 1 key -->
+    <rect x="80" y="80" width="80" height="35" fill="transparent" />
+
+    <!-- round 1 sbox input -->
+    <line x1="90" y1="115" x2="90" y2="150" />
+    <line x1="110" y1="115" x2="110" y2="150" />
+    <line x1="130" y1="115" x2="130" y2="150" />
+    <line x1="150" y1="115" x2="150" y2="150" />
+
+    <!-- round 1 sbox -->
+    <rect x="80" y="150" width="80" height="35" fill="transparent" />
+
+    <!-- round 2 key input -->
+    <line x1="90" y1="185" x2="90" y2="220" />
+    <line x1="110" y1="185" x2="110" y2="220" />
+    <line x1="130" y1="185" x2="130" y2="220" />
+    <line x1="150" y1="185" x2="150" y2="220" />
+
+    <!-- round 2 key -->
+    <rect x="80" y="220" width="80" height="35" fill="transparent" />
+
+    <!-- round 2 key output -->
+    <line x1="90" y1="255" x2="90" y2="290" />
+    <line x1="110" y1="255" x2="110" y2="290" />
+    <line x1="130" y1="255" x2="130" y2="290" />
+    <line x1="150" y1="255" x2="150" y2="290" />
+  </g>
+  <g>
+    <style>
+      text { 
+        font-size: 20px;
+        font-family: monospace;
+      }
+
+      .sub {
+        font-size: 13px;
+      }
+    </style>
+    <!-- K1 -->
+    <text x="113" y="103">K</text> 
+    <text class="sub" x="125" y="107">1</text> 
+    <!-- K2 -->
+    <text x="113" y="243">K</text> 
+    <text class="sub" x="125" y="247">2</text> 
+
+    <!-- x -->
+    <text x="50" y="70">x</text> 
+
+    <!-- u1 -->
+    <text x="50" y="140">u</text> 
+    <!-- v1 -->
+    <text x="50" y="205">v</text> 
+
+    <!-- y -->
+    <text x="50" y="280">y</text> 
+  </g>
+</svg>
