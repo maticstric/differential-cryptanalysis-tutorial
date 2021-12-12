@@ -1,6 +1,28 @@
 body {
   display: flex;
   background: var(--background);
-  font-family: monospace;
+  font-family: LibreBaskerville;
+  font-size: 14px;
   color: var(--text);
+}
+
+@font-face {
+  font-family: "LibreBaskerville";
+  src: url("../fonts/LibreBaskerville-Regular.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "LibreBaskerville";
+  src: url("../fonts/LibreBaskerville-Bold.ttf");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "LibreBaskerville";
+  src: url("../fonts/LibreBaskerville-Italic.ttf");
+  font-weight: normal;
+  font-style: italic;
 }

@@ -1,8 +1,8 @@
 :root {
-  --border: #aaaaaa;
-  --toc-hover: #555555;
-  --background: #222222;
-  --second-background: #333333;
-  --text: #f0f0f0;
-  --second-text: #aaaaaa;
+  --border: #ab9dcc;
+  --toc-hover: #ab9dcc;
+  --background: #e0d2b4;
+  --second-background: #e0d684;
+  --text: #111111;
+  --second-text: #555555;
 }
