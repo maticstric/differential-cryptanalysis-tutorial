@@ -5,7 +5,7 @@
 #include <limits.h>
 #include <libgen.h>
 
-const char USAGE[] = "usage: include-components index.html";
+const char USAGE[] = "usage: include-components template_file final_html_file";
 const char COMPONENT_DELIMITER_START[] = "{{";
 const char COMPONENT_DELIMITER_END[] = "}}";
 
@@ -64,19 +64,19 @@ struct Substring get_substring(char *string, char* start_string, char* end_strin
   return substring;
 }
 
-char* get_component_path(char *buffer, char *path_dir) {
-  struct Substring substring = get_substring(buffer, (char*) COMPONENT_DELIMITER_START, (char*) COMPONENT_DELIMITER_END);
+char* get_component_path(char *template_buffer, char *template_path_dir) {
+  struct Substring substring = get_substring(template_buffer, (char*) COMPONENT_DELIMITER_START, (char*) COMPONENT_DELIMITER_END);
 
   if (substring.start != NULL && substring.end != NULL) {
     size_t component_path_length = substring.end - substring.start - 1;
 
-    char *component_path = malloc(sizeof(char) * (component_path_length + strlen(path_dir) + 1));
-    strcpy(component_path, path_dir);
+    char *component_path = malloc(sizeof(char) * (component_path_length + strlen(template_path_dir) + 1));
+    strcpy(component_path, template_path_dir);
 
-    component_path[strlen(path_dir)] = '/';
-    memcpy(component_path + strlen(path_dir) + 1, substring.start + 2, component_path_length - 1);
+    component_path[strlen(template_path_dir)] = '/';
+    memcpy(component_path + strlen(template_path_dir) + 1, substring.start + 2, component_path_length - 1);
 
-    component_path[component_path_length + strlen(path_dir)] = '\0';
+    component_path[component_path_length + strlen(template_path_dir)] = '\0';
 
     return component_path;
   }
@@ -84,59 +84,67 @@ char* get_component_path(char *buffer, char *path_dir) {
   return NULL;
 }
 
-void include_component(char *file_buffer, char *component_buffer, char *resolved_path, char *path_dir) {
-  char combined_buffer[strlen(file_buffer) + strlen(component_buffer)];
+char* include_component(char *template_buffer, char *component_buffer) {
+  char *combined_buffer = malloc(sizeof(char) * (strlen(template_buffer) + strlen(component_buffer)));
 
-  struct Substring substring = get_substring(file_buffer, (char*)COMPONENT_DELIMITER_START, (char*)COMPONENT_DELIMITER_END);
+  struct Substring substring = get_substring(template_buffer, (char*)COMPONENT_DELIMITER_START, (char*)COMPONENT_DELIMITER_END);
 
-  memcpy(combined_buffer, file_buffer, substring.start - file_buffer);
-  memcpy(combined_buffer + (substring.start - file_buffer), component_buffer, strlen(component_buffer));
-  strcpy(combined_buffer + (substring.start - file_buffer) + strlen(component_buffer), substring.end + strlen(COMPONENT_DELIMITER_END) + 1);
+  memcpy(combined_buffer, template_buffer, substring.start - template_buffer);
+  memcpy(combined_buffer + (substring.start - template_buffer), component_buffer, strlen(component_buffer));
+  strcpy(combined_buffer + (substring.start - template_buffer) + strlen(component_buffer), substring.end + strlen(COMPONENT_DELIMITER_END) + 1);
 
-  combined_buffer[(substring.start - file_buffer) + strlen(component_buffer) + (strlen(file_buffer) - (substring.end - file_buffer + strlen(COMPONENT_DELIMITER_END) + 1))] = '\0';
+  combined_buffer[(substring.start - template_buffer) + strlen(component_buffer) + (strlen(template_buffer) - (substring.end - template_buffer + strlen(COMPONENT_DELIMITER_END) + 1))] = '\0';
 
-  FILE *f;
-
-  char tmp_path[strlen(path_dir) + 5];
-  strcpy(tmp_path, path_dir);
-  strcat(tmp_path, "/tmp\0");
-
-  f = fopen(tmp_path, "w");
-  fprintf(f, "%s", combined_buffer);
-  fclose(f);
-
-  rename(tmp_path, resolved_path);
+  return combined_buffer;
 }
 
 int main(int argc, char *argv[]) {
-  // MAKE NEW ARGUMENT. ONE FOR FINAL HTML AND ONE FOR TEMPLATE FILE
-  if (argc != 2) { usage(); }
+  if (argc != 3) { usage(); }
 
-  char *path = argv[1];
-  char resolved_path[PATH_MAX];
-  char *path_dir;
+  char *template_path = argv[1];
+  char *html_path = argv[2];
 
-  if (realpath(path, resolved_path) != NULL) {
-    path_dir = dirname(resolved_path);
+  char template_realpath[PATH_MAX];
+  char *template_path_dir;
+
+  if (realpath(template_path, template_realpath) != NULL) {
+    template_path_dir = dirname(template_realpath);
   } else {
     print_error();
   }
 
-  char *buffer;
-  char *component_path;
+  char *template_buffer;
   char *component_buffer;
+  char *combined_buffer;
 
-  buffer = file_into_buffer(resolved_path);
-  component_path = get_component_path(buffer, path_dir);
+  char *component_path;
+
+  template_buffer = file_into_buffer(template_realpath);
+  component_path = get_component_path(template_buffer, template_path_dir);
 
   if (component_path != NULL) {
     component_buffer = file_into_buffer(component_path);
 
-    include_component(buffer, component_buffer, resolved_path, path_dir);
+    combined_buffer = include_component(template_buffer, component_buffer);
 
+    printf("%s", combined_buffer);
+
+    free(combined_buffer);
     free(component_buffer);
   }
 
   free(component_path);
-  free(buffer);
+  free(template_buffer);
 }
+
+  //FILE *f;
+
+  //char tmp_path[strlen(path_dir) + 5];
+  //strcpy(tmp_path, path_dir);
+  //strcat(tmp_path, "/tmp\0");
+
+  //f = fopen(tmp_path, "w");
+  //fprintf(f, "%s", combined_buffer);
+  //fclose(f);
+
+  //rename(tmp_path, resolved_path);
