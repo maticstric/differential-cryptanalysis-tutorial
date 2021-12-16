@@ -14,7 +14,8 @@ h6 { font-size: 1em; }
   color: var(--second-text);
 }
 
-#content img:not(#logo) {
+#content img:not(#logo),
+#spn-visualization {
   border: 2px solid var(--border);
   background: var(--second-background);
   padding: 1.5em;

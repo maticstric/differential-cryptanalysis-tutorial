@@ -1,0 +1,140 @@
+<div id="spn-visualization">
+  <div id="spn">
+    <div id="plaintext">
+      <span id="nibble1">0100</span>
+      <span id="nibble2">1011</span>
+      <span id="nibble3">0001</span>
+      <span id="nibble4">1101</span>
+    </div>
+    {{../images/spn.svg}}
+    <div id="ciphertext">
+      <span id="nibble1"></span>
+      <span id="nibble2"></span>
+      <span id="nibble3"></span>
+      <span id="nibble4"></span>
+    </div>
+  </div>
+  <div id="controls">
+    <table id="sbox">
+      <tr>
+        <th colspan="17">SBOX</th>
+      </tr>
+      <tr>
+        <th>Input:</th>
+        <td>0</td>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+        <td>4</td>
+        <td>5</td>
+        <td>6</td>
+        <td>7</td>
+        <td>8</td>
+        <td>9</td>
+        <td>a</td>
+        <td>b</td>
+        <td>c</td>
+        <td>d</td>
+        <td>e</td>
+        <td>f</td>
+      </tr>
+      <tr>
+        <th>Output:</th>
+        <td><input value='e' /></td>
+        <td><input value='4' /></td>
+        <td><input value='d' /></td>
+        <td><input value='1' /></td>
+        <td><input value='2' /></td>
+        <td><input value='f' /></td>
+        <td><input value='b' /></td>
+        <td><input value='8' /></td>
+        <td><input value='3' /></td>
+        <td><input value='a' /></td>
+        <td><input value='6' /></td>
+        <td><input value='c' /></td>
+        <td><input value='5' /></td>
+        <td><input value='9' /></td>
+        <td><input value='0' /></td>
+        <td><input value='7' /></td>
+      </tr>
+    </table>
+    <table id="pbox">
+      <tr>
+        <th colspan="17">PBOX</th>
+      </tr>
+      <tr>
+        <th>Input:</th>
+        <td>0</td>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+        <td>4</td>
+        <td>5</td>
+        <td>6</td>
+        <td>7</td>
+        <td>8</td>
+        <td>9</td>
+        <td>a</td>
+        <td>b</td>
+        <td>c</td>
+        <td>d</td>
+        <td>e</td>
+        <td>f</td>
+      </tr>
+      <tr>
+        <th>Output:</th>
+        <td><input value='0' /></td>
+        <td><input value='4' /></td>
+        <td><input value='8' /></td>
+        <td><input value='c' /></td>
+        <td><input value='1' /></td>
+        <td><input value='5' /></td>
+        <td><input value='9' /></td>
+        <td><input value='d' /></td>
+        <td><input value='2' /></td>
+        <td><input value='6' /></td>
+        <td><input value='a' /></td>
+        <td><input value='e' /></td>
+        <td><input value='3' /></td>
+        <td><input value='7' /></td>
+        <td><input value='b' /></td>
+        <td><input value='f' /></td>
+      </tr>
+    </table>
+    <table id="key-plaintext">
+      <tr>
+        <td><b>Plaintext:</b></td>
+        <td>0x<input id="plaintext-input" value='4b1d' /></td>
+      </tr>
+      <tr>
+        <td><b>Key 1:</b></td>
+        <td>0x<input id="key1-input" value='1a6d' /></td>
+      </tr>
+      <tr>
+        <td><b>Key 2:</b></td>
+        <td>0x<input id="key2-input" value='2ac2' /></td>
+      </tr>
+      <tr>
+        <td><b>Key 3:</b></td>
+        <td>0x<input id="key3-input" value='452f' /></td>
+      </tr>
+      <tr>
+        <td><b>Key 4:</b></td>
+        <td>0x<input id="key4-input" value='6ff1' /></td>
+      </tr>
+      <tr>
+        <td><b>Key 5:</b></td>
+        <td>0x<input id="key5-input" value='b520' /></td>
+      </tr>
+      <tr>
+        <td><b>Ciphertext:</b></td>
+        <td id="ciphertext-output"></td>
+      </tr>
+    </table>
+    <div id="error-messages">
+      <p id="pbox-error" style="display: none;">PBOX is invalid. Make sure to only include hexadecimal digits (0 to f) and that the PBOX is one-to-one (i.e. there are no duplicates in the output).</p>
+      <p id="sbox-error" style="display: none;">SBOX is invalid. Make sure to only include hexadecimal digits (0 to f) and that the SBOX is one-to-one (i.e. there are no duplicates in the output).</p>
+    </div>
+  </div>
+  <script src="js/spn-visualization.js"></script>
+</div>
