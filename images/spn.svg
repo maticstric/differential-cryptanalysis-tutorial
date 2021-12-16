@@ -337,7 +337,28 @@
     <text x="40" y="780">v</text> 
     <text class="sub" x="53" y="785">4</text> 
 
-    <!-- 7 -->
+    <!-- y -->
     <text x="40" y="850">y</text> 
+
+    <!-- S -->
+    <text x="114" y="175">S</text> 
+    <text x="234" y="175">S</text> 
+    <text x="354" y="175">S</text> 
+    <text x="474" y="175">S</text> 
+
+    <text x="114" y="365">S</text> 
+    <text x="234" y="365">S</text> 
+    <text x="354" y="365">S</text> 
+    <text x="474" y="365">S</text> 
+
+    <text x="114" y="555">S</text> 
+    <text x="234" y="555">S</text> 
+    <text x="354" y="555">S</text> 
+    <text x="474" y="555">S</text> 
+
+    <text x="114" y="745">S</text> 
+    <text x="234" y="745">S</text> 
+    <text x="354" y="745">S</text> 
+    <text x="474" y="745">S</text> 
   </g>
 </svg>
