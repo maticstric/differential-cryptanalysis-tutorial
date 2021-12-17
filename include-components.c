@@ -43,7 +43,7 @@ char* file_into_buffer(char* path) {
   long filesize = ftell(f);
   if (filesize == -1) { print_error(); }
 
-  buffer = malloc(sizeof(char) * (filesize + 1));
+  buffer = calloc((filesize + 1), sizeof(char));
 
   if (fseek(f, 0, SEEK_SET) == -1) { print_error(); }
 
@@ -76,7 +76,7 @@ char* get_component_path(char *template_buffer, char *template_path_dir) {
   if (substring.start != NULL && substring.end != NULL) {
     size_t component_path_length = substring.end - substring.start - 1;
 
-    char *component_path = malloc(sizeof(char) * (component_path_length + strlen(template_path_dir) + 1));
+    char *component_path = calloc((component_path_length + strlen(template_path_dir) + 1), sizeof(char));
     strcpy(component_path, template_path_dir);
 
     component_path[strlen(template_path_dir)] = '/';
@@ -91,7 +91,7 @@ char* get_component_path(char *template_buffer, char *template_path_dir) {
 }
 
 char* include_component(char *template_buffer, char *component_buffer) {
-  char *combined_buffer = malloc(sizeof(char) * (strlen(template_buffer) + strlen(component_buffer)));
+  char *combined_buffer = calloc((strlen(template_buffer) + strlen(component_buffer)), sizeof(char));
 
   struct Substring substring = get_substring(template_buffer, (char*)COMPONENT_DELIMITER_START, (char*)COMPONENT_DELIMITER_END);
 
@@ -113,6 +113,8 @@ char* include_components_recursive_helper(char *template_path) {
 
   template_buffer = file_into_buffer(template_path);
 
+  printf("%s -- %s -- %s", template_path, template_buffer, template_path);
+
   component_path = get_component_path(template_buffer, dirname(template_path));
 
   while (component_path != NULL) {
@@ -122,7 +124,7 @@ char* include_components_recursive_helper(char *template_path) {
 
     free(template_buffer);
 
-    template_buffer = malloc(sizeof(char) * strlen(combined_buffer) + 1);
+    template_buffer = calloc(strlen(combined_buffer) + 1, sizeof(char));
     strcpy(template_buffer, combined_buffer);
 
     free(component_buffer);
