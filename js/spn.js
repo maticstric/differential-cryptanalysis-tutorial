@@ -34,7 +34,7 @@ const spnSubstitute = (state, sbox) => {
 
 const spnPermutate = (state, pbox) => {
   let newStateBits = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-  
+
   let stateBits = nibblesToBits(state);
 
   stateBits.forEach((bit, index) => {
@@ -50,7 +50,7 @@ const spnAddRoundKey = (state, key) => {
   state.forEach((nibble, index) => {
     newState.push(nibble ^ key[index]);
   });
-  
+
   return newState;
 }
 

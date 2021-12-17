@@ -5,7 +5,7 @@
     <circle r="8" cx="79" cy="25" fill="black" />
   </mask>
   <g fill="#8b6dcf">
-    <!-- C --> 
+    <!-- C -->
     <path d="M 0 0 H 25 V 25 H 50 V 50 H 0 Z" />
 
     <!-- O -->

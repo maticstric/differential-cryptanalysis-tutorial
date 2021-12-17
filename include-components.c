@@ -86,7 +86,7 @@ char* get_component_path(char *template_buffer, char *template_path_dir) {
 
     return component_path;
   }
-  
+
   return NULL;
 }
 
@@ -167,7 +167,7 @@ int main(int argc, char *argv[]) {
   char *final_html_buffer = NULL;
 
   final_html_buffer = include_components_recursively(template_path, html_path);
-  
+
   write_to_file(html_path, final_html_buffer);
 
   free(final_html_buffer);

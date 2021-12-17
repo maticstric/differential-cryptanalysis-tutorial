@@ -36,7 +36,7 @@
   </g>
   <g>
     <style>
-      text { 
+      text {
         font-size: 20px;
         font-family: monospace;
       }
@@ -46,24 +46,24 @@
       }
     </style>
     <!-- K1 -->
-    <text x="113" y="103">K</text> 
-    <text class="sub" x="125" y="107">1</text> 
+    <text x="113" y="103">K</text>
+    <text class="sub" x="125" y="107">1</text>
     <!-- K2 -->
-    <text x="113" y="243">K</text> 
-    <text class="sub" x="125" y="247">2</text> 
+    <text x="113" y="243">K</text>
+    <text class="sub" x="125" y="247">2</text>
 
     <!-- x -->
-    <text x="50" y="70">x</text> 
+    <text x="50" y="70">x</text>
 
     <!-- u1 -->
-    <text x="50" y="140">u</text> 
+    <text x="50" y="140">u</text>
     <!-- v1 -->
-    <text x="50" y="205">v</text> 
+    <text x="50" y="205">v</text>
 
     <!-- y -->
-    <text x="50" y="280">y</text> 
+    <text x="50" y="280">y</text>
 
     <!-- S -->
-    <text x="114" y="175">S</text> 
+    <text x="114" y="175">S</text>
   </g>
 </svg>

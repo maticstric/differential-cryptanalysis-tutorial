@@ -175,7 +175,7 @@ $('#spn-visualization > .controls > .sbox input').on('input', (event) => {
 
   if (SBOX !== null) {
     $('.visualization > .controls > .error-messages > .sbox-error').hide();
-  
+
     showEncryption();
   } else {
     $('.visualization > .controls > .error-messages > .sbox-error').show();
