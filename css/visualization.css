@@ -1,0 +1,79 @@
+.visualization {
+  font-family: monospace;
+  display: inline-flex;
+}
+
+.visualization > .figure {
+  margin-right: 1.5em;
+}
+
+.visualization > .figure > .plaintext,
+.visualization > .figure > .ciphertext {
+  display: flex;
+  justify-content: space-between;
+  letter-spacing: 6.5px;
+}
+
+.visualization > .figure > .plaintext {
+  margin-bottom: 5px;
+}
+
+.visualization > .figure > .ciphertext {
+  margin-top: 3px;
+}
+
+.visualization input {
+  font-size: 14px;
+  height: 1em;
+  border: none;
+  border-bottom: 2px solid var(--border);
+  background: var(--second-background);
+  font-family: monospace;
+}
+
+.visualization input:focus {
+  outline: none;
+}
+
+.visualization > .controls > .sbox,
+.visualization > .controls > .pbox {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 2em;
+}
+
+.visualization > .controls > .sbox,
+.visualization > .controls > .sbox th,
+.visualization > .controls > .sbox td,
+.visualization > .controls > .pbox,
+.visualization > .controls > .pbox th,
+.visualization > .controls > .pbox td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+.visualization > .controls > .sbox input,
+.visualization > .controls > .pbox input {
+  width: 0.6em;
+}
+
+.visualization > .controls > .plaintext-key-ciphertext tr:first-child > td {
+  padding-bottom: 1em;
+}
+
+.visualization > .controls > .plaintext-key-ciphertext tr:last-child > td {
+  padding-top: 1em;
+}
+
+.visualization > .controls > .plaintext-key-ciphertext input {
+  width: 2.5em;
+}
+
+.visualization > .controls > .error-messages > .sbox-error,
+.visualization > .controls > .error-messages > .pbox-error {
+  color: var(--error);
+}
+
+.visualization > .figure > svg line.isOne {
+  stroke: var(--is-one);
+}

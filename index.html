@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet" href="css/toc.css">
     <link rel="stylesheet" href="css/content.css">
+    <link rel="stylesheet" href="css/visualization.css">
     <link rel="stylesheet" href="css/spn-visualization.css">
   </head>
 
@@ -25,19 +26,23 @@
   <section>
     <h2>Abstract</h2>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-    <div id="spn-visualization">
-  <div id="spn">
-    <div id="plaintext">
-      <span id="nibble1">0100</span>
-      <span id="nibble2">1011</span>
-      <span id="nibble3">0001</span>
-      <span id="nibble4">1101</span>
+  </section>
+  <section>
+    <h2>Background</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <div class="visualization" id="spn-visualization">
+  <div class="figure">
+    <div class="plaintext">
+      <span class="nibble1">0100</span>
+      <span class="nibble2">1011</span>
+      <span class="nibble3">0001</span>
+      <span class="nibble4">1101</span>
     </div>
     <svg version="1.1" viewBox="40 45 481 815" xmlns="http://www.w3.org/2000/svg">
   <!-- original viewBox="0 0 600 905" -->
   <g stroke="black" stroke-width="2.5">
     <!-- round 1 key input -->
-    <g id="x">
+    <g class="x">
       <line x1="90" y1="45" x2="90" y2="80" class="b0" />
       <line x1="110" y1="45" x2="110" y2="80" class="b1" />
       <line x1="130" y1="45" x2="130" y2="80" class="b2" />
@@ -63,7 +68,7 @@
     <rect x="80" y="80" width="440" height="35" fill="transparent" />
 
     <!-- round 1 sbox input -->
-    <g id="u1">
+    <g class="u1">
       <line x1="90" y1="115" x2="90" y2="150" class="b0" />
       <line x1="110" y1="115" x2="110" y2="150" class="b1" />
       <line x1="130" y1="115" x2="130" y2="150" class="b2" />
@@ -92,7 +97,7 @@
     <rect x="440" y="150" width="80" height="35" fill="transparent" />
 
     <!-- round 1 pbox -->
-    <g id="v1">
+    <g class="v1">
       <line x1="90" y1="185" x2="90" y2="270" class="b0 pbox" />
       <line x1="110" y1="185" x2="210" y2="270" class="b1 pbox" />
       <line x1="130" y1="185" x2="330" y2="270" class="b2 pbox" />
@@ -118,7 +123,7 @@
     <rect x="80" y="270" width="440" height="35" fill="transparent" />
 
     <!-- round 2 sbox input -->
-    <g id="u2">
+    <g class="u2">
       <line x1="90" y1="305" x2="90" y2="340" class="b0" />
       <line x1="110" y1="305" x2="110" y2="340" class="b1" />
       <line x1="130" y1="305" x2="130" y2="340" class="b2" />
@@ -147,7 +152,7 @@
     <rect x="440" y="340" width="80" height="35" fill="transparent" />
 
     <!-- round 2 pbox -->
-    <g id="v2">
+    <g class="v2">
       <line x1="90" y1="375" x2="90" y2="460" class="b0 pbox" />
       <line x1="110" y1="375" x2="210" y2="460" class="b1 pbox" />
       <line x1="130" y1="375" x2="330" y2="460" class="b2 pbox" />
@@ -173,7 +178,7 @@
     <rect x="80" y="460" width="440" height="35" fill="transparent" />
 
     <!-- round 3 sbox input -->
-    <g id="u3">
+    <g class="u3">
       <line x1="90" y1="495" x2="90" y2="530" class="b0" />
       <line x1="110" y1="495" x2="110" y2="530" class="b1" />
       <line x1="130" y1="495" x2="130" y2="530" class="b2" />
@@ -202,7 +207,7 @@
     <rect x="440" y="530" width="80" height="35" fill="transparent" />
 
     <!-- round 3 pbox -->
-    <g id="v3">
+    <g class="v3">
       <line x1="90" y1="565" x2="90" y2="650" class="b0 pbox" />
       <line x1="110" y1="565" x2="210" y2="650" class="b1 pbox" />
       <line x1="130" y1="565" x2="330" y2="650" class="b2 pbox" />
@@ -228,7 +233,7 @@
     <rect x="80" y="650" width="440" height="35" fill="transparent" />
 
     <!-- round 4 sbox input -->
-    <g id="u4">
+    <g class="u4">
       <line x1="90" y1="685" x2="90" y2="720" class="b0" />
       <line x1="110" y1="685" x2="110" y2="720" class="b1" />
       <line x1="130" y1="685" x2="130" y2="720" class="b2" />
@@ -257,7 +262,7 @@
     <rect x="440" y="720" width="80" height="35" fill="transparent" />
 
     <!-- round 5 key input -->
-    <g id="v4">
+    <g class="v4">
       <line x1="90" y1="755" x2="90" y2="790" class="b0" />
       <line x1="110" y1="755" x2="110" y2="790" class="b1" />
       <line x1="130" y1="755" x2="130" y2="790" class="b2" />
@@ -283,7 +288,7 @@
     <rect x="80" y="790" width="440" height="35" fill="transparent" />
 
     <!-- round 5 key output -->
-    <g id="y">
+    <g class="y">
       <line x1="90" y1="825" x2="90" y2="860" class="b0" />
       <line x1="110" y1="825" x2="110" y2="860" class="b1" />
       <line x1="130" y1="825" x2="130" y2="860" class="b2" />
@@ -397,15 +402,15 @@
     <text x="474" y="745">S</text> 
   </g>
 </svg>
-    <div id="ciphertext">
-      <span id="nibble1"></span>
-      <span id="nibble2"></span>
-      <span id="nibble3"></span>
-      <span id="nibble4"></span>
+    <div class="ciphertext">
+      <span class="nibble1"></span>
+      <span class="nibble2"></span>
+      <span class="nibble3"></span>
+      <span class="nibble4"></span>
     </div>
   </div>
-  <div id="controls">
-    <table id="sbox">
+  <div class="controls">
+    <table class="sbox">
       <tr>
         <th colspan="17">SBOX</th>
       </tr>
@@ -448,7 +453,7 @@
         <td><input value='7' /></td>
       </tr>
     </table>
-    <table id="pbox">
+    <table class="pbox">
       <tr>
         <th colspan="17">PBOX</th>
       </tr>
@@ -466,8 +471,7 @@
         <td>9</td>
         <td>a</td>
         <td>b</td>
-        <td>c</td>
-        <td>d</td>
+        <td>c</td> <td>d</td>
         <td>e</td>
         <td>f</td>
       </tr>
@@ -491,53 +495,47 @@
         <td><input value='f' /></td>
       </tr>
     </table>
-    <table id="key-plaintext">
+    <table class="plaintext-key-ciphertext">
       <tr>
         <td><b>Plaintext:</b></td>
-        <td>0x<input id="plaintext-input" value='4b1d' /></td>
+        <td>0x<input class="plaintext-input" value='4b1d' /></td>
       </tr>
       <tr>
         <td><b>Key 1:</b></td>
-        <td>0x<input id="key1-input" value='1a6d' /></td>
+        <td>0x<input class="key1-input" value='1a6d' /></td>
       </tr>
       <tr>
         <td><b>Key 2:</b></td>
-        <td>0x<input id="key2-input" value='2ac2' /></td>
+        <td>0x<input class="key2-input" value='2ac2' /></td>
       </tr>
       <tr>
         <td><b>Key 3:</b></td>
-        <td>0x<input id="key3-input" value='452f' /></td>
+        <td>0x<input class="key3-input" value='452f' /></td>
       </tr>
       <tr>
         <td><b>Key 4:</b></td>
-        <td>0x<input id="key4-input" value='6ff1' /></td>
+        <td>0x<input class="key4-input" value='6ff1' /></td>
       </tr>
       <tr>
         <td><b>Key 5:</b></td>
-        <td>0x<input id="key5-input" value='b520' /></td>
+        <td>0x<input class="key5-input" value='b520' /></td>
       </tr>
       <tr>
         <td><b>Ciphertext:</b></td>
-        <td id="ciphertext-output"></td>
+        <td class="ciphertext-output"></td>
       </tr>
     </table>
-    <div id="error-messages">
-      <p id="pbox-error" style="display: none;">PBOX is invalid. Make sure to only include hexadecimal digits (0 to f) and that the PBOX is one-to-one (i.e. there are no duplicates in the output).</p>
-      <p id="sbox-error" style="display: none;">SBOX is invalid. Make sure to only include hexadecimal digits (0 to f) and that the SBOX is one-to-one (i.e. there are no duplicates in the output).</p>
+    <div class="error-messages">
+      <p class="pbox-error" style="display: none;">PBOX is invalid. Make sure to only include hexadecimal digits (0 to f) and that the PBOX is one-to-one (i.e. there are no duplicates in the output).</p>
+      <p class="sbox-error" style="display: none;">SBOX is invalid. Make sure to only include hexadecimal digits (0 to f) and that the SBOX is one-to-one (i.e. there are no duplicates in the output).</p>
     </div>
   </div>
   <script src="js/spn-visualization.js"></script>
 </div>
   </section>
   <section>
-    <h2>Background</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-    <img src="images/toy.svg" width="100" />
-  </section>
-  <section>
     <h2>Toy Cipher</h2>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-    <img src="images/spn.svg" width="400" />
     <section>
       <h3>Toy Cipher Implementation</h3>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>

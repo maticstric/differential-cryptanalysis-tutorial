@@ -2,7 +2,7 @@
   <!-- original viewBox="0 0 600 905" -->
   <g stroke="black" stroke-width="2.5">
     <!-- round 1 key input -->
-    <g id="x">
+    <g class="x">
       <line x1="90" y1="45" x2="90" y2="80" class="b0" />
       <line x1="110" y1="45" x2="110" y2="80" class="b1" />
       <line x1="130" y1="45" x2="130" y2="80" class="b2" />
@@ -28,7 +28,7 @@
     <rect x="80" y="80" width="440" height="35" fill="transparent" />
 
     <!-- round 1 sbox input -->
-    <g id="u1">
+    <g class="u1">
       <line x1="90" y1="115" x2="90" y2="150" class="b0" />
       <line x1="110" y1="115" x2="110" y2="150" class="b1" />
       <line x1="130" y1="115" x2="130" y2="150" class="b2" />
@@ -57,7 +57,7 @@
     <rect x="440" y="150" width="80" height="35" fill="transparent" />
 
     <!-- round 1 pbox -->
-    <g id="v1">
+    <g class="v1">
       <line x1="90" y1="185" x2="90" y2="270" class="b0 pbox" />
       <line x1="110" y1="185" x2="210" y2="270" class="b1 pbox" />
       <line x1="130" y1="185" x2="330" y2="270" class="b2 pbox" />
@@ -83,7 +83,7 @@
     <rect x="80" y="270" width="440" height="35" fill="transparent" />
 
     <!-- round 2 sbox input -->
-    <g id="u2">
+    <g class="u2">
       <line x1="90" y1="305" x2="90" y2="340" class="b0" />
       <line x1="110" y1="305" x2="110" y2="340" class="b1" />
       <line x1="130" y1="305" x2="130" y2="340" class="b2" />
@@ -112,7 +112,7 @@
     <rect x="440" y="340" width="80" height="35" fill="transparent" />
 
     <!-- round 2 pbox -->
-    <g id="v2">
+    <g class="v2">
       <line x1="90" y1="375" x2="90" y2="460" class="b0 pbox" />
       <line x1="110" y1="375" x2="210" y2="460" class="b1 pbox" />
       <line x1="130" y1="375" x2="330" y2="460" class="b2 pbox" />
@@ -138,7 +138,7 @@
     <rect x="80" y="460" width="440" height="35" fill="transparent" />
 
     <!-- round 3 sbox input -->
-    <g id="u3">
+    <g class="u3">
       <line x1="90" y1="495" x2="90" y2="530" class="b0" />
       <line x1="110" y1="495" x2="110" y2="530" class="b1" />
       <line x1="130" y1="495" x2="130" y2="530" class="b2" />
@@ -167,7 +167,7 @@
     <rect x="440" y="530" width="80" height="35" fill="transparent" />
 
     <!-- round 3 pbox -->
-    <g id="v3">
+    <g class="v3">
       <line x1="90" y1="565" x2="90" y2="650" class="b0 pbox" />
       <line x1="110" y1="565" x2="210" y2="650" class="b1 pbox" />
       <line x1="130" y1="565" x2="330" y2="650" class="b2 pbox" />
@@ -193,7 +193,7 @@
     <rect x="80" y="650" width="440" height="35" fill="transparent" />
 
     <!-- round 4 sbox input -->
-    <g id="u4">
+    <g class="u4">
       <line x1="90" y1="685" x2="90" y2="720" class="b0" />
       <line x1="110" y1="685" x2="110" y2="720" class="b1" />
       <line x1="130" y1="685" x2="130" y2="720" class="b2" />
@@ -222,7 +222,7 @@
     <rect x="440" y="720" width="80" height="35" fill="transparent" />
 
     <!-- round 5 key input -->
-    <g id="v4">
+    <g class="v4">
       <line x1="90" y1="755" x2="90" y2="790" class="b0" />
       <line x1="110" y1="755" x2="110" y2="790" class="b1" />
       <line x1="130" y1="755" x2="130" y2="790" class="b2" />
@@ -248,7 +248,7 @@
     <rect x="80" y="790" width="440" height="35" fill="transparent" />
 
     <!-- round 5 key output -->
-    <g id="y">
+    <g class="y">
       <line x1="90" y1="825" x2="90" y2="860" class="b0" />
       <line x1="110" y1="825" x2="110" y2="860" class="b1" />
       <line x1="130" y1="825" x2="130" y2="860" class="b2" />

@@ -1,83 +1,13 @@
-#spn-visualization {
-  font-family: monospace;
-  display: inline-flex;
-}
-
-#spn-visualization div#spn {
+#spn-visualization > .figure {
   width: 350px;
-  margin-right: 1.5em;
 }
 
-#spn-visualization div#spn #plaintext {
-  margin-bottom: 5px;
+#spn-visualization > .controls {
+  width: 350px;
 }
 
-#spn-visualization div#spn #ciphertext {
-  margin-top: 3px;
-}
-
-#spn-visualization div#spn #plaintext,
-#spn-visualization div#spn #ciphertext {
-  display: flex;
-  justify-content: space-between;
+#spn-visualization > .figure > .plaintext,
+#spn-visualization > .figure > .ciphertext {
   margin-left: 32px;
   margin-right: -3px;
-  letter-spacing: 6.5px;
-}
-
-#spn-visualization div#controls {
-  width: 350px;
-}
-
-#spn-visualization input {
-  font-size: 14px;
-  height: 1em;
-  border: none;
-  border-bottom: 2px solid var(--border);
-  background: var(--second-background);
-  font-family: monospace;
-}
-
-#spn-visualization input:focus {
-  outline: none;
-}
-
-#spn-visualization table#sbox,
-#spn-visualization table#pbox {
-  width: 100%;
-  text-align: center;
-  margin-bottom: 2em;
-}
-
-#spn-visualization table#sbox,
-#spn-visualization table#sbox th,
-#spn-visualization table#sbox td,
-#spn-visualization table#pbox,
-#spn-visualization table#pbox th,
-#spn-visualization table#pbox td {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-
-#spn-visualization table#sbox input,
-#spn-visualization table#pbox input {
-  width: 0.6em;
-}
-
-#spn-visualization table#key-plaintext tr:nth-child(2) > td,
-#spn-visualization table#key-plaintext tr:last-child > td {
-  padding-top: 1em;
-}
-
-#spn-visualization table#key-plaintext input {
-  width: 2.5em;
-}
-
-#spn-visualization #pbox-error,
-#spn-visualization #sbox-error {
-  color: var(--error);
-}
-
-#spn-visualization line.isOne {
-  stroke: var(--is-one);
 }
