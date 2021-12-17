@@ -113,8 +113,6 @@ char* include_components_recursive_helper(char *template_path) {
 
   template_buffer = file_into_buffer(template_path);
 
-  printf("%s -- %s -- %s", template_path, template_buffer, template_path);
-
   component_path = get_component_path(template_buffer, dirname(template_path));
 
   while (component_path != NULL) {
