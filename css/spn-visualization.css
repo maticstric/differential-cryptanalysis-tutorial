@@ -10,4 +10,10 @@
 #spn-visualization > .figure > .ciphertext {
   margin-left: 32px;
   margin-right: -3px;
+  letter-spacing: 6.5px;
+  font-size: 14px;
+}
+
+#spn-visualization > .controls > .plaintext-key-ciphertext input {
+  width: 2.5em;
 }

@@ -5,7 +5,9 @@
     <meta charset="utf-8">
     <title>Differential Cryptanalysis Tutorial</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="js/toy.js"></script>
     <script src="js/spn.js"></script>
+    <script src="js/visualization.js"></script>
     <link rel="stylesheet" href="css/colors.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/sidebar.css">
@@ -13,6 +15,7 @@
     <link rel="stylesheet" href="css/content.css">
     <link rel="stylesheet" href="css/visualization.css">
     <link rel="stylesheet" href="css/spn-visualization.css">
+    <link rel="stylesheet" href="css/toy-visualization.css">
   </head>
 
   <body>
@@ -26,6 +29,161 @@
   <section>
     <h2>Abstract</h2>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <div class="visualization" id="toy-visualization">
+  <div class="figure">
+    <div class="plaintext">
+      <span class="nibble1">0111</span>
+    </div>
+    <svg version="1.1" viewBox="51 45 110 245" xmlns="http://www.w3.org/2000/svg">
+  <!-- original viewBox="0 0 600 905" -->
+  <g stroke="black" stroke-width="2.5">
+    <!-- round 1 key input -->
+    <g class="x">
+      <line x1="90" y1="45" x2="90" y2="80" class="b0" />
+      <line x1="110" y1="45" x2="110" y2="80" class="b1" />
+      <line x1="130" y1="45" x2="130" y2="80" class="b2" />
+      <line x1="150" y1="45" x2="150" y2="80" class="b3" />
+    </g>
+
+    <!-- round 1 key -->
+    <rect x="80" y="80" width="80" height="35" fill="transparent" />
+
+    <!-- round 1 sbox input -->
+    <g class="u">
+      <line x1="90" y1="115" x2="90" y2="150" class="b0" />
+      <line x1="110" y1="115" x2="110" y2="150" class="b1" />
+      <line x1="130" y1="115" x2="130" y2="150" class="b2" />
+      <line x1="150" y1="115" x2="150" y2="150" class="b3" />
+    </g>
+
+    <!-- round 1 sbox -->
+    <rect x="80" y="150" width="80" height="35" fill="transparent" />
+
+    <!-- round 2 key input -->
+    <g class="v">
+      <line x1="90" y1="185" x2="90" y2="220" class="b0" />
+      <line x1="110" y1="185" x2="110" y2="220" class="b1" />
+      <line x1="130" y1="185" x2="130" y2="220" class="b2" />
+      <line x1="150" y1="185" x2="150" y2="220" class="b3" />
+    </g>
+
+    <!-- round 2 key -->
+    <rect x="80" y="220" width="80" height="35" fill="transparent" />
+
+    <!-- round 2 key output -->
+    <g class="y">
+      <line x1="90" y1="255" x2="90" y2="290" class="b0" />
+      <line x1="110" y1="255" x2="110" y2="290" class="b1" />
+      <line x1="130" y1="255" x2="130" y2="290" class="b2" />
+      <line x1="150" y1="255" x2="150" y2="290" class="b3" />
+    </g>
+  </g>
+  <g>
+    <style>
+      text {
+        font-size: 20px;
+        font-family: monospace;
+      }
+
+      .sub {
+        font-size: 13px;
+      }
+    </style>
+    <!-- K1 -->
+    <text x="113" y="103">K</text>
+    <text class="sub" x="125" y="107">1</text>
+    <!-- K2 -->
+    <text x="113" y="243">K</text>
+    <text class="sub" x="125" y="247">2</text>
+
+    <!-- x -->
+    <text x="50" y="70">x</text>
+
+    <!-- u1 -->
+    <text x="50" y="140">u</text>
+    <!-- v1 -->
+    <text x="50" y="205">v</text>
+
+    <!-- y -->
+    <text x="50" y="280">y</text>
+
+    <!-- S -->
+    <text x="114" y="175">S</text>
+  </g>
+</svg>
+    <div class="ciphertext">
+      <span class="nibble1"></span>
+    </div>
+  </div>
+  <div class="controls">
+    <table class="sbox">
+      <tr>
+        <th colspan="17">SBOX</th>
+      </tr>
+      <tr>
+        <th>Input:</th>
+        <td>0</td>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+        <td>4</td>
+        <td>5</td>
+        <td>6</td>
+        <td>7</td>
+        <td>8</td>
+        <td>9</td>
+        <td>a</td>
+        <td>b</td>
+        <td>c</td>
+        <td>d</td>
+        <td>e</td>
+        <td>f</td>
+      </tr>
+      <tr>
+        <th>Output:</th>
+        <td><input value='e' /></td>
+        <td><input value='4' /></td>
+        <td><input value='d' /></td>
+        <td><input value='1' /></td>
+        <td><input value='2' /></td>
+        <td><input value='f' /></td>
+        <td><input value='b' /></td>
+        <td><input value='8' /></td>
+        <td><input value='3' /></td>
+        <td><input value='a' /></td>
+        <td><input value='6' /></td>
+        <td><input value='c' /></td>
+        <td><input value='5' /></td>
+        <td><input value='9' /></td>
+        <td><input value='0' /></td>
+        <td><input value='7' /></td>
+      </tr>
+    </table>
+    <table class="plaintext-key-ciphertext">
+      <tr>
+        <td><b>Plaintext:</b></td>
+        <td>0x<input class="plaintext-input" value='7' /></td>
+      </tr>
+      <tr>
+        <td><b>Key 1:</b></td>
+        <td>0x<input class="key1-input" value='b' /></td>
+      </tr>
+      <tr>
+        <td><b>Key 2:</b></td>
+        <td>0x<input class="key2-input" value='d' /></td>
+      </tr>
+      <tr>
+        <td><b>Ciphertext:</b></td>
+        <td class="ciphertext-output"></td>
+      </tr>
+    </table>
+    <div class="error-messages">
+      <p class="pbox-error" style="display: none;">PBOX is invalid. Make sure to only include hexadecimal digits (0 to f) and that the PBOX is one-to-one (i.e. there are no duplicates in the output).</p>
+      <p class="sbox-error" style="display: none;">SBOX is invalid. Make sure to only include hexadecimal digits (0 to f) and that the SBOX is one-to-one (i.e. there are no duplicates in the output).</p>
+    </div>
+  </div>
+  <script src="js/toy-visualization.js"></script>
+</div>
   </section>
   <section>
     <h2>Background</h2>

@@ -1,79 +1,25 @@
-let notHexRegex = /[^0-9a-f]/g;
 // x positions for ith bit in svg
 let xPositions = [90, 110, 130, 150, 210, 230, 250, 270, 330, 350, 370, 390, 450, 470, 490, 510];
 
-// Get PBOX from the input
-const getPBOX = () => {
-  let PBOX = [];
-  let valid = true;
-
-  $('#spn-visualization > .controls > .pbox input').each((index, element) => {
-    if (element.value == '' || element.value.match(notHexRegex) || PBOX.includes(element.value)) {
-      valid = false;
-    }
-
-    PBOX.push(element.value);
-  });
-
-  return (valid ? PBOX : null);
-}
-
-// Get SBOX from the input
-const getSBOX = () => {
-  let SBOX = [];
-  let valid = true;
-
-  $('#spn-visualization > .controls > .sbox input').each((index, element) => {
-    if (element.value == '' || element.value.match(notHexRegex) || SBOX.includes(element.value)) {
-      valid = false;
-    }
-
-    SBOX.push(element.value);
-  });
-
-  return (valid ? SBOX : null);
-}
-
-const restrictInput = (event, len) => {
-  if (event.target.value.match(notHexRegex)) {
-    event.target.value = event.target.value.replace(notHexRegex, '');
-  }
-
-  if (event.target.value.length > len) {
-    event.target.value = event.target.value.substring(0, len);
-  }
-}
-
-const highlightSvgLine = (step, stepClass) => {
-  step.forEach((bit, index) => {
-    index = index.toString(16);
-
-    if (bit === 1) {
-      $(`#spn-visualization > .figure > svg .${stepClass} .b${index}`).addClass('isOne');
-    }
-  });
-}
-
-const highlightSvgLines = (steps) => {
+const spnHighlightSvgLines = (steps) => {
   // Reset all
   $('#spn-visualization > .figure > svg line').removeClass('isOne');
 
   let stepsInBinary = steps.map(step => nibblesToBits(step));
 
-  highlightSvgLine(stepsInBinary[0], 'x');
-  highlightSvgLine(stepsInBinary[1], 'u1');
-  highlightSvgLine(stepsInBinary[2], 'v1');
-  highlightSvgLine(stepsInBinary[4], 'u2');
-  highlightSvgLine(stepsInBinary[5], 'v2');
-  highlightSvgLine(stepsInBinary[7], 'u3');
-  highlightSvgLine(stepsInBinary[8], 'v3');
-  highlightSvgLine(stepsInBinary[10], 'u4');
-  highlightSvgLine(stepsInBinary[11], 'v4');
-  highlightSvgLine(stepsInBinary[12], 'y');
+  highlightSvgLine('spn-visualization', stepsInBinary[0], 'x');
+  highlightSvgLine('spn-visualization', stepsInBinary[1], 'u1');
+  highlightSvgLine('spn-visualization', stepsInBinary[2], 'v1');
+  highlightSvgLine('spn-visualization', stepsInBinary[4], 'u2');
+  highlightSvgLine('spn-visualization', stepsInBinary[5], 'v2');
+  highlightSvgLine('spn-visualization', stepsInBinary[7], 'u3');
+  highlightSvgLine('spn-visualization', stepsInBinary[8], 'v3');
+  highlightSvgLine('spn-visualization', stepsInBinary[10], 'u4');
+  highlightSvgLine('spn-visualization', stepsInBinary[11], 'v4');
+  highlightSvgLine('spn-visualization', stepsInBinary[12], 'y');
 }
 
-const showEncryption = () => {
-
+const spnShowEncryption = () => {
   let plaintext = $('#spn-visualization > .controls > .plaintext-key-ciphertext .plaintext-input').val();
   let key1 = $('#spn-visualization > .controls > .plaintext-key-ciphertext .key1-input').val();
   let key2 = $('#spn-visualization > .controls > .plaintext-key-ciphertext .key2-input').val();
@@ -89,11 +35,11 @@ const showEncryption = () => {
   key4 = key4.padStart(4, '0').split('').map(n => parseInt(n, 16));
   key5 = key5.padStart(4, '0').split('').map(n => parseInt(n, 16));
 
-  let sbox = getSBOX();
+  let sbox = getSBOX('spn-visualization');
   if (sbox === null) { return; }
   sbox = sbox.map(n => parseInt(n, 16));
 
-  let pbox = getPBOX();
+  let pbox = getPBOX('spn-visualization');
   if (pbox === null) { return; }
   pbox = pbox.map(n => parseInt(n, 16));
 
@@ -114,7 +60,7 @@ const showEncryption = () => {
   $('#spn-visualization > .figure > .ciphertext > .nibble3').text(nibble3);
   $('#spn-visualization > .figure > .ciphertext > .nibble4').text(nibble4);
 
-  highlightSvgLines(steps);
+  spnHighlightSvgLines(steps);
 }
 
 $(`#spn-visualization > .controls > .plaintext-key-ciphertext .key1-input,
@@ -124,7 +70,7 @@ $(`#spn-visualization > .controls > .plaintext-key-ciphertext .key1-input,
    #spn-visualization > .controls > .plaintext-key-ciphertext .key5-input`).on('input', (event) => {
   restrictInput(event, 4);
 
-  showEncryption();
+  spnShowEncryption();
 });
 
 // Put plaintext from input to top of diagram
@@ -142,17 +88,17 @@ $('#spn-visualization > .controls > .plaintext-key-ciphertext .plaintext-input')
   $('#spn-visualization > .figure > .plaintext > .nibble3').text(nibble3);
   $('#spn-visualization > .figure > .plaintext > .nibble4').text(nibble4);
 
-  showEncryption();
+  spnShowEncryption();
 });
 
 // Change svg PBOX based on PBOX input
 $('#spn-visualization > .controls > .pbox input').on('input', (event) => {
   restrictInput(event, 1);
 
-  let PBOX = getPBOX();
+  let PBOX = getPBOX('spn-visualization');
 
   if (PBOX !== null) {
-    $('.visualization > .controls > .error-messages > .pbox-error').hide();
+    $('#spn-visualization > .controls > .error-messages > .pbox-error').hide();
 
     for (let i = 0; i < 16; i++) {
       let classSelector = '.pbox.b' + i.toString(16);
@@ -162,25 +108,25 @@ $('#spn-visualization > .controls > .pbox input').on('input', (event) => {
       });
     }
 
-    showEncryption();
+    spnShowEncryption();
   } else {
-    $('.visualization > .controls > .error-messages > .pbox-error').show();
+    $('#spn-visualization > .controls > .error-messages > .pbox-error').show();
   }
 });
 
 $('#spn-visualization > .controls > .sbox input').on('input', (event) => {
   restrictInput(event, 1);
 
-  let SBOX = getSBOX();
+  let SBOX = getSBOX('spn-visualization');
 
   if (SBOX !== null) {
-    $('.visualization > .controls > .error-messages > .sbox-error').hide();
+    $('#spn-visualization > .controls > .error-messages > .sbox-error').hide();
 
-    showEncryption();
+    spnShowEncryption();
   } else {
-    $('.visualization > .controls > .error-messages > .sbox-error').show();
+    $('#spn-visualization > .controls > .error-messages > .sbox-error').show();
   }
 });
 
 // Show encryption on startup
-showEncryption();
+spnShowEncryption();

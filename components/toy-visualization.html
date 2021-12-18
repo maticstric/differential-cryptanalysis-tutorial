@@ -1,0 +1,79 @@
+<div class="visualization" id="toy-visualization">
+  <div class="figure">
+    <div class="plaintext">
+      <span class="nibble1">0111</span>
+    </div>
+    {{../images/toy.svg}}
+    <div class="ciphertext">
+      <span class="nibble1"></span>
+    </div>
+  </div>
+  <div class="controls">
+    <table class="sbox">
+      <tr>
+        <th colspan="17">SBOX</th>
+      </tr>
+      <tr>
+        <th>Input:</th>
+        <td>0</td>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+        <td>4</td>
+        <td>5</td>
+        <td>6</td>
+        <td>7</td>
+        <td>8</td>
+        <td>9</td>
+        <td>a</td>
+        <td>b</td>
+        <td>c</td>
+        <td>d</td>
+        <td>e</td>
+        <td>f</td>
+      </tr>
+      <tr>
+        <th>Output:</th>
+        <td><input value='e' /></td>
+        <td><input value='4' /></td>
+        <td><input value='d' /></td>
+        <td><input value='1' /></td>
+        <td><input value='2' /></td>
+        <td><input value='f' /></td>
+        <td><input value='b' /></td>
+        <td><input value='8' /></td>
+        <td><input value='3' /></td>
+        <td><input value='a' /></td>
+        <td><input value='6' /></td>
+        <td><input value='c' /></td>
+        <td><input value='5' /></td>
+        <td><input value='9' /></td>
+        <td><input value='0' /></td>
+        <td><input value='7' /></td>
+      </tr>
+    </table>
+    <table class="plaintext-key-ciphertext">
+      <tr>
+        <td><b>Plaintext:</b></td>
+        <td>0x<input class="plaintext-input" value='7' /></td>
+      </tr>
+      <tr>
+        <td><b>Key 1:</b></td>
+        <td>0x<input class="key1-input" value='b' /></td>
+      </tr>
+      <tr>
+        <td><b>Key 2:</b></td>
+        <td>0x<input class="key2-input" value='d' /></td>
+      </tr>
+      <tr>
+        <td><b>Ciphertext:</b></td>
+        <td class="ciphertext-output"></td>
+      </tr>
+    </table>
+    <div class="error-messages">
+      <p class="pbox-error" style="display: none;">PBOX is invalid. Make sure to only include hexadecimal digits (0 to f) and that the PBOX is one-to-one (i.e. there are no duplicates in the output).</p>
+      <p class="sbox-error" style="display: none;">SBOX is invalid. Make sure to only include hexadecimal digits (0 to f) and that the SBOX is one-to-one (i.e. there are no duplicates in the output).</p>
+    </div>
+  </div>
+  <script src="js/toy-visualization.js"></script>
+</div>

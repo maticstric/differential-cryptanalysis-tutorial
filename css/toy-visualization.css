@@ -1,0 +1,19 @@
+#toy-visualization > .figure {
+  width: 150px;
+}
+
+#toy-visualization > .controls {
+  width: 350px;
+}
+
+#toy-visualization > .figure > .plaintext,
+#toy-visualization > .figure > .ciphertext {
+  margin-left: 47px;
+  margin-right: -3px;
+  letter-spacing: 16.5px;
+  font-size: 18px;
+}
+
+#toy-visualization > .controls > .plaintext-key-ciphertext input {
+  width: 0.6em;
+}

@@ -2,37 +2,45 @@
   <!-- original viewBox="0 0 600 905" -->
   <g stroke="black" stroke-width="2.5">
     <!-- round 1 key input -->
-    <line x1="90" y1="45" x2="90" y2="80" />
-    <line x1="110" y1="45" x2="110" y2="80" />
-    <line x1="130" y1="45" x2="130" y2="80" />
-    <line x1="150" y1="45" x2="150" y2="80" />
+    <g class="x">
+      <line x1="90" y1="45" x2="90" y2="80" class="b0" />
+      <line x1="110" y1="45" x2="110" y2="80" class="b1" />
+      <line x1="130" y1="45" x2="130" y2="80" class="b2" />
+      <line x1="150" y1="45" x2="150" y2="80" class="b3" />
+    </g>
 
     <!-- round 1 key -->
     <rect x="80" y="80" width="80" height="35" fill="transparent" />
 
     <!-- round 1 sbox input -->
-    <line x1="90" y1="115" x2="90" y2="150" />
-    <line x1="110" y1="115" x2="110" y2="150" />
-    <line x1="130" y1="115" x2="130" y2="150" />
-    <line x1="150" y1="115" x2="150" y2="150" />
+    <g class="u">
+      <line x1="90" y1="115" x2="90" y2="150" class="b0" />
+      <line x1="110" y1="115" x2="110" y2="150" class="b1" />
+      <line x1="130" y1="115" x2="130" y2="150" class="b2" />
+      <line x1="150" y1="115" x2="150" y2="150" class="b3" />
+    </g>
 
     <!-- round 1 sbox -->
     <rect x="80" y="150" width="80" height="35" fill="transparent" />
 
     <!-- round 2 key input -->
-    <line x1="90" y1="185" x2="90" y2="220" />
-    <line x1="110" y1="185" x2="110" y2="220" />
-    <line x1="130" y1="185" x2="130" y2="220" />
-    <line x1="150" y1="185" x2="150" y2="220" />
+    <g class="v">
+      <line x1="90" y1="185" x2="90" y2="220" class="b0" />
+      <line x1="110" y1="185" x2="110" y2="220" class="b1" />
+      <line x1="130" y1="185" x2="130" y2="220" class="b2" />
+      <line x1="150" y1="185" x2="150" y2="220" class="b3" />
+    </g>
 
     <!-- round 2 key -->
     <rect x="80" y="220" width="80" height="35" fill="transparent" />
 
     <!-- round 2 key output -->
-    <line x1="90" y1="255" x2="90" y2="290" />
-    <line x1="110" y1="255" x2="110" y2="290" />
-    <line x1="130" y1="255" x2="130" y2="290" />
-    <line x1="150" y1="255" x2="150" y2="290" />
+    <g class="y">
+      <line x1="90" y1="255" x2="90" y2="290" class="b0" />
+      <line x1="110" y1="255" x2="110" y2="290" class="b1" />
+      <line x1="130" y1="255" x2="130" y2="290" class="b2" />
+      <line x1="150" y1="255" x2="150" y2="290" class="b3" />
+    </g>
   </g>
   <g>
     <style>
