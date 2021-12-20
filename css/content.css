@@ -12,6 +12,7 @@ h6 { font-size: 1em; }
 #content span.section-num {
   margin-right: 0.5em;
   color: var(--second-text);
+  font-family: monospace;
 }
 
 #content img:not(#logo),

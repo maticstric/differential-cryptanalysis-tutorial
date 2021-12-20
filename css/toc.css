@@ -18,6 +18,7 @@
 #toc span.section-num {
   color: var(--second-text);
   margin-right: 0.1em;
+  font-family: monospace;
 }
 
 #toc span.section-title {
