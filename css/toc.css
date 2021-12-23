@@ -18,7 +18,6 @@
 #toc span.section-num {
   color: var(--second-text);
   margin-right: 0.1em;
-  font-family: monospace;
 }
 
 #toc span.section-title {
@@ -50,7 +49,7 @@
 
 #toc > ol > li > div.section-header {
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 1.3em;
 }
 
 #toc > ol > li > ol > li > div.section-header {

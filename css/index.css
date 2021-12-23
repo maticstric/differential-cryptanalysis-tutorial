@@ -1,28 +1,28 @@
 body {
   display: flex;
   background: var(--background);
-  font-family: LibreBaskerville;
+  font-family: "NotoSerif";
   font-size: 14px;
   color: var(--text);
 }
 
 @font-face {
-  font-family: "LibreBaskerville";
-  src: url("../fonts/LibreBaskerville-Regular.ttf");
+  font-family: "NotoSerif";
+  src: url("../fonts/NotoSerif-Regular.ttf");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "LibreBaskerville";
-  src: url("../fonts/LibreBaskerville-Bold.ttf");
+  font-family: "NotoSerif";
+  src: url("../fonts/NotoSerif-Bold.ttf");
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "LibreBaskerville";
-  src: url("../fonts/LibreBaskerville-Italic.ttf");
+  font-family: "NotoSerif";
+  src: url("../fonts/NotoSerif-Italic.ttf");
   font-weight: normal;
   font-style: italic;
 }
