@@ -25,8 +25,21 @@ h5 { font-size: 1.3em; }
 #content h5 + p,
 #content h6 + p,
 #content ul + p,
+#content hr + p,
 #content p:first-child {
   text-indent: 0;
+}
+
+#content a {
+  color: var(--link);
+}
+
+#content hr {
+	border: none;
+	border-top: 2px solid;
+	height: 0;
+	margin: 2em auto;
+	width: 50%;
 }
 
 #content span.section-num {
