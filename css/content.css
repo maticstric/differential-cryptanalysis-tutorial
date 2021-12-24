@@ -24,6 +24,7 @@ h5 { font-size: 1.3em; }
 #content h4 + p,
 #content h5 + p,
 #content h6 + p,
+#content header + p,
 #content ul + p,
 #content hr + p,
 #content p:first-child {
@@ -61,4 +62,16 @@ h5 { font-size: 1.3em; }
 
 #content > header {
   display: flex;
+}
+
+#content > section > header > blockquote > cite {
+	display: block;
+  margin-top: 1em;
+  text-align: right;
+	font-style: normal;
+}
+
+#content > section > header > blockquote > p {
+  text-align: center;
+	font-style: italic;
 }
