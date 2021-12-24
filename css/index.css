@@ -2,7 +2,7 @@ body {
   display: flex;
   background: var(--background);
   font-family: "NotoSerif";
-  font-size: 14px;
+  font-size: 15px;
   color: var(--text);
 }
 

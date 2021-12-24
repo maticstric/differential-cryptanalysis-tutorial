@@ -28,17 +28,20 @@
   </header>
   <section>
     <h2>Abstract</h2>
-    <p>Differential cryptanalysis is a subtle, beautiful, and powerful method of breaking some of the world’s strongest ciphers. This tutorial is a detailed and interactive introduction to differential cryptanalysis for novices with an interest in cryptography. Unlike other currently available tutorials, it avoids needless math notation, makes very few assumptions about prior knowledge, does not gloss over details, and is written to be understood by motivated highschool students, undergraduates in engineering/computer science, and amateur cryptographers.</p>
+    <p>This tutorial is a detailed and interactive introduction to differential cryptanalysis, a subtle, beautiful, and powerful method of breaking some of the world’s strongest ciphers. Unlike other currently available tutorials, it avoids needless math notation, makes very few assumptions about prior knowledge, does not gloss over details, and is written to be understood by novices with an interest in cryptography.</p>
     <p>Before continuing, know that there are two major prerequisites:</p>
     <ul>
       <li>You must be comfortable with binary and hexidecimal notation, especially how to convert between them</li>
-      <li>You need a surface-level understanding of the purpose and use of symmetric-key block ciphers</li>
+      <li>We will be using differential cryptanalysis to break symmetric-key block ciphers. To learn about it before understanding how these ciphers are used would be to put the cart before the horse</li>
     </ul>
-    <p>It would also be helpful to have an understanding of the XOR operation, though that can be picked up as you read along.</p>
   </section>
   <section>
     <h2>Introduction</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <p>Differential cryptanalysis was first discovered in the 1970s by the designers of the Data Encryption Standard (DES) at IBM. After a consultation with the NSA, the DES designers opted to keep the techinque a secret, because its release “would weaken the competitive advantage the United States enjoyed over other countries in the field of cryptography.” It remained classified until it was independently rediscovered and published in the early 1990s by Eli Biham and Adi Shamir, who are now credited with its discovery.</p>
+    <p>Before getting to the definition, it is important to note that differential cryptanalysis is what’s known as a “chosen plaintext” attack. This means that we, as attackers, may choose which plaintexts, and how many, we want encrypted by the cipher using the same secret key. This may not always be true in the real world since the same key often isn’t used for a very long time, and during that time it can be difficult or impossible to encrypt whichever plaintext you wish. Nevertheless, we must make this assumption for the attack to work.</p>
+    <p>Block ciphers work by repeatedly applying a set of transformations (key addition, substitution, permutation, etc.) to a plaintext, until a ciphertext is obtained. The security of the cipher depends on the attacker never knowing/guessing any intermediate value during encryption; we can only see the plaintext (remember, chosen plaintext) and ciphertext, nothing more. However, as we will explain thoroughly in this tutorial, we <em>can</em> know/guess the intermediate value of the <em>difference of two plaintexts</em> during encryption (this is why the technique is called <em>differential</em> cryptanalysis). This is a very subtle point and one that can be difficult to wrap your mind around, but is paramount to understanding how differential cryptanalysis can recover the secret key and therefore break the cipher.</p>
+    <p>As you will see, this “difference” is measured via a simple bitwise XOR of the two plaintexts.</em>
+    <p>Now that we have the basics, let’s get to breaking our first cipher!</p>
   </section>
   <section>
     <h2>Toy Cipher</h2>
@@ -725,6 +728,13 @@
   <section>
     <h2>Modern Cryptography</h2>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+  </section>
+  <section>
+    <h2>Bibliography</h2>
+    <ol>
+      <li>Biham, Eli and Adi Shamir. “Differential Cryptanalysis of DES-like Cryptosystems.” <i>Journal of Cryptology</i> 4, no. 1 (January 1991): 3–72. https://doi.org/10.1007/BF00630563.</li>
+      <li>Coppersmith, Don. “The Data Encryption Standard (DES) and its strength against attacks” <i>IBM Journal of Research and Development</i> 38, no. 3 (May 1994): 243–250. https://doi.org/10.1147/rd.383.0243.</li>
+    </ol>
   </section>
 </section>
 <script src="js/generate-section-numbers.js"></script>
