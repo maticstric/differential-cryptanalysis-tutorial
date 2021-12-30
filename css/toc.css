@@ -49,17 +49,17 @@
 
 #toc > ol > li > div.section-header {
   font-weight: bold;
-  font-size: 1.3em;
+  font-size: 1.1em;
 }
 
 #toc > ol > li > ol > li > div.section-header {
-  font-size: 1em;
-}
-
-#toc > ol > li > ol > li > ol > li > div.section-header {
   font-size: 0.9em;
 }
 
-#toc > ol > li > ol > li > ol > li > ol > li > div.section-header {
+#toc > ol > li > ol > li > ol > li > div.section-header {
   font-size: 0.8em;
+}
+
+#toc > ol > li > ol > li > ol > li > ol > li > div.section-header {
+  font-size: 0.7em;
 }
