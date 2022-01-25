@@ -28,15 +28,22 @@
     <header>
       <h2>Toy Cipher</h2>
       <blockquote>
-        <p>If you can't solve a problem, then there is an easier problem you can't solve: find it.</p>
+        <p>If you can’t solve a problem, then there is an easier problem you can’t solve: find it.</p>
         <cite>—Pólya/Conway</cite>
       </blockquote>
     </header>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-    {{toy-visualization.html}}
+    <p>Let’s begin by breaking the simplest block cipher worth breaking which we’ll call the “toy cipher”. The toy cipher is <em>just</em> complicated enough to make differential cryptanalysis a valid method to break it, but no more. Note that it is trivial to break the toy cipher by bruteforce. Nevertheless, it will serve as a great introduction to the main concepts behind differential cryptanalysis.</p>
     <section>
       <h3>Toy Cipher Definition</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      <p>The toy cipher has a block size of 4 bits (also known as a nibble), meaning that we’ll input 4 bits into the cipher and it will return 4 bits of ciphertext. The toy cipher also has a 4 bit substitution box (SBOX) and two separate 4 bit keys (<i>k<sub>0</sub></i> and <i>k<sub>1</sub></i>).</p>
+      <p>Now let’s look at how we can encrypt a nibble with the toy cipher. There are three steps:</p>
+      <ol>
+        <li>We XOR the plaintext with <i>k<sub>0</sub></i></li>
+        <li>Feed that result into the SBOX</li>
+        <li>XOR the output of the SBOX with <i>k<sub>1</sub></i></li>
+      </ol>
+      <p>These simple steps give us the final ciphertext. The cipher is much easier to understand visually so look to the diagram below. Note that the values underlined with purple can be changed. Play around with different values to see how the cipher is affected. The red lines represent the 1s and the black lines the 0s as the nibble makes its way through the cipher. Also note the labels <i>x</i>, <i>u</i>, <i>v</i>, and <i>y</i> on the left (<i>x</i> is the value of the plaintext, <i>u</i> is the value after the fist key addition, etc.). Those labels will make it easier to discuss the cipher when we get to differential cryptanalysis so keep them in mind.</p>
+      {{toy-visualization.html}}
     </section>
     <section>
       <h3>Differential Cryptanalysis of the Toy Cipher</h3>
