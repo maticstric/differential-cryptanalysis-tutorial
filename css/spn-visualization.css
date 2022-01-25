@@ -17,3 +17,7 @@
 #spn-visualization > .controls > .plaintext-key-ciphertext input {
   width: 2.5em;
 }
+
+#spn-visualization p {
+  text-indent: 0;
+}

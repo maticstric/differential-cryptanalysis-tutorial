@@ -1,3 +1,7 @@
+#toy-visualization {
+  margin: 1em;
+}
+
 #toy-visualization > .figure {
   width: 150px;
 }
@@ -16,4 +20,8 @@
 
 #toy-visualization > .controls > .plaintext-key-ciphertext input {
   width: 0.6em;
+}
+
+#toy-visualization p {
+  text-indent: 0;
 }
