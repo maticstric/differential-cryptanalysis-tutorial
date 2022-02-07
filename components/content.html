@@ -20,9 +20,111 @@
     <p>Before getting to the definition, it is important to note that differential cryptanalysis is what’s known as a “chosen plaintext” attack. This means that we, as attackers, may choose which plaintexts, and how many, we want encrypted by the cipher using the same secret key. This may not always be true in the real world since the same key often isn’t used for a very long time, and during that time it can be difficult or impossible to encrypt whichever plaintext you wish. Nevertheless, we must make this assumption for the attack to work.</p>
     <hr/>
     <p>Block ciphers work by repeatedly applying a set of transformations (key addition, substitution, permutation, etc.) to a plaintext, until a ciphertext is obtained. The security of the cipher depends on the attacker never knowing/guessing any intermediate value during encryption; we can only see the plaintext (remember, chosen plaintext) and ciphertext, nothing more.</p>
-    <p>However, as we will explain thoroughly in this tutorial, we <em>can</em> know/guess the intermediate value of the <em>difference of two plaintexts</em> during encryption (this is why the technique is called <em>differential</em> cryptanalysis). This is a very subtle point and one that can be difficult to wrap your mind around, but is paramount to understanding how differential cryptanalysis can recover the secret key and therefore break the cipher.</p>
+    <p>However, as we will explain thoroughly in this tutorial, we <em>can</em> know/guess the intermediate value of the <em>difference of two plaintexts</em> during encryption (this is why the technique is called <em>differential</em> cryptanalysis). This is a very subtle point and one that can be difficult to understand initially, but is paramount to understanding how differential cryptanalysis can recover the secret key and therefore break the cipher.</p>
     <p>As you will see, this “difference” is measured via a simple bitwise XOR of the two plaintexts.</em>
     <p>Now that we have the basics, let’s get to breaking our first cipher!</p>
+  </section>
+  <section>
+    <h2>Components of Block Ciphers</h2>
+    <p>This section is a short refresher on the components which make up the block ciphers we’ll be breaking. If you feel confident in your knowledge of key addition, SBOXes, and PBOXes, you are encouraged to skip this section.</p>
+    <section>
+      <h3>Block Ciphers</h3>
+      <p>Block ciphers are symmetric key encryption algorithms which operate on a fixed-length <em>block</em> of bits. They take a fixed-length block as input and output an encrypted block of the same length. Decryption is done by running the encypted block backwards through the cipher. There are many ways to construct block ciphers, but most are made up of a repeated sequence of three simple transformations: key addition, substitution, and permutation.</p>
+    </section>
+    <section>
+      <h3>Key Addition</h3>
+      <p>Key addition is the step in which we introduce the secret/symmetric key. We do this by a bit-wise XOR of the key with the block. If, for example, our secret key was the bit string 11010010 and we had a block of bits, which <em>before</em> the key addition step had a value of 01101110 (block size is a byte), the value of the block <em>after</em> the key addition would be:</p>
+      <table id="key-addition">
+        <tr>
+          <td></td>
+          <td>01101110</td>
+        </tr>
+        <tr>
+          <td>⊕</td>
+          <td>11010010</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>10111100</td>
+        </tr>
+      </table>
+    </section>
+    <section>
+      <h3>Substitution</h3>
+      <p>Substitution is the step in which some bits are directly substituted for others. We define how these bits are substituted with a substitution-box (SBOX). Let’s define a simple 4-bit SBOX:
+      <table id="substitution">
+        <tr>
+          <th colspan="17">SBOX</th>
+        </tr>
+        <tr>
+          <th>Input:</th>
+          <td>0</td>
+          <td>1</td>
+          <td>2</td>
+          <td>3</td>
+          <td>4</td>
+          <td>5</td>
+          <td>6</td>
+          <td>7</td>
+          <td>8</td>
+          <td>9</td>
+          <td>a</td>
+          <td>b</td>
+          <td>c</td>
+          <td>d</td>
+          <td>e</td>
+          <td>f</td>
+        </tr>
+        <tr>
+          <th>Output:</th>
+          <td>e</td>
+          <td>4</td>
+          <td>d</td>
+          <td>1</td>
+          <td>2</td>
+          <td>f</td>
+          <td>b</td>
+          <td>8</td>
+          <td>3</td>
+          <td>a</td>
+          <td>6</td>
+          <td>c</td>
+          <td>5</td>
+          <td>9</td>
+          <td>0</td>
+          <td>7</td>
+        </tr>
+      </table>
+      <p>Note that both the input and output are represented using hexadecimal notation. As an example, if the input to this SBOX is 1011 (0xb), then we’ll get an output of 1100 (0xc) by simply looking it up in the table.</p>
+      <p>The SBOX that a cipher uses is almost always released to the public. This is done to follow Kerckhoffs's principle which says that a cryptosystem should be secure even if everything about it―with the exception of the secret keys―is public knowledge. If everybody can see what the SBOX does, it might at first seem that substitution is pointless and insignificant because it’s so easly reversible. However, it is actually often the only part of a cipher which directly protects against differential cryptanalysis. Consequently, we’ll discuss substitution in a lot more depth throughout this tutorial.</p>
+    </section>
+    <section>
+      <h3>Permutation</h3>
+      <p>Permutation is the step in which we change the position of the bits. We define how these bits are permutated with a permutation-box (PBOX). Let’s define a simple 4-bit PBOX:</p>
+      <table id="permutation">
+        <tr>
+          <th colspan="17">PBOX</th>
+        </tr>
+        <tr>
+          <th>Input:</th>
+          <td>0</td>
+          <td>1</td>
+          <td>2</td>
+          <td>3</td>
+        </tr>
+        <tr>
+          <th>Output:</th>
+          <td>3</td>
+          <td>0</td>
+          <td>2</td>
+          <td>1</td>
+        </tr>
+      </table>
+      <p>This PBOX says that the bit at position 0 will move to position 3, the bit at position 1 will move to position 0, the bit at position 2 will move to position 2, and the bit at position 3 will move to position 1. Let’s see an example: if we input the nibble 1001 into the PBOX we should see that the output of the PBOX will be 0101. PBOXes, unlike SBOXes, are easy to represent visually:</p>
+      {{../images/pbox.svg}}
+      <p>Just like SBOXes, PBOXes are released to the public. Though SBOXes serve as the main protection against differential cryptanalysis, PBOXes also play a vital role which we will discuss later.</p>
+      <p>
+    </section>
   </section>
   <section>
     <header>
@@ -35,14 +137,14 @@
     <p>Let’s begin by breaking the simplest block cipher worth breaking which we’ll call the “toy cipher”. The toy cipher is <em>just</em> complicated enough to make differential cryptanalysis a valid method to break it, but no more. Note that it is trivial to break the toy cipher by bruteforce. Nevertheless, it will serve as a great introduction to the main concepts behind differential cryptanalysis.</p>
     <section>
       <h3>Toy Cipher Definition</h3>
-      <p>The toy cipher has a block size of 4 bits (also known as a nibble), meaning that we’ll input 4 bits into the cipher and it will return 4 bits of ciphertext. The toy cipher also has a 4 bit substitution box (SBOX) and two separate 4 bit keys (<i>k<sub>0</sub></i> and <i>k<sub>1</sub></i>).</p>
+      <p>The toy cipher has a block size of 4 bits (also known as a nibble), meaning that we’ll input 4 bits into the cipher and it will return 4 bits of ciphertext. The toy cipher also has a 4-bit substitution box (SBOX) and two separate 4-bit keys (<i>k</i><sub>1</sub> and <i>k</i><sub>2</sub>).</p>
       <p>Now let’s look at how we can encrypt a nibble with the toy cipher. There are three steps:</p>
       <ol>
-        <li>We XOR the plaintext with <i>k<sub>0</sub></i></li>
+        <li>We XOR the plaintext with <i>k</i><sub>1</sub></li>
         <li>Feed that result into the SBOX</li>
-        <li>XOR the output of the SBOX with <i>k<sub>1</sub></i></li>
+        <li>XOR the output of the SBOX with <i>k</i><sub>2</sub></li>
       </ol>
-      <p>These simple steps give us the final ciphertext. The cipher is much easier to understand visually so look to the diagram below. Note that the values underlined with purple can be changed. Play around with different values to see how the cipher is affected. The red lines represent the 1s and the black lines the 0s as the nibble makes its way through the cipher. Also note the labels <i>x</i>, <i>u</i>, <i>v</i>, and <i>y</i> on the left (<i>x</i> is the value of the plaintext, <i>u</i> is the value after the fist key addition, etc.). Those labels will make it easier to discuss the cipher when we get to differential cryptanalysis so keep them in mind.</p>
+      <p>These simple steps give us the final ciphertext. The cipher is much easier to understand visually so look to the diagram below. The values underlined with purple can be changed, so play around with them to see how the cipher is affected. The red lines represent the 1s and the black lines the 0s as the nibble makes its way through the cipher. Also note the labels <i>x</i>, <i>u</i>, <i>v</i>, and <i>y</i> on the left (<i>x</i> is the value of the plaintext, <i>u</i> is the value after the first key addition, etc.). Those labels will make it easier to discuss the cipher when we get to differential cryptanalysis so keep them in mind.</p>
       {{toy-visualization.html}}
     </section>
     <section>

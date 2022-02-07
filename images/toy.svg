@@ -43,16 +43,6 @@
     </g>
   </g>
   <g>
-    <style>
-      text {
-        font-size: 20px;
-        font-family: monospace;
-      }
-
-      .sub {
-        font-size: 13px;
-      }
-    </style>
     <!-- K1 -->
     <text x="113" y="103">K</text>
     <text class="sub" x="125" y="107">1</text>

@@ -72,3 +72,12 @@
 .visualization > .figure > svg line.isOne {
   stroke: var(--is-one);
 }
+
+.visualization svg text {
+  font-size: 20px;
+  font-family: monospace;
+}
+
+.visualization svg .sub {
+  font-size: 13px;
+}

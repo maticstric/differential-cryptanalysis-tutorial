@@ -8,13 +8,13 @@ h5 { font-size: 1.2em; }
   flex: 3;
   padding-left: 10em;
   padding-right: 10em;
+  font-size: 1.1em;
 }
 
 #content p {
   margin: 0;
   text-indent: 2em;
   line-height: 1.5em;
-  font-size: 1.1em;
   text-align: justify;
   text-justify: inter-word;
 }
@@ -74,4 +74,47 @@ h5 { font-size: 1.2em; }
 #content > section > header > blockquote > p {
   text-align: center;
 	font-style: italic;
+}
+
+#content table#key-addition {
+  margin: 2em;
+}
+
+#content table#key-addition tr:nth-of-type(2) td:nth-of-type(2) {
+  border-bottom: 1px solid;
+}
+
+#content table#substitution {
+  width: 25em;
+}
+
+#content table#permutation {
+  width: 11em;
+}
+
+#content table#substitution,
+#content table#permutation {
+  font-family: monospace;
+  text-align: center;
+  margin: 2em;
+}
+
+#content table#substitution,
+#content table#substitution th,
+#content table#substitution td,
+#content table#permutation,
+#content table#permutation th,
+#content table#permutation td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+#content #pbox-svg {
+  width: 5em;
+  margin: 2em;
+}
+
+#content #pbox-svg text {
+  font-size: 20px;
+  font-family: monospace;
 }

@@ -1,0 +1,16 @@
+<svg version="1.1" viewBox="60 30 90 125" xmlns="http://www.w3.org/2000/svg" id="pbox-svg">
+  <!-- original viewBox="0 0 200 200" -->
+  <g stroke="black">
+    <!-- input -->
+    <text x="60" y="50">1 0 0 1</text>
+
+    <!-- lines -->
+    <line x1="66" y1="55" x2="138" y2="130" stroke-width="3" />
+    <line x1="90" y1="55" x2="66" y2="130" stroke-width="3" />
+    <line x1="114" y1="55" x2="114" y2="130" stroke-width="3" />
+    <line x1="138" y1="55" x2="90" y2="130" stroke-width="3" />
+
+    <!-- output -->
+    <text x="60" y="150">0 1 0 1</text>
+  </g>
+</svg>
