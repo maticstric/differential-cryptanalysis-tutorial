@@ -76,6 +76,10 @@ h5 { font-size: 1.2em; }
 	font-style: italic;
 }
 
+#content table#xor {
+  width: 10em;
+}
+
 #content table#key-addition {
   margin: 2em;
 }
@@ -92,19 +96,50 @@ h5 { font-size: 1.2em; }
   width: 11em;
 }
 
-#content table#substitution,
-#content table#permutation {
+#content table#xor-input-table {
+  width: 15em;
+}
+
+#content table#xor-input-output-table {
+  width: 30em;
+}
+
+#content table#xor-appearances-table {
+  width: 15em;
+}
+
+#content table#difference-distribution-table {
+  table-layout: fixed;
+  width: 30em;
+}
+
+#content table#difference-distribution-table th:nth-of-type(1) {
+  width: 4em;
+}
+
+#content table#difference-distribution-table tr:nth-of-type(1) th,
+#content table#difference-distribution-table tr:nth-of-type(2) th {
+  border-top: none;
+  border-bottom: none;
+}
+
+#content table#xor-appearances-table tr:nth-of-type(4) td,
+#content table#xor-appearances-table tr:nth-of-type(7) td,
+#content table#xor-appearances-table tr:nth-of-type(9) td,
+#content table#xor-appearances-table tr:nth-of-type(15) td,
+#content table#xor-appearances-table tr:nth-of-type(17) td {
+  background: var(--second-background)
+}
+
+#content table.monospaced-table {
   font-family: monospace;
   text-align: center;
   margin: 2em;
 }
 
-#content table#substitution,
-#content table#substitution th,
-#content table#substitution td,
-#content table#permutation,
-#content table#permutation th,
-#content table#permutation td {
+#content table.monospaced-table,
+#content table.monospaced-table th,
+#content table.monospaced-table td {
   border: 1px solid black;
   border-collapse: collapse;
 }

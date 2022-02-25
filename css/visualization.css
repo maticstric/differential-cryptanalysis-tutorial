@@ -22,7 +22,7 @@
 }
 
 .visualization input {
-  font-size: 14px;
+  font-size: 1em;
   height: 1em;
   border: none;
   border-bottom: 2px solid var(--border);
