@@ -124,11 +124,11 @@
         </tr>
       </table>
       <p>Note that both the input and output are represented using hexadecimal notation. As an example, if the input to this SBOX is 1011 (0xb), then we’ll get an output of 1100 (0xc) by simply looking it up in the table.</p>
-      <p>The SBOX that a cipher uses is almost always released to the public. This is done to follow Kerckhoffs's principle which says that a cryptosystem should be secure even if everything about it―with the exception of the secret keys―is public knowledge. If everybody can see what the SBOX does, it might at first seem that substitution is pointless and insignificant because it’s so easly reversible. However, it is actually often the only part of a cipher which directly protects against differential cryptanalysis. Consequently, we’ll discuss substitution in a lot more depth throughout this tutorial.</p>
+      <p>The SBOX that a cipher uses is almost always released to the public. This is done in accordance with Kerckhoffs’s principle which says that a cryptosystem should be secure even if everything about it―with the exception of the secret keys―is public knowledge. Just because the SBOX is public does not mean that substitution is pointless or insignificant because it’s so easily reversible. In fact, it is often the only part of a cipher which directly protects against differential cryptanalysis. Consequently, we’ll discuss substitution in a lot more depth throughout this tutorial.</p>
     </section>
     <section>
       <h3>Permutation</h3>
-      <p>Permutation is the step in which we change the position of the bits. We define how these bits are permutated with a permutation-box (PBOX). Let’s define a simple 4-bit PBOX:</p>
+      <p>Permutation is a step in which we change the position of the bits. We define how these bits are permutated with a permutation-box (PBOX). Let’s define a simple 4-bit PBOX:</p>
       <table class="monospaced-table" id="permutation">
         <tr>
           <th colspan="17">PBOX</th>
@@ -148,7 +148,7 @@
           <td>1</td>
         </tr>
       </table>
-      <p>This PBOX says that the bit at position 0 will move to position 3, the bit at position 1 will move to position 0, the bit at position 2 will move to position 2, and the bit at position 3 will move to position 1. Let’s see an example: if we input the nibble 1001 into the PBOX we should see that the output of the PBOX will be 0101. PBOXes, unlike SBOXes, are easy to represent visually:</p>
+      <p>This PBOX says that the bit at position 0 will move to position 3, the bit at position 1 will move to position 0, the bit at position 2 will move to position 2, and the bit at position 3 will move to position 1. Let’s see an example: if we input the nibble 1001 into the PBOX, we will get an output of 0101. PBOXes, unlike SBOXes, are easy to represent visually:</p>
       {{../images/pbox.svg}}
       <p>Just like SBOXes, PBOXes are released to the public. Though SBOXes serve as the main protection against differential cryptanalysis, PBOXes also play a vital role which we will discuss later.</p>
       <p>
@@ -165,14 +165,14 @@
     <p>Let’s begin by breaking the simplest block cipher worth breaking which we’ll call the “toy cipher”. The toy cipher is <em>just</em> complicated enough to make differential cryptanalysis a valid method to break it, but no more. Note that it is trivial to break the toy cipher by bruteforce. Nevertheless, it will serve as a great introduction to the main concepts behind differential cryptanalysis.</p>
     <section>
       <h3>Toy Cipher Definition</h3>
-      <p>The toy cipher has a block size of 4 bits (also known as a nibble), meaning that we’ll input 4 bits into the cipher and it will return 4 bits of ciphertext. The toy cipher also has a 4-bit substitution box (SBOX) and two separate 4-bit keys (<i>k</i><sub>1</sub> and <i>k</i><sub>2</sub>).</p>
+      <p>The toy cipher has a block size of 4 bits (also known as a nibble), meaning that we’ll input 4 bits into the cipher and it will return 4 bits of ciphertext. The toy cipher has a 4-bit SBOX and two separate 4-bit keys (<i>k</i><sub>1</sub> and <i>k</i><sub>2</sub>).</p>
       <p>Now let’s look at how we can encrypt a nibble with the toy cipher. There are three steps:</p>
       <ol>
         <li>We XOR the plaintext with <i>k</i><sub>1</sub></li>
         <li>Feed that result into the SBOX</li>
         <li>XOR the output of the SBOX with <i>k</i><sub>2</sub></li>
       </ol>
-      <p>These simple steps give us the final ciphertext. The cipher is much easier to understand visually so look to the diagram below. The values underlined with purple can be changed, so play around with them to see how the cipher is affected. The red lines represent the 1s and the black lines the 0s as the nibble makes its way through the cipher. Also note the labels <i>x</i>, <i>u</i>, <i>v</i>, and <i>y</i> on the left (<i>x</i> is the value of the plaintext, <i>u</i> is the value after the first key addition, etc.). Those labels will make it easier to discuss the cipher when we get to differential cryptanalysis so keep them in mind.</p>
+      <p>These simple steps give us the final ciphertext. The cipher is much easier to understand visually so look to the figure below. The values underlined with purple can be changed, so play around with them to see how the cipher is affected. The red lines represent the 1s and the black lines the 0s as the nibble makes its way through the cipher. Also note the labels <i>x</i>, <i>u</i>, <i>v</i>, and <i>y</i> on the left (<i>x</i> is the value of the plaintext, <i>u</i> is the value after the first key addition, etc.). Those labels will make it easier to discuss the cipher when we get to differential cryptanalysis so keep them in mind.</p>
       {{toy-visualization.html}}
     </section>
     <section>
@@ -465,7 +465,7 @@
         </tr>
         <tr>
           <td>0010</td>
-          <td>8</td>
+          <td class="highlight">8</td>
         </tr>
         <tr>
           <td>0011</td>
@@ -477,7 +477,7 @@
         </tr>
         <tr>
           <td>0101</td>
-          <td>2</td>
+          <td class="highlight">2</td>
         </tr>
         <tr>
           <td>0110</td>
@@ -485,7 +485,7 @@
         </tr>
         <tr>
           <td>0111</td>
-          <td>2</td>
+          <td class="highlight">2</td>
         </tr>
         <tr>
           <td>1000</td>
@@ -509,7 +509,7 @@
         </tr>
         <tr>
           <td>1101</td>
-          <td>2</td>
+          <td class="highlight">2</td>
         </tr>
         <tr>
           <td>1110</td>
@@ -517,11 +517,11 @@
         </tr>
         <tr>
           <td>1111</td>
-          <td>2</td>
+          <td class="highlight">2</td>
         </tr>
       </table>
       <p>Consider what this table is really saying. If we pick two plaintexts which XOR to 1011, put each of them through the SBOX, and then XOR those SBOX outputs, 8 out of 16 times, they will XOR to 0010. They will XOR to 0111 2 out of 16 times. They will never XOR to 1010. This bias towards certain XORs is what makes differential cryptanalysis possible.</p>
-      <p>So far we’ve only considered the input XOR of 1011. We can repeat the same process for every possible input XOR and build what is called a <em>difference distribution table</em> for the given SBOX. The rows in this table represent the SBOX input, the columns represent the SBOX output, and the cell values are the number of appearances of that output XOR given the input XOR. Note that the XORs are represented in hexadecimal instead of binary (e.g. you can find the previous example of 1011 in the row labeled b).</p>
+      <p>So far we’ve only considered the input XOR of 1011. We can repeat the same process for every possible input XOR and build what is called a <em class="highlight">difference distribution table</em> for the given SBOX. The rows in this table represent the SBOX input XOR, the columns represent the SBOX output XOR, and the cell values are the number of appearances of that output XOR given the input XOR. Note that the XORs are represented in hexadecimal instead of binary (e.g. you can find the previous example of 1011 in the row labeled b).</p>
       <table class="monospaced-table" id="difference-distribution-table">
         <tr>
           <th>Input</th>
@@ -548,7 +548,7 @@
         </tr>
         <tr>
           <th>0</th>
-          <td>16</td>
+          <td class="highlight">16</td>
           <td>0</td>
           <td>0</td>
           <td>0</td>
@@ -570,17 +570,17 @@
           <td>0</td>
           <td>0</td>
           <td>0</td>
-          <td>2</td>
+          <td class="highlight">2</td>
           <td>0</td>
           <td>0</td>
           <td>0</td>
-          <td>2</td>
+          <td class="highlight">2</td>
           <td>0</td>
-          <td>2</td>
-          <td>4</td>
+          <td class="highlight">2</td>
+          <td class="highlight">4</td>
           <td>0</td>
-          <td>4</td>
-          <td>2</td>
+          <td class="highlight">4</td>
+          <td class="highlight">2</td>
           <td>0</td>
           <td>0</td>
         </tr>
@@ -589,54 +589,54 @@
           <td>0</td>
           <td>0</td>
           <td>0</td>
-          <td>2</td>
+          <td class="highlight">2</td>
           <td>0</td>
-          <td>6</td>
-          <td>2</td>
-          <td>2</td>
+          <td class="highlight">6</td>
+          <td class="highlight">2</td>
+          <td class="highlight">2</td>
           <td>0</td>
-          <td>2</td>
-          <td>0</td>
-          <td>0</td>
+          <td class="highlight">2</td>
           <td>0</td>
           <td>0</td>
-          <td>2</td>
+          <td>0</td>
+          <td>0</td>
+          <td class="highlight">2</td>
           <td>0</td>
         </tr>
         <tr>
           <th>3</th>
           <td>0</td>
           <td>0</td>
-          <td>2</td>
+          <td class="highlight">2</td>
           <td>0</td>
-          <td>2</td>
-          <td>0</td>
-          <td>0</td>
+          <td class="highlight">2</td>
           <td>0</td>
           <td>0</td>
-          <td>4</td>
-          <td>2</td>
-          <td>0</td>
-          <td>2</td>
           <td>0</td>
           <td>0</td>
-          <td>4</td>
+          <td class="highlight">4</td>
+          <td class="highlight">2</td>
+          <td>0</td>
+          <td class="highlight">2</td>
+          <td>0</td>
+          <td>0</td>
+          <td class="highlight">4</td>
         </tr>
         <tr>
           <th>4</th>
           <td>0</td>
           <td>0</td>
           <td>0</td>
-          <td>2</td>
+          <td class="highlight">2</td>
           <td>0</td>
           <td>0</td>
-          <td>6</td>
+          <td class="highlight">6</td>
           <td>0</td>
           <td>0</td>
-          <td>2</td>
+          <td class="highlight">2</td>
           <td>0</td>
-          <td>4</td>
-          <td>2</td>
+          <td class="highlight">4</td>
+          <td class="highlight">2</td>
           <td>0</td>
           <td>0</td>
           <td>0</td>
@@ -644,59 +644,59 @@
         <tr>
           <th>5</th>
           <td>0</td>
-          <td>4</td>
+          <td class="highlight">4</td>
           <td>0</td>
           <td>0</td>
           <td>0</td>
-          <td>2</td>
-          <td>2</td>
+          <td class="highlight">2</td>
+          <td class="highlight">2</td>
           <td>0</td>
           <td>0</td>
           <td>0</td>
-          <td>4</td>
+          <td class="highlight">4</td>
           <td>0</td>
-          <td>2</td>
+          <td class="highlight">2</td>
           <td>0</td>
           <td>0</td>
-          <td>2</td>
+          <td class="highlight">2</td>
         </tr>
         <tr>
           <th>6</th>
           <td>0</td>
           <td>0</td>
           <td>0</td>
-          <td>4</td>
+          <td class="highlight">4</td>
           <td>0</td>
-          <td>4</td>
-          <td>0</td>
-          <td>0</td>
+          <td class="highlight">4</td>
           <td>0</td>
           <td>0</td>
           <td>0</td>
           <td>0</td>
-          <td>2</td>
-          <td>2</td>
-          <td>2</td>
-          <td>2</td>
+          <td>0</td>
+          <td>0</td>
+          <td class="highlight">2</td>
+          <td class="highlight">2</td>
+          <td class="highlight">2</td>
+          <td class="highlight">2</td>
         </tr>
         <tr>
           <th>7</th>
           <td>0</td>
           <td>0</td>
-          <td>2</td>
-          <td>2</td>
-          <td>2</td>
+          <td class="highlight">2</td>
+          <td class="highlight">2</td>
+          <td class="highlight">2</td>
           <td>0</td>
-          <td>2</td>
-          <td>0</td>
-          <td>0</td>
-          <td>2</td>
-          <td>2</td>
+          <td class="highlight">2</td>
           <td>0</td>
           <td>0</td>
+          <td class="highlight">2</td>
+          <td class="highlight">2</td>
           <td>0</td>
           <td>0</td>
-          <td>4</td>
+          <td>0</td>
+          <td>0</td>
+          <td class="highlight">4</td>
         </tr>
         <tr>
           <th>8</th>
@@ -706,32 +706,32 @@
           <td>0</td>
           <td>0</td>
           <td>0</td>
-          <td>2</td>
-          <td>2</td>
+          <td class="highlight">2</td>
+          <td class="highlight">2</td>
           <td>0</td>
           <td>0</td>
           <td>0</td>
-          <td>4</td>
+          <td class="highlight">4</td>
           <td>0</td>
-          <td>4</td>
-          <td>2</td>
-          <td>2</td>
+          <td class="highlight">4</td>
+          <td class="highlight">2</td>
+          <td class="highlight">2</td>
         </tr>
         <tr>
           <th>9</th>
           <td>0</td>
-          <td>2</td>
+          <td class="highlight">2</td>
           <td>0</td>
           <td>0</td>
-          <td>2</td>
+          <td class="highlight">2</td>
           <td>0</td>
           <td>0</td>
-          <td>4</td>
-          <td>2</td>
+          <td class="highlight">4</td>
+          <td class="highlight">2</td>
           <td>0</td>
-          <td>2</td>
-          <td>2</td>
-          <td>2</td>
+          <td class="highlight">2</td>
+          <td class="highlight">2</td>
+          <td class="highlight">2</td>
           <td>0</td>
           <td>0</td>
           <td>0</td>
@@ -739,116 +739,443 @@
         <tr>
           <th>a</th>
           <td>0</td>
-          <td>2</td>
-          <td>2</td>
+          <td class="highlight">2</td>
+          <td class="highlight">2</td>
           <td>0</td>
           <td>0</td>
           <td>0</td>
           <td>0</td>
           <td>0</td>
-          <td>6</td>
+          <td class="highlight">6</td>
           <td>0</td>
           <td>0</td>
-          <td>2</td>
+          <td class="highlight">2</td>
           <td>0</td>
           <td>0</td>
-          <td>4</td>
+          <td class="highlight">4</td>
           <td>0</td>
         </tr>
         <tr>
           <th>b</th>
           <td>0</td>
           <td>0</td>
-          <td>8</td>
+          <td class="highlight">8</td>
           <td>0</td>
           <td>0</td>
-          <td>2</td>
+          <td class="highlight">2</td>
           <td>0</td>
-          <td>2</td>
-          <td>0</td>
-          <td>0</td>
+          <td class="highlight">2</td>
           <td>0</td>
           <td>0</td>
           <td>0</td>
-          <td>2</td>
           <td>0</td>
-          <td>2</td>
+          <td>0</td>
+          <td class="highlight">2</td>
+          <td>0</td>
+          <td class="highlight">2</td>
         </tr>
         <tr>
           <th>c</th>
           <td>0</td>
-          <td>2</td>
+          <td class="highlight">2</td>
           <td>0</td>
           <td>0</td>
-          <td>2</td>
-          <td>2</td>
-          <td>2</td>
+          <td class="highlight">2</td>
+          <td class="highlight">2</td>
+          <td class="highlight">2</td>
           <td>0</td>
           <td>0</td>
           <td>0</td>
           <td>0</td>
-          <td>2</td>
+          <td class="highlight">2</td>
           <td>0</td>
-          <td>6</td>
+          <td class="highlight">6</td>
           <td>0</td>
           <td>0</td>
         </tr>
         <tr>
           <th>d</th>
           <td>0</td>
-          <td>4</td>
+          <td class="highlight">4</td>
           <td>0</td>
           <td>0</td>
           <td>0</td>
           <td>0</td>
           <td>0</td>
-          <td>4</td>
-          <td>2</td>
+          <td class="highlight">4</td>
+          <td class="highlight">2</td>
           <td>0</td>
-          <td>2</td>
+          <td class="highlight">2</td>
           <td>0</td>
-          <td>2</td>
+          <td class="highlight">2</td>
           <td>0</td>
-          <td>2</td>
+          <td class="highlight">2</td>
           <td>0</td>
         </tr>
         <tr>
           <th>e</th>
           <td>0</td>
           <td>0</td>
-          <td>2</td>
-          <td>4</td>
-          <td>2</td>
+          <td class="highlight">2</td>
+          <td class="highlight">4</td>
+          <td class="highlight">2</td>
           <td>0</td>
           <td>0</td>
           <td>0</td>
-          <td>6</td>
+          <td class="highlight">6</td>
           <td>0</td>
           <td>0</td>
           <td>0</td>
           <td>0</td>
           <td>0</td>
-          <td>2</td>
+          <td class="highlight">2</td>
           <td>0</td>
         </tr>
         <tr>
           <th>f</th>
           <td>0</td>
-          <td>2</td>
+          <td class="highlight">2</td>
           <td>0</td>
           <td>0</td>
-          <td>6</td>
+          <td class="highlight">6</td>
           <td>0</td>
           <td>0</td>
           <td>0</td>
           <td>0</td>
-          <td>4</td>
+          <td class="highlight">4</td>
           <td>0</td>
-          <td>2</td>
+          <td class="highlight">2</td>
           <td>0</td>
           <td>0</td>
-          <td>2</td>
+          <td class="highlight">2</td>
           <td>0</td>
+        </tr>
+      </table>
+      <hr/>
+      <p>This table gives us probabilities for what happens to the XOR of two plaintexts as they individually travel through the SBOX. However, besides the SBOX, the cipher also includes key addition. So, before we finally get to  breaking the keys, we must consider what happens to the XOR of two plaintexts as we put them through key addition.</p>
+      <p>Let’s consider two plaintexts:</p>
+      <table class="monospaced-table math">
+        <tr>
+          <td>
+            <p><i>x</i> = 0111</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><i>x</i><sup>*</sup> = 1100</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><i>x</i> ⊕ <i>x</i><sup>*</sup> = <span class="highlight">1011</span></p>
+          </td>
+        </tr>
+      </table>
+      <p>Now let’s choose a key that we’ll add to both:</p>
+      <table class="monospaced-table math">
+        <tr>
+          <td>
+            <p><i>k</i> = 1010</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><i>x</i> ⊕ <i>k</i> = 0111 ⊕ 1010 = 1101</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><i>x</i><sup>*</sup> ⊕ <i>k</i> = 1100 ⊕ 1010 = 0110</p>
+          </td>
+        </tr>
+      </table>
+      <p>Now let’s see what value we get when we XOR the outputs of this key addition:</p>
+      <table class="monospaced-table math">
+        <tr>
+          <td>
+            <p>(<i>x</i> ⊕ <i>k</i>) ⊕ (<i>x</i><sup>*</sup> ⊕ <i>k</i>) = 1101 ⊕ 0110 = <span class="highlight">1011</span></p>
+          </td>
+        </tr>
+      </table>
+      <p>You should see that both <i>x</i> ⊕ <i>x</i><sup>*</sup> and (<i>x</i> ⊕ <i>k</i>) ⊕ (<i>x</i><sup>*</sup> ⊕ <i>k</i>) come out to the same value. This should be apparent because of a few mathematical facts: XOR is associative, XOR is commutative, a value XORed by itself is zero, and a value XORed by zero is itself. We can therefore prove the previous statement like so:</p>
+      <table class="monospaced-table math">
+        <tr>
+          <td>
+            <p>(<i>x</i> ⊕ <i>k</i>) ⊕ (<i>x</i><sup>*</sup> ⊕ <i>k</i>)</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>= <i>x</i> ⊕ <i>x</i><sup>*</sup> ⊕ <i>k</i> ⊕ <i>k</i></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>= <i>x</i> ⊕ <i>x</i><sup>*</sup> ⊕ 0</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>= <i>x</i> ⊕ <i>x</i><sup>*</sup></p>
+          </td>
+        </tr>
+      </table>
+      <p>This is an incredibly useful realization. Given the XOR of two plaintexts, we can predict with 100% certainty what their XOR will be after key addition—it will always stay the same. Remember that with the SBOX, the best prediction we have is only 50%, and many are much worse than that.</p>
+      <p>The fact that keys become essentially useless when we use this attack should convince us that we’re on the right track. This is also why SBOXes are an absolutely <em>essential</em> part of many ciphers. You will see in the next section that even when we also consider permutations, SBOXes are still the only protection against attacks like differential cryptanalysis.</p>
+      <hr/>
+      <p>Now we can begin breaking the keys.</p>
+      <p>Because differential cryptanalysis is a chosen plaintext attack we’ll need to encrypt plaintexts in order to break the keys. For that, however, we need to choose which keys will be used for encryption. For now let’s assume that <i>k</i><sub>1</sub> = 0xb and <i>k</i><sub>2</sub> = 0xd. Of course, when differential cryptanalysis is used in the real world the keys are unknown to the attackers. But some keys <em>need</em> to be chosen and this is just a tutorial so we might as well know them beforehand.</p>
+      <p>The first step is to pick a <em class="highlight">differential characteristic</em> (this is just an input and output XOR pair). Let’s just choose a random one which has a non-zero value in the difference distribution table: 0x5 ➝ 0xa.</p>
+      <p>Next we must find a pair of plaintexts which XOR to 0x5 and whose associated ciphertexts XOR to 0xa. Such a pair is called a <em class="highlight">good pair</em> for that given differential characteristic. You will see how a good pair is useful in a second.</p>
+      <p>Assuming <i>k</i><sub>1</sub> = 0xb and <i>k</i><sub>2</sub> = 0xd, one good pair is 0x6 and 0x3. They encrypt to 0x4 and 0xe respectively, and 0x4 ⊕ 0xe = 0xa. You can confirm this using the toy cipher visualization at the beginning of this section or by hand.</p>
+      <div class="visualization">
+        <div class="figure">
+          {{../images/toy-dc-unfinished.svg}}
+        </div>
+      </div>
+      <p>Now let’s see how this good pair will travel through the cipher. Above is a figure showing what is being explained here. We’ll be referencing the letters on the sides of the figure.</p>
+      <p>We know that at <i>x</i> the value on the left is 0x6, the value on the right is 0x3, and their XOR is 0x5. We also know that at <i>y</i> the value on the left is 0x4, the value on the right is 0xe, and their XOR is 0xa. These are all values which we’ve hand picked. Now, what is the XOR at <i>u</i>? As explained earlier, the XOR doesn’t change over key addition, so it remains at 0x5. We can follow the same logic and conclude that the XOR at <i>v</i> must be 0xa.</p>
+      <p>But what are the values at <i>u</i> and <i>v</i>?</p>
+      <p>Assuming the keys were unknown to us, there’s no easy way to tell. However, we do know that whatever the values at <i>u</i> are, they must XOR to 0x5 and whatever the values at <i>v</i> are, they must XOR to 0xa. Well, what are the possible inputs to an SBOX which XOR to 0x5 and whose corresponding SBOX outputs XOR to 0xa? We’ve already calculated them when making the difference distribution table! The calculation was not shown previously (we only saw the one for an SBOX input XOR of 0xb) so let’s see it now:</p>
+      <table class="monospaced-table" id="xor-input-output-table-0x5">
+        <tr>
+          <th><i>x</i></th>
+          <th><i>x</i><sup>*</sup></th>
+          <th><i>x</i> ⊕ <i>x</i><sup>*</sup></th>
+          <th><i>y</i></th>
+          <th><i>y</i><sup>*</sup></th>
+          <th><i>y</i> ⊕ <i>y</i><sup>*</sup></th>
+        </tr>
+        <tr>
+          <td>0000</td>
+          <td>0101</td>
+          <td>0101</td>
+          <td>1110</td>
+          <td>1111</td>
+          <td>0001</td>
+        </tr>
+        <tr>
+          <td>0001</td>
+          <td>0100</td>
+          <td>0101</td>
+          <td>0100</td>
+          <td>0010</td>
+          <td>0110</td>
+        </tr>
+        <tr>
+          <td>0010</td>
+          <td>0111</td>
+          <td>0101</td>
+          <td>1101</td>
+          <td>1000</td>
+          <td>0101</td>
+        </tr>
+        <tr class="highlight">
+          <td>0011</td>
+          <td>0110</td>
+          <td>0101</td>
+          <td>0001</td>
+          <td>1011</td>
+          <td>1010</td>
+        </tr>
+        <tr>
+          <td>0100</td>
+          <td>0001</td>
+          <td>0101</td>
+          <td>0010</td>
+          <td>0100</td>
+          <td>0110</td>
+        </tr>
+        <tr>
+          <td>0101</td>
+          <td>0000</td>
+          <td>0101</td>
+          <td>1111</td>
+          <td>1110</td>
+          <td>0001</td>
+        </tr>
+        <tr class="highlight">
+          <td>0110</td>
+          <td>0011</td>
+          <td>0101</td>
+          <td>1011</td>
+          <td>0001</td>
+          <td>1010</td>
+        </tr>
+        <tr>
+          <td>0111</td>
+          <td>0010</td>
+          <td>0101</td>
+          <td>1000</td>
+          <td>1101</td>
+          <td>0101</td>
+        </tr>
+        <tr class="highlight">
+          <td>1000</td>
+          <td>1101</td>
+          <td>0101</td>
+          <td>0011</td>
+          <td>1001</td>
+          <td>1010</td>
+        </tr>
+        <tr>
+          <td>1001</td>
+          <td>1100</td>
+          <td>0101</td>
+          <td>1010</td>
+          <td>0101</td>
+          <td>1111</td>
+        </tr>
+        <tr>
+          <td>1010</td>
+          <td>1111</td>
+          <td>0101</td>
+          <td>0110</td>
+          <td>0111</td>
+          <td>0001</td>
+        </tr>
+        <tr>
+          <td>1011</td>
+          <td>1110</td>
+          <td>0101</td>
+          <td>1100</td>
+          <td>0000</td>
+          <td>1100</td>
+        </tr>
+        <tr>
+          <td>1100</td>
+          <td>1001</td>
+          <td>0101</td>
+          <td>0101</td>
+          <td>1010</td>
+          <td>1111</td>
+        </tr>
+        <tr class="highlight">
+          <td>1101</td>
+          <td>1000</td>
+          <td>0101</td>
+          <td>1001</td>
+          <td>0011</td>
+          <td>1010</td>
+        </tr>
+        <tr>
+          <td>1110</td>
+          <td>1011</td>
+          <td>0101</td>
+          <td>0000</td>
+          <td>1100</td>
+          <td>1100</td>
+        </tr>
+        <tr>
+          <td>1111</td>
+          <td>1010</td>
+          <td>0101</td>
+          <td>0111</td>
+          <td>0110</td>
+          <td>0001</td>
+        </tr>
+      </table>
+      <p>The rows which are highlighted give us all possible SBOX inputs which XOR to 0x5 whose respective outputs XOR to 0xa. With this information, we can update the previous figure:</p>
+      <div class="visualization">
+        <div class="figure">
+          {{../images/toy-dc-finished.svg}}
+        </div>
+      </div>
+      <p>If we know the value at <i>x</i>, <i>u</i>, <i>v</i>, and <i>y</i>, we can simply calculate the value of the first and second key! By definition, we know:</p>
+      <table class="math monospaced-table">
+        <tr>
+          <td>
+            <p><i>x</i> ⊕ <i>k</i><sub>1</sub> = <i>u</i></p>
+          </td>                   
+        </tr>                     
+        <tr>                      
+          <td>                    
+            <p><i>v</i> ⊕ <i>k</i><sub>2</sub> = <i>y</i></p>
+          </td>
+        </tr>
+      </table>
+      <p>Using simple XOR rules we can conclude that:</p>
+      <table class="monospaced-table math">
+        <tr>
+          <td>
+            <p><i>k</i><sub>1</sub> = <i>x</i> ⊕ <i>u</i></p>
+          </td>                       
+        </tr>                                    
+        <tr>                                     
+          <td>                                   
+            <p><i>k</i><sub>2</sub> = <i>v</i> ⊕ <i>y</i></p>
+          </td>
+        </tr>
+      </table>
+      <p>Since there are only four possible values of <i>u</i> and <i>v</i>, we’ve narrowed down the possibilities for the two keys from 256 to only 4 (in the table, the subscripts <i>l</i> and <i>r</i> refer to the left and right values in the figure above):</p>
+      <table class="monospaced-table" id="toy-keys">
+        <tr>
+          <th><i>x<sub>l</sub></i></th>
+          <th><i>u<sub>l</sub></i></th>
+          <th><i>v<sub>l</sub></i></th>
+          <th><i>y<sub>l</sub></i></th>
+          <th><i>x<sub>r</sub></i></th>
+          <th><i>u<sub>r</sub></i></th>
+          <th><i>v<sub>r</sub></i></th>
+          <th><i>y<sub>r</sub></i></th>
+          <th>
+            <i>x<sub>l</sub></i> ⊕ <i>u<sub>l</sub></i> =<br/>
+            <i>x<sub>r</sub></i> ⊕ <i>u<sub>r</sub></i> =<br/>
+            <i>k</i><sub>1</sub>
+          </th>
+          <th>
+            <i>v<sub>l</sub></i> ⊕ <i>y<sub>l</sub></i> =<br/>
+            <i>v<sub>r</sub></i> ⊕ <i>y<sub>r</sub></i> =<br/>
+            <i>k</i><sub>2</sub>
+          </th>
+        </tr>
+        <tr>
+          <td>0x6</td>
+          <td>0x3</td>
+          <td>0x1</td>
+          <td>0x4</td>
+          <td>0x3</td>
+          <td>0x6</td>
+          <td>0xb</td>
+          <td>0xe</td>
+          <td>0x5</td>
+          <td>0x5</td>
+        </tr>
+        <tr>
+          <td>0x6</td>
+          <td>0x6</td>
+          <td>0xb</td>
+          <td>0x4</td>
+          <td>0x3</td>
+          <td>0x3</td>
+          <td>0x1</td>
+          <td>0xe</td>
+          <td>0x0</td>
+          <td>0xf</td>
+        </tr>
+        <tr>
+          <td>0x6</td>
+          <td>0x8</td>
+          <td>0x3</td>
+          <td>0x4</td>
+          <td>0x3</td>
+          <td>0xd</td>
+          <td>0x9</td>
+          <td>0xe</td>
+          <td>0xe</td>
+          <td>0x7</td>
+        </tr>
+        <tr>
+          <td>0x6</td>
+          <td>0xd</td>
+          <td>0x9</td>
+          <td>0x4</td>
+          <td>0x3</td>
+          <td>0x8</td>
+          <td>0x3</td>
+          <td>0xe</td>
+          <td class="highlight">0xb</td>
+          <td class="highlight">0xd</td>
         </tr>
       </table>
     </section>

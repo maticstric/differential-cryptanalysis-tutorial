@@ -1,4 +1,5 @@
 .visualization {
+  margin: 1em;
   font-family: monospace;
   display: inline-flex;
 }
@@ -71,13 +72,4 @@
 
 .visualization > .figure > svg line.isOne {
   stroke: var(--is-one);
-}
-
-.visualization svg text {
-  font-size: 20px;
-  font-family: monospace;
-}
-
-.visualization svg .sub {
-  font-size: 13px;
 }

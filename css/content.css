@@ -13,22 +13,14 @@ h5 { font-size: 1.2em; }
 
 #content p {
   margin: 0;
-  text-indent: 2em;
+  text-indent: 0em;
   line-height: 1.5em;
   text-align: justify;
   text-justify: inter-word;
 }
 
-#content h2 + p,
-#content h3 + p,
-#content h4 + p,
-#content h5 + p,
-#content h6 + p,
-#content header + p,
-#content ul + p,
-#content hr + p,
-#content p:first-child {
-  text-indent: 0;
+#content p + p {
+  text-indent: 2em;
 }
 
 #content a {
@@ -100,12 +92,30 @@ h5 { font-size: 1.2em; }
   width: 15em;
 }
 
-#content table#xor-input-output-table {
+#content table#xor-input-output-table,
+#content table#xor-input-output-table-0x5 {
   width: 30em;
 }
 
 #content table#xor-appearances-table {
   width: 15em;
+}
+
+#content table#toy-keys {
+  width: 40em;
+}
+
+#content table#xor-input-output-table tr td:nth-of-type(3),
+#content table#xor-input-output-table tr th:nth-of-type(3),
+
+#content table#xor-input-output-table-0x5 tr td:nth-of-type(3),
+#content table#xor-input-output-table-0x5 tr th:nth-of-type(3),
+
+#content table#toy-keys tr td:nth-of-type(4),
+#content table#toy-keys tr th:nth-of-type(4),
+#content table#toy-keys tr td:nth-of-type(8),
+#content table#toy-keys tr th:nth-of-type(8) {
+  border-right: 5px double black;
 }
 
 #content table#difference-distribution-table {
@@ -123,14 +133,6 @@ h5 { font-size: 1.2em; }
   border-bottom: none;
 }
 
-#content table#xor-appearances-table tr:nth-of-type(4) td,
-#content table#xor-appearances-table tr:nth-of-type(7) td,
-#content table#xor-appearances-table tr:nth-of-type(9) td,
-#content table#xor-appearances-table tr:nth-of-type(15) td,
-#content table#xor-appearances-table tr:nth-of-type(17) td {
-  background: var(--second-background)
-}
-
 #content table.monospaced-table {
   font-family: monospace;
   text-align: center;
@@ -144,6 +146,11 @@ h5 { font-size: 1.2em; }
   border-collapse: collapse;
 }
 
+#content table.math,
+#content table.math td {
+  border: none;
+}
+
 #content #pbox-svg {
   width: 5em;
   margin: 2em;
@@ -152,4 +159,25 @@ h5 { font-size: 1.2em; }
 #content #pbox-svg text {
   font-size: 20px;
   font-family: monospace;
+}
+
+#content .highlight {
+  background: var(--second-background)
+}
+
+#content svg text {
+  font-size: 20px;
+  font-family: monospace;
+}
+
+#content svg .sub {
+  font-size: 13px;
+}
+
+#content #toy-dc-unfinished {
+  width: 600px;
+}
+
+#content #toy-dc-unfinished #mid-text text {
+  font-size: 12px;
 }
