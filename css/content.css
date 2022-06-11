@@ -56,15 +56,24 @@ h5 { font-size: 1.2em; }
   display: flex;
 }
 
-#content > section > header > blockquote > cite {
+#content > section > header > blockquote,
+#content > section > footer > blockquote{
+  width: 55%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#content > section > header > blockquote > cite,
+#content > section > footer > blockquote > cite {
 	display: block;
   margin-top: 1em;
   text-align: right;
 	font-style: normal;
 }
 
-#content > section > header > blockquote > p {
-  text-align: center;
+#content > section > header > blockquote > p,
+#content > section > footer > blockquote > p {
+  text-align: justify;
 	font-style: italic;
 }
 
@@ -84,8 +93,12 @@ h5 { font-size: 1.2em; }
   width: 25em;
 }
 
-#content table#permutation {
+#content table#permutation-4 {
   width: 11em;
+}
+
+#content table#permutation-16 {
+  width: 25em;
 }
 
 #content table#xor-input-table {
@@ -115,7 +128,7 @@ h5 { font-size: 1.2em; }
 #content table#toy-keys tr th:nth-of-type(4),
 #content table#toy-keys tr td:nth-of-type(8),
 #content table#toy-keys tr th:nth-of-type(8) {
-  border-right: 5px double black;
+  border-right: 3px double black;
 }
 
 #content table#difference-distribution-table {
