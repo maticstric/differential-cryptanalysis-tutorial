@@ -38,7 +38,7 @@
   <section>
     <h2>Introduction</h2>
     <p>Differential cryptanalysis was first discovered in the 1970s by the designers of the Data Encryption Standard (DES) at IBM. After a consultation with the NSA, the DES designers opted to keep the techinque a secret, because its release “would weaken the competitive advantage the United States enjoyed over other countries in the field of cryptography” {cite(biham)}. It remained classified until it was independently rediscovered and published in the early 1990s by Eli Biham and Adi Shamir, who are now credited with its discovery {cite(coppersmith)}.</p>
-    <p>Before getting to the definition, it is important to note that differential cryptanalysis is what’s known as a “chosen plaintext” attack. This means that we, as attackers, may choose which plaintexts, and how many, we want encrypted by the cipher using the same secret key. This may not always be true in the real world since the same key often isn’t used for a very long time, and during that time it can be difficult or impossible to encrypt whichever plaintext you wish. Nevertheless, we must make this assumption for the attack to work.</p>
+    <p>Before getting to the definition, it is important to note that differential cryptanalysis is what’s known as a <span class="highlight"><em>chosen plaintext</em></span> attack. This means that we, as attackers, may choose which plaintexts, and how many, we want encrypted by the cipher using the same secret key. This may not always be true in the real world since the same key often isn’t used for a very long time, and during that time it can be difficult or impossible to encrypt whichever plaintext you wish. Nevertheless, we must make this assumption for the attack to work.</p>
     <hr/>
     <p>Block ciphers work by repeatedly applying a set of transformations (key addition, substitution, permutation, etc.) to a plaintext, until a ciphertext is obtained. The security of the cipher depends on the attacker never knowing/guessing any intermediate value during encryption; we can only see the plaintext (remember, chosen plaintext) and ciphertext, nothing more.</p>
     <p>However, as we will explain thoroughly in this tutorial, we <em>can</em> know/guess the intermediate value of the <em>difference of two plaintexts</em> during encryption (this is why the technique is called <em>differential</em> cryptanalysis). This is a very subtle point and one that can be difficult to understand initially, but is paramount to understanding how differential cryptanalysis can recover the secret key and therefore break the cipher.</p>
@@ -169,7 +169,7 @@
           <td>1</td>
         </tr>
       </table>
-      <p>This PBOX says that the bit at position 0 will move to position 3, the bit at position 1 will move to position 0, the bit at position 2 will stay at position 2, and the bit at position 3 will move to position 1. Let’s see an example: if we input the nibble 1001 into the PBOX, we will get an output of 0101. PBOXes, unlike SBOXes, are easy to represent visually:</p>
+      <p>This PBOX says that the bit at position 0 will move to position 3, the bit at position 1 will move to position 0, the bit at position 2 will stay at position 2, and the bit at position 3 will move to position 1. For example, if we input the nibble 1001 into the PBOX, we will get an output of 0101. PBOXes, unlike SBOXes, are easy to represent visually:</p>
       <svg version="1.1" viewBox="60 30 90 125" xmlns="http://www.w3.org/2000/svg" id="pbox-svg">
   <!-- original viewBox="0 0 200 200" -->
   <g stroke="black">
@@ -357,7 +357,7 @@
     </section>
     <section>
       <h3>Differential Cryptanalysis of the Toy Cipher</h3>
-      <p>Much of the following is based on King's webpage: “Differential Cryptanalysis Tutorial” {cite(king)} as well as Stinson's textbook {cite(stinson)}.</p>
+      <p>Much of the following is based on King's webpage: “Differential Cryptanalysis Tutorial” {cite(king)} as well as Stinson's textbook <i>Cryptography: Theory and Practice</i> {cite(stinson)}.</p>
       <p>We must begin by defining which SBOX we’ll be using for the toy cipher. Remember that SBOXes are public knowledge and that, once the cipher is defined, they do not change. So, we’ll pick an arbitrary SBOX for our toy cipher.</p>
       <table class="monospaced-table" id="substitution">
         <tr>
@@ -701,7 +701,7 @@
           <td class="highlight">2</td>
         </tr>
       </table>
-      <p>Consider what this table is really saying. If we pick two plaintexts which XOR to 1011, put each of them through the SBOX, and then XOR those SBOX outputs, 8 out of 16 times, they will XOR to 0010. They will XOR to 0111 2 out of 16 times. They will never XOR to 1010. This bias towards certain XORs is what makes differential cryptanalysis possible.</p>
+      <p>Consider what this table is really saying. If we pick two random plaintexts which XOR to 1011, put each of them through the SBOX, and then XOR those SBOX outputs, 8 out of 16 times, they will XOR to 0010. They will XOR to 0111 2 out of 16 times. They will never XOR to 1010. This bias towards certain XORs is what makes differential cryptanalysis possible.</p>
       <p>So far we’ve only considered the input XOR of 1011. We can repeat the same process for every possible input XOR and build what is called a <em class="highlight">difference distribution table</em> for the given SBOX. The rows in this table represent the SBOX input XOR, the columns represent the SBOX output XOR, and the cell values are the number of appearances of that output XOR given the input XOR. Note that the XORs are represented in hexadecimal instead of binary (e.g. you can find the previous example of 1011 in the row labeled b).</p>
       <table class="monospaced-table" id="difference-distribution-table">
         <tr>
@@ -1277,7 +1277,7 @@
         </div>
       </div>
       <p>Now let’s see how this good pair will travel through the cipher. Above is a figure showing what is being explained here. We’ll be referencing the letters on the sides of the figure.</p>
-      <p>We know that at <i>x</i> the value on the left is 0x6, the value on the right is 0x3, and their XOR is 0x5. We also know that at <i>y</i> the value on the left is 0x4, the value on the right is 0xe, and their XOR is 0xa. These are all values which we’ve hand picked. Now, what is the XOR at <i>u</i>? As explained earlier, the XOR doesn’t change over key addition, so it remains at 0x5. We can follow the same logic and conclude that the XOR at <i>v</i> must be 0xa.</p>
+      <p>We know that at <i>x</i> the value on the left is 0x6, the value on the right is 0x3, and their XOR is 0x5. We also know that at <i>y</i> the value on the left is 0x4, the value on the right is 0xe, and their XOR is 0xa. These are all values which we’ve hand picked. Now, what is the XOR at <i>u</i>? As explained earlier, the XOR doesn’t change over key addition, so it remains at 0x5. Since the XOR at <i>y</i> is 0xa, we can follow the same logic and conclude that the XOR at <i>v</i> must also be 0xa.</p>
       <p>But what are the values at <i>u</i> and <i>v</i>?</p>
       <p>Assuming the keys are unknown to us, there’s no easy way to tell. However, we do know that whatever the values at <i>u</i> are, they must XOR to 0x5 and whatever the values at <i>v</i> are, they must XOR to 0xa. Well, what are the possible inputs to an SBOX which XOR to 0x5 and whose corresponding SBOX outputs XOR to 0xa? We’ve already calculated them when making the difference distribution table! The calculation was not shown previously (we only saw the one for an SBOX input XOR of 0xb) so let’s see it now:</p>
       <table class="monospaced-table" id="xor-input-output-table-0x5">
@@ -1418,7 +1418,7 @@
           <td>0001</td>
         </tr>
       </table>
-      <p>The rows which are highlighted give us all possible SBOX inputs which XOR to 0x5 whose respective outputs XOR to 0xa. With this information, we can update the previous figure:</p>
+      <p>The highlighted rows give us the four possible SBOX input pairs which XOR to 0x5, whose respective outputs XOR to 0xa. With this information, we can update the previous figure:</p>
       <div class="visualization">
         <div class="figure">
           <svg version="1.1" viewBox="51 10 540 290" xmlns="http://www.w3.org/2000/svg" id="toy-dc-unfinished">
@@ -1720,7 +1720,7 @@
     <p>This section expands on the knowledge gained in the previous. We will discuss how differential cryptanalysis can be applied to more complicated ciphers which resemble the Advanced Encryption Standard (AES). Though the heart of the method will remain the same, the complexity of these ciphers will require the introduction of some new concepts.</p>
     <section>
       <h3>SPN Definition</h3>
-      <p>At it’s core, a substitution-permutation network (SPN) is any kind of cipher which uses both substitution and permutation together with key addition. The toy cipher from the previous section is not an SPN because it does not use permutation. Because an SPN is so general (it can have any block size, SBOX size, number of rounds, etc.) and because differential cryptanalysis depends a lot on the structure of the cipher, we’ll be focusing on a particular SPN. Nevertheless, these steps could be taken for any kind of SPN.</p>
+      <p>A substitution-permutation network (SPN) is any kind of cipher which uses both substitution and permutation together with key addition. Because an SPN is so general (it can have any block size, SBOX size, number of rounds, etc.) and because differential cryptanalysis depends a lot on the structure of the cipher, we’ll be focusing on a particular SPN. Nevertheless, these steps could be taken for any kind of SPN.</p>
       <p>We will be using an SPN with a block size of 16 bits. It will have a total of four rounds. Each round, with the exception of the fourth, will consist of the following operations:</p>
       <ol>
         <li>Key addition with a 16 bit key</li>
@@ -1729,7 +1729,7 @@
       </ol>
       <p>The fourth round will be the same as the previous except without the permutation (because it actually provides no extra security). We will also end the cipher with one last key addition.</p>
       <p>This means that we will need five 16-bit keys. The total number of keybits we need to break is therefore 80. A simple brutefore is beyond most computers as this means there are 2<sup>80</sup> = 1.21 × 10<sup>24</sup> possible key combinations. It should be apparent that breaking a cipher like this isn’t trivial. At first glance it might even seem very secure, but we will show how we can use differential cryptanalysis to break it easily.</p>
-      <p>As with the toy cipher, this SPN is easier to undestand if you look to the figure below. Remember that the values underlined with purple can be modified. The labels on the side are similar to the ones for the toy cipher with a few changes: we use subscripts to indicate the round number and a new label <i>w</i> is added for the value after the permutation.</p>
+      <p>As with the toy cipher, this SPN is easier to understand if you look to the figure below. Remember that the values underlined with purple can be modified. The labels on the side are similar to the ones for the toy cipher with a few changes: we use subscripts to indicate the round number and a new label <i>w</i> is added for the value after the permutation.</p>
       <div class="visualization" id="spn-visualization">
   <div class="figure">
     <div class="plaintext">
@@ -2644,8 +2644,54 @@
           <td>0</td>
         </tr>
       </table>
+      <hr/>
       <p>Before we move on we need to discuss permutation. We’ve considered what happens to the XOR of two plaintexts when they go through key addition (it doesn’t change) and when they go through substitution (we can guess it based on the probabilities in the difference distribution table). However, we have not considered what happens when they go through permutation.</p>
-      <p>Notice that both of the plaintexts will travel through the same PBOX. If their XOR is 1 at some bit position, it will remain 1 after applying the permutation. It will just move to a different bit position determined by the PBOX. The same logic applies for when their XOR is 0. Therefore, while the XOR does change, if we know the input XOR (which, remember, we can guess with significant certainty) we can predict the output XOR with 100% certainty by simply putting the XOR through the permutation. One way of writing this more mathematically is:</p>
+      <p>Let’s consider two plaintexts:</p>
+      <table class="monospaced-table math">
+        <tr>
+          <td>
+            <p><i>x</i> = 1100 1110 1001 1011</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><i>x</i><sup>*</sup> = 0011 1110 0101 0111</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><i>x</i> ⊕ <i>x</i><sup>*</sup> = 1111 0000 1100 1100</p>
+          </td>
+        </tr>
+      </table>
+      <p>Now let’s send both of these plaintexts through the PBOX:</p>
+      <table class="monospaced-table math">
+        <tr>
+          <td>
+            <p>permutate(<i>x</i>) = 1111 1100 0101 0011</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>permutate(<i>x</i><sup>*</sup>) = 0100 0111 1101 1011</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>permutate(<i>x</i>) ⊕ permutate(<i>x</i><sup>*</sup>) = <span class="highlight">1011 1011 1000 1000</span></p>
+          </td>
+        </tr>
+      </table>
+      <p>We can see that, unlike key addition, the XOR value before the permutation operation is different than the XOR of the value after the permutation, which could make things difficult. However, what happens if we send the XOR value before the permutation through the PBOX?</p>
+      <table class="monospaced-table math">
+        <tr>
+          <td>
+            <p>permutate(<i>x</i> ⊕ <i>x</i><sup>*</sup>) = permutate(1111 0000 1100 1100) = <span class="highlight">1011 1011 1000 0001</span></p>
+          </td>
+        </tr>
+      </table>
+      <p>You should see that both permutate(<i>x</i>) ⊕ permutate(<i>x</i><sup>*</sup>) and permutate(<i>x</i> ⊕ <i>x</i><sup>*</sup>) come out to the same value.</p>
+      <p>For some intuition as to why this is true, notice that both of the plaintexts will travel through the same PBOX. If their XOR is 1 at some bit position, it will remain 1 after applying the permutation. It will just move to a different bit position determined by the PBOX. The same logic applies for when their XOR is 0. Therefore, while the XOR doesn’t remain the same, if we know the input XOR (which, remember, we can guess with significant certainty) we can predict the output XOR with 100% certainty by simply putting the XOR through the permutation. One way of writing this more mathematically is:</p>
       <table class="monospaced-table math">
         <tr>
           <td>
@@ -2653,7 +2699,14 @@
           </td>                   
         </tr>                     
       </table>
-      <p>If you have trouble understanding this, you’re encouranged to confirm it by an example.</p>
+      <p>The significance of this might not be immediately obvious, but remember that the actual values of <i>x</i> and <i>x</i><sup>*</sup> are essentially impossible to guess, which makes computing permutate(<i>x</i>) ⊕ permutate(<i>x</i><sup>*</sup>) difficult. The value of <i>x</i> ⊕ <i>x</i><sup>*</sup>, on the other hand, is what we’ve been keeping track of this whole time! The PBOX, like the SBOX, is public knowledge so computing permutate(<i>x</i> ⊕ <i>x</i><sup>*</sup>) is very easy.</p>
+      <hr/>
+      <p>Now that we have discussed all three components let’s quickly review how the XOR interacts with them:</p>
+      <ul>
+        <li>Key addition: the XOR of two plaintexts <em>does not</em> change over key addition. We can therefore predict the output XOR with 100% certainty.</li>
+        <li>Substitution: the XOR of two plaintext <em>does</em> change over substitution. However, it does so probabilistically based on the input XOR and the difference distribution table of the SBOX, which gives us some ability to predict it.</li>
+        <li>Permutation: the XOR of two plaintext <em>does</em> change over permutation. However, we can predict it with 100% certainty by simply sending the input XOR through the PBOX.</li>
+      </ul>
       <hr/>
     </section>
   </section>
