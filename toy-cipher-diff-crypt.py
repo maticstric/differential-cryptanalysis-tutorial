@@ -2,9 +2,10 @@ import sys
 import random
 
 """
-This script was written for the Differential Cryptanalysis Tutorial
-
+This script was written for the Differential Cryptanalysis Tutorial.
 https://maticstric.github.io/differential-cryptanalysis-tutorial/
+
+Based on http://theamazingking.com/crypto-diff.php
 """
 
 """ --- Feel free to edit the variables below --- """
@@ -15,6 +16,9 @@ KEY1 = 0xb
 KEY2 = 0xd
 
 """ --------------------------------------------- """
+
+INV_SBOX = [SBOX.index(i) for i in range(len(SBOX))]
+
 
 
 def main():
@@ -77,8 +81,8 @@ def confirm_key_guesses(possible_key_pairs):
 
         # See if any plaintext (0-15) doesn't encrypt correctly with key guess
         for plaintext in range(16):
-            encryption_guess = encrypt(plaintext, key1_guess, key2_guess, SBOX)
-            encryption_correct = encrypt(plaintext, KEY1, KEY2, SBOX)
+            encryption_guess = encrypt(plaintext, key1_guess, key2_guess)
+            encryption_correct = encrypt(plaintext, KEY1, KEY2)
 
             if encryption_guess != encryption_correct:
                 correct = False
@@ -147,8 +151,8 @@ def get_good_pair(diff_char):
 
         # Get the ciphertexts for plain1 and plain2. Remember that differential
         # cryptanalysis is a chosen plaintext attack, so we can do this
-        cipher1 = encrypt(plain1, KEY1, KEY2, SBOX)
-        cipher2 = encrypt(plain2, KEY1, KEY2, SBOX)
+        cipher1 = encrypt(plain1, KEY1, KEY2)
+        cipher2 = encrypt(plain2, KEY1, KEY2)
 
         if cipher1 ^ cipher2 == output_xor: # Good pair found!
             return (plain1, plain2, cipher1, cipher2)
@@ -214,19 +218,16 @@ def build_difference_distribution_table(sbox):
 
 """ Toy Cipher Implementation """
 
-def encrypt(state, key1, key2, sbox):
+def encrypt(state, key1, key2):
     state = add_round_key(state, key1)
-    state = sub(state, sbox)
+    state = sub(state, SBOX)
     state = add_round_key(state, key2)
 
     return state
 
-def decrypt(state, key1, key2, sbox):
-    # For decryption we need the inverse sbox
-    inv_sbox = calculate_inv_sbox(sbox)
-
+def decrypt(state, key1, key2):
     state = add_round_key(state, key2)
-    state = sub(state, inv_sbox)
+    state = sub(state, INV_SBOX)
     state = add_round_key(state, key1)
 
     return state
@@ -255,14 +256,6 @@ def validate_input():
 
     if KEY2 < 0 or KEY2 > 0xf:
         sys.exit('Error: KEY2 should be a value between 0 and 0xf')
-
-def calculate_inv_sbox(SBOX):
-    inv_sbox = [0] * 16
-
-    for i, val in enumerate(SBOX):
-        inv_sbox[val] = i 
-
-    return inv_sbox
 
 def get_diff_dist_table_string(diff_dist_table):
     string =  '+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n'
