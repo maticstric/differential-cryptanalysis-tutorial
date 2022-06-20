@@ -17,7 +17,7 @@ KEY2 = 0xd
 
 """ --------------------------------------------- """
 
-INV_SBOX = [SBOX.index(i) for i in range(len(SBOX))]
+INV_SBOX = [SBOX.index(i) if i in SBOX else i for i in range(len(SBOX))]
 
 
 
