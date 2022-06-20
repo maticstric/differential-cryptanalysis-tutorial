@@ -220,19 +220,19 @@ def build_difference_distribution_table(sbox):
 
 def encrypt(state, key1, key2):
     state = add_round_key(state, key1)
-    state = sub(state, SBOX)
+    state = substitute(state, SBOX)
     state = add_round_key(state, key2)
 
     return state
 
 def decrypt(state, key1, key2):
     state = add_round_key(state, key2)
-    state = sub(state, INV_SBOX)
+    state = substitute(state, INV_SBOX)
     state = add_round_key(state, key1)
 
     return state
 
-def sub(state, sbox):
+def substitute(state, sbox):
     return sbox[state]
 
 def add_round_key(state, key):
