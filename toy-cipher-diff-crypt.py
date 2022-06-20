@@ -65,7 +65,7 @@ def main():
 
 
 
-""" --- Differential Cryptanalysis --- """
+""" --- DIFFERENTIAL CRYPTANALYSIS --- """
 
 def confirm_key_guesses(possible_key_pairs):
     """
@@ -216,7 +216,7 @@ def build_difference_distribution_table(sbox):
 
 
 
-""" Toy Cipher Implementation """
+""" --- TOY CIPHER IMPLEMENTATION --- """
 
 def encrypt(state, key1, key2):
     state = add_round_key(state, key1)
@@ -240,7 +240,7 @@ def add_round_key(state, key):
 
 
 
-""" Misc Functions """
+""" --- MISC FUNCTIONS --- """
 
 def validate_input():
     if len(SBOX) != 16:
