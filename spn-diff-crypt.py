@@ -3,7 +3,7 @@ import random
 import time
 import math
 
-from BitString import BitString
+#from BitString import BitString
 
 """
 This script was written for the Differential Cryptanalysis Tutorial.
@@ -18,11 +18,11 @@ SBOX = [0xe, 0x4, 0xd, 0x1, 0x2, 0xf, 0xb, 0x8, 0x3, 0xa, 0x6, 0xc, 0x5, 0x9, 0x
 
 PBOX = [0x0, 0x4, 0x8, 0xc, 0x1, 0x5, 0x9, 0xd, 0x2, 0x6, 0xa, 0xe, 0x3, 0x7, 0xb, 0xf]
 
-KEY1 = BitString(0x1a6d)
-KEY2 = BitString(0x2ac2)
-KEY3 = BitString(0x452f)
-KEY4 = BitString(0x6ff1)
-KEY5 = BitString(0xb520)
+KEY1 = 0x1a6d
+KEY2 = 0x2ac2
+KEY3 = 0x452f
+KEY4 = 0x6ff1
+KEY5 = 0xb520
 
 NUM_CHOSEN_PLAINTEXTS = 1000
 
@@ -36,6 +36,7 @@ INV_PBOX = [PBOX.index(i) if i in PBOX else i for i in range(len(PBOX))]
 def main():
     random.seed(0)
     validate_input()
+    start = time.time()
 
     diff_dist_table = build_difference_distribution_table(SBOX)
     diff_dist_table_string = get_diff_dist_table_string(diff_dist_table)
@@ -44,21 +45,33 @@ def main():
     print(diff_dist_table_string) 
 
     # The vast majority of trails will have very low probabilities, so we only
-    # care about the first trails in the list. Here, we just take to first 100
+    # care about the first few trails in the list. This speeds up the program
+    # a lot compared to always using all of them.
     num_of_trails = 100
 
-    round_keys = [BitString(0), BitString(0), BitString(0), BitString(0), BitString(0)]
+    # We'll be building up this arrray of round keys
+    round_keys = [0, 0, 0, 0, 0]
 
     for round_num in range(3, -1, -1):
         most_probable_diff_trails = find_highly_probable_differential_trails(diff_dist_table, round_num)[:num_of_trails]
         round_keys[round_num + 1] = break_round_key(round_num, most_probable_diff_trails, round_keys)
-        print(round_keys[round_num + 1])
+        print(hex(round_keys[round_num + 1]))
+
+    end = time.time()
+
+    print(str(round(end - start, 2))) 
+
 
 
 """ --- DIFFERENTIAL CRYPTANALYSIS --- """
 
 def break_round_key(round_num, most_probable_diff_trails, round_keys):
-    round_key = BitString(0) # We'll be building this round key
+    """
+    Breaks a whole round key given some highly probable differential trails
+    by choosing ones which will break keybits we have not yet broken until
+    all key bits are broken/SBOXes are used.
+    """
+    round_key = 0 # We'll be building this round key
     sboxes_already_used = [False, False, False, False]
 
     while not all(sboxes_already_used):
@@ -68,50 +81,48 @@ def break_round_key(round_num, most_probable_diff_trails, round_keys):
         output_xor = useful_diff_trail[2]
 
         breaking_key_bits = find_which_key_bits_will_be_broken(round_num, output_xor)
-        #print(bin(breaking_key_bits.bit_string))
         broken_key_bits = break_key_bits(round_num, input_xor, output_xor, breaking_key_bits, round_keys)
 
         # Set the keybits which were broken
         for i in range(16):
-            if breaking_key_bits.get_bit(i) == 1:
-                round_key.set_bit(i, broken_key_bits.get_bit(i))
+            if get_bit(breaking_key_bits, i) == 1:
+                round_key = set_bit(round_key, i, get_bit(broken_key_bits, i))
 
         # Mark which sboxes this used up
         for i in range(4):
-            if output_xor.get_nibble(i) != 0:
+            if get_nibble(output_xor,i) != 0:
                 sboxes_already_used[i] = True
 
     return round_key
 
 def break_key_bits(round_num, input_xor, output_xor, breaking_key_bits, round_keys):
+    """
+    Breaks bits of the round key specified by the breaking_key_bits array by
+    generating random plaintexts.
+
+    Returns the most probable key for the specified bits.
+    """
+
     key_count_dict = {}
 
-    # We need some number of randomly chosen plaintexts. This number is pulled
-    # out of thin air. It seems to work well, and is still fairly quick.
+    # We need some number of randomly chosen plaintexts; we use a constant.
     # A better way would be to create a function which chooses this number
     # based on the probability of the trail.
     for i in range(NUM_CHOSEN_PLAINTEXTS):
         text1 = choose_random_plaintext()
-        text2 = BitString(text1.bit_string ^ input_xor.bit_string)
-        #print(text1)
-        #print(text2)
-        #print(hex(text1.bit_string ^ text2.bit_string))
+        text2 = text1 ^ input_xor
 
         # Now, text1 ^ text2 = input_xor and we can encrypt both
 
-        encrypt(text1, KEY1, KEY2, KEY3, KEY4, KEY5)
-        encrypt(text2, KEY1, KEY2, KEY3, KEY4, KEY5)
-
-        #print(text1)
-        #print(text2)
+        text1 = encrypt(text1, KEY1, KEY2, KEY3, KEY4, KEY5)
+        text2 = encrypt(text2, KEY1, KEY2, KEY3, KEY4, KEY5)
 
         # This will modify the key_count_dict after key guesses
         guess_key_bits(round_num, text1, text2, output_xor, key_count_dict, breaking_key_bits, round_keys)
 
-    #print(key_count_dict)
     # Extract the most likely key out of the dictonary
     most_probable_key = sorted(key_count_dict.items(), key=lambda x: x[1], reverse=True)[0][0]
-    most_probable_key = BitString(int(most_probable_key, 16))
+    most_probable_key = int(most_probable_key, 16)
 
     return most_probable_key
 
@@ -123,10 +134,10 @@ def guess_key_bits(round_num, ciphertext1, ciphertext2, output_xor, key_count_di
     likely output XOR matches the XOR of the partially decrypted ciphertexts.
     """
 
-    total_needed_key_guesses = int(math.pow(2, breaking_key_bits.count_one_bits()))
+    total_needed_key_guesses = int(math.pow(2, count_one_bits(breaking_key_bits)))
 
     for i in range(total_needed_key_guesses):
-        key_guess_bits = BitString(0)
+        key_guess_bits = 0
 
         div = total_needed_key_guesses / 2
 
@@ -134,28 +145,22 @@ def guess_key_bits(round_num, ciphertext1, ciphertext2, output_xor, key_count_di
         # looping, it will loop thorough all possible keys only for the bits
         # where breaking_key_bits is set
         for j in range(16):
-            if breaking_key_bits.get_bit(j) == 1:
+            if get_bit(breaking_key_bits, j) == 1:
                 if i > div - 1 and i % (div * 2) >= div:
-                    key_guess_bits.set_bit(j, 1)
+                    key_guess_bits = set_bit(key_guess_bits, j, 1)
 
                 div /= 2
 
         # Set round key so partial_decryption will use it
         round_keys[round_num + 1] = key_guess_bits
 
-        # partial_decryption will overwrite these so make a copy
-        _ct1 = BitString(ciphertext1.bit_string)
-        _ct2 = BitString(ciphertext2.bit_string)
-
-        partial_xor = partial_decryption(round_num, _ct1, _ct2, round_keys)
-        #print(partial_xor)
-        #print('---')
+        partial_xor = partial_decryption(round_num, ciphertext1, ciphertext2, round_keys)
 
         # Make the dictionary keys a string so it's easier to debug
-        key_as_string = format(key_guess_bits.bit_string, '#06x')
+        key_as_string = format(key_guess_bits, '#06x')
 
         # If the XORs match, increment value in dictionary 
-        if partial_xor.bit_string == output_xor.bit_string:
+        if partial_xor == output_xor:
             if key_as_string not in key_count_dict:
                 key_count_dict[key_as_string] = 1
             else:
@@ -166,26 +171,19 @@ def partial_decryption(round_num, ciphertext1, ciphertext2, round_keys):
     This function partially decrypts ciphertext1 and ciphertext2 using
     round_keys up to round_num. It returns their XOR after partial decryption.
     """
-    #print('---')
-    #print(ciphertext1)
 
     for i in range(4, round_num, -1):
-        add_round_key(ciphertext1, round_keys[i])
-        add_round_key(ciphertext2, round_keys[i])
-        #print(ciphertext1)
+        ciphertext1 = add_round_key(ciphertext1, round_keys[i])
+        ciphertext2 = add_round_key(ciphertext2, round_keys[i])
 
         if i < 4:
-            permutate(ciphertext1, INV_PBOX)
-            permutate(ciphertext2, INV_PBOX)
-            #print('p')
-            #print(ciphertext1)
+            ciphertext1 = permutate(ciphertext1, INV_PBOX)
+            ciphertext2 = permutate(ciphertext2, INV_PBOX)
 
-        substitute(ciphertext1, INV_SBOX)
-        substitute(ciphertext2, INV_SBOX)
-        #print(ciphertext1)
+        ciphertext1 = substitute(ciphertext1, INV_SBOX)
+        ciphertext2 = substitute(ciphertext2, INV_SBOX)
 
-    #print(ciphertext1)
-    partial_xor = BitString(ciphertext1.bit_string ^ ciphertext2.bit_string)
+    partial_xor = ciphertext1 ^ ciphertext2
         
     return partial_xor
 
@@ -196,15 +194,14 @@ def find_which_key_bits_will_be_broken(round_num, output_xor):
     attempting to break given the output_xor and round_num.
     """
 
-    breaking_key_bits = BitString(0)
+    breaking_key_bits = 0
 
-    if output_xor.get_nibble(0) != 0: breaking_key_bits.set_nibble(0, 0xf)
-    if output_xor.get_nibble(1) != 0: breaking_key_bits.set_nibble(1, 0xf)
-    if output_xor.get_nibble(2) != 0: breaking_key_bits.set_nibble(2, 0xf)
-    if output_xor.get_nibble(3) != 0: breaking_key_bits.set_nibble(3, 0xf)
+    for i in range(4):
+        if get_nibble(output_xor, i) != 0:
+            breaking_key_bits = set_nibble(breaking_key_bits, i, 0xf)
 
     if round_num < 3: # If round_num < 3 we need to take the permutation into account
-        permutate(breaking_key_bits, INV_PBOX)
+        breaking_key_bits = permutate(breaking_key_bits, INV_PBOX)
         
     return breaking_key_bits
 
@@ -219,7 +216,7 @@ def find_useful_diff_trail(round_num, most_probable_diff_trails, sboxes_already_
 
         # Check if this diff_trail will use any sboxes which we haven't used already
         for i in range(len(sboxes_already_used)):
-            if output_xor.get_nibble(i) != 0 and sboxes_already_used[i] == False: # Hit! We can use this one
+            if get_nibble(output_xor, i) != 0 and sboxes_already_used[i] == False: # Hit! We can use this one
                 return diff_trail
 
 def find_highly_probable_differential_trails(diff_dist_table, round_num):
@@ -238,15 +235,15 @@ def find_highly_probable_differential_trails(diff_dist_table, round_num):
         for j in range(16):
             for k in range(16):
                 for l in range(16):
+
                     if i == 0 and j == 0 and k == 0 and l == 0: continue # We don't care about all zero xors
 
-                    input_xor = [i, j, k, l]
-                    input_xor = BitString(0)
+                    input_xor = 0
 
-                    input_xor.set_nibble(0, l)
-                    input_xor.set_nibble(1, k)
-                    input_xor.set_nibble(2, j)
-                    input_xor.set_nibble(3, i)
+                    input_xor = set_nibble(input_xor, 0, l)
+                    input_xor = set_nibble(input_xor, 1, k)
+                    input_xor = set_nibble(input_xor, 2, j)
+                    input_xor = set_nibble(input_xor, 3, i)
 
                     output_xor, _, preference = find_differential_trail(input_xor, diff_dist_table, round_num)
 
@@ -270,25 +267,25 @@ def find_differential_trail(input_xor, diff_dist_table, round_num):
 
     probability = 1
 
-    current_xor = BitString(input_xor.bit_string)
+    current_xor = input_xor
 
     for r in range(round_num):
         # XOR doesn't change over key addition, so we can just ignore it
 
         # XOR going through sbox changes the probability (non-linear)
         for i in range(4):
-            if current_xor.get_nibble(i) > 0: # SBOX is active
+            if get_nibble(current_xor, i) > 0: # SBOX is active
 
                 # Get max entry in diff_dist row and adjust probability based on that
-                max_count = max(diff_dist_table[current_xor.get_nibble(i)])
-                most_probable_output_xor = diff_dist_table[current_xor.get_nibble(i)].index(max_count)
+                max_count = max(diff_dist_table[get_nibble(current_xor, i)])
+                most_probable_output_xor = diff_dist_table[get_nibble(current_xor, i)].index(max_count)
 
                 probability *= max_count / len(diff_dist_table)
 
-                current_xor.set_nibble(i, most_probable_output_xor)
+                current_xor = set_nibble(current_xor, i, most_probable_output_xor)
 
         # XOR changes over permutation, but the probability is not affected (linear)
-        permutate(current_xor, PBOX)
+        current_xor = permutate(current_xor, PBOX)
 
 
     # If we get a highly probable trail which has all the final SBOXes active,
@@ -300,10 +297,10 @@ def find_differential_trail(input_xor, diff_dist_table, round_num):
 
     num_final_active_sboxes = 0
 
-    if current_xor.get_nibble(0) > 0: num_final_active_sboxes += 1
-    if current_xor.get_nibble(1) > 0: num_final_active_sboxes += 1
-    if current_xor.get_nibble(2) > 0: num_final_active_sboxes += 1
-    if current_xor.get_nibble(3) > 0: num_final_active_sboxes += 1
+    
+    for i in range(4):
+        if get_nibble(current_xor, i) > 0:
+            num_final_active_sboxes += 1
 
     preference = probability
 
@@ -335,84 +332,156 @@ def build_difference_distribution_table(sbox):
     return diff_dist_table
 
 def choose_random_plaintext():
-    return BitString(random.randint(0, 0xffff))
+    return random.randint(0, 0xffff)
 
 
 
 """ --- SPN CIPHER IMPLEMENTATION --- """
 
 def encrypt(state, key1, key2, key3, key4, key5):
-    add_round_key(state, key1)
-    substitute(state, SBOX)
-    permutate(state, PBOX)
+    state = add_round_key(state, key1)
+    state = substitute(state, SBOX)
+    state = permutate(state, PBOX)
 
-    add_round_key(state, key2)
-    substitute(state, SBOX)
-    permutate(state, PBOX)
+    state = add_round_key(state, key2)
+    state = substitute(state, SBOX)
+    state = permutate(state, PBOX)
 
-    add_round_key(state, key3)
-    substitute(state, SBOX)
-    permutate(state, PBOX)
+    state = add_round_key(state, key3)
+    state = substitute(state, SBOX)
+    state = permutate(state, PBOX)
 
-    add_round_key(state, key4)
-    substitute(state, SBOX)
+    state = add_round_key(state, key4)
+    state = substitute(state, SBOX)
 
-    add_round_key(state, key5)
+    state = add_round_key(state, key5)
+
+    return state
 
 def decrypt(state, key1, key2, key3, key4, key5):
-    add_round_key(state, key5)
+    state = add_round_key(state, key5)
 
-    substitute(state, INV_SBOX)
-    add_round_key(state, key4)
+    state = substitute(state, INV_SBOX)
+    state = add_round_key(state, key4)
 
-    permutate(state, INV_PBOX)
-    substitute(state, INV_SBOX)
-    add_round_key(state, key3)
+    state = permutate(state, INV_PBOX)
+    state = substitute(state, INV_SBOX)
+    state = add_round_key(state, key3)
 
-    permutate(state, INV_PBOX)
-    substitute(state, INV_SBOX)
-    add_round_key(state, key2)
+    state = permutate(state, INV_PBOX)
+    state = substitute(state, INV_SBOX)
+    state = add_round_key(state, key2)
 
-    permutate(state, INV_PBOX)
-    substitute(state, INV_SBOX)
-    add_round_key(state, key1)
+    state = permutate(state, INV_PBOX)
+    state = substitute(state, INV_SBOX)
+    state = add_round_key(state, key1)
+
+    return state
 
 def add_round_key(state, key):
-    state.bit_string ^= key.bit_string
+    state ^= key
+
+    return state
 
 def substitute(state, sbox):
-    new_state = BitString(0)
-    bit_string = state.bit_string
+    new_state = 0
 
-    new_state.set_nibble(0, sbox[state.get_nibble(0)])
-    new_state.set_nibble(1, sbox[state.get_nibble(1)])
-    new_state.set_nibble(2, sbox[state.get_nibble(2)])
-    new_state.set_nibble(3, sbox[state.get_nibble(3)])
+    for i in range(4):
+        new_state = set_nibble(new_state, i, sbox[get_nibble(state, i)])
 
-    state.bit_string = new_state.bit_string
+    return new_state
 
 def permutate(state, pbox):
-    new_state = BitString(0)
-    bit_string = state.bit_string
+    new_state = 0
 
-    new_state.set_bit(0, state.get_bit(pbox[0]))
-    new_state.set_bit(1, state.get_bit(pbox[1]))
-    new_state.set_bit(2, state.get_bit(pbox[2]))
-    new_state.set_bit(3, state.get_bit(pbox[3]))
-    new_state.set_bit(4, state.get_bit(pbox[4]))
-    new_state.set_bit(5, state.get_bit(pbox[5]))
-    new_state.set_bit(6, state.get_bit(pbox[6]))
-    new_state.set_bit(7, state.get_bit(pbox[7]))
-    new_state.set_bit(8, state.get_bit(pbox[8]))
-    new_state.set_bit(9, state.get_bit(pbox[9]))
-    new_state.set_bit(10, state.get_bit(pbox[10]))
-    new_state.set_bit(11, state.get_bit(pbox[11]))
-    new_state.set_bit(12, state.get_bit(pbox[12]))
-    new_state.set_bit(13, state.get_bit(pbox[13]))
-    new_state.set_bit(14, state.get_bit(pbox[14]))
-    new_state.set_bit(15, state.get_bit(pbox[15]))
+    for i in range(16):
+        new_state = set_bit(new_state, i, get_bit(state, pbox[i]))
 
-    state.bit_string = new_state.bit_string
+    return new_state
+
+
+
+""" --- BIT STRING FUNCTIONS --- """
+
+def count_one_bits(bit_string):
+    """
+    Returns the number of 1 bits in bit_string
+    """
+
+    count = 0
+
+    while bit_string > 0:
+        if bit_string & 1 == 1: count += 1
+
+        bit_string >>= 1
+
+    return count
+
+def get_bit(bit_string, index):
+    """
+    Returns the index-th bit in bit_string
+
+    Zero indexed and index zero is the least significant bit
+    """
+
+    mask = 0x1 << index
+    nibble = bit_string & mask
+    nibble = nibble >> index
+
+    return nibble
+
+def set_bit(bit_string, index, value):
+    """
+    Sets the index-th bit in bit_string. Returns the new bit string
+
+    Value should be either 0 or 1. Otherwise returns None
+
+    Zero indexed and index zero is the least significant bit
+    """
+
+    if value != 0 and value != 1:
+        return None
+
+    mask = 0x1 << index
+    bit_string &= ~mask
+    bit_string ^= (value << index)
+
+    return bit_string
+
+def get_nibble(bit_string, index):
+    """
+    Returns the index-th nibble int bit_string
+
+    Zero indexed and index zero is the least significant bit
+    """
+
+    index *= 4
+
+    mask = 0xf << index
+    nibble = bit_string & mask
+    nibble = nibble >> index
+
+    return nibble
+
+def set_nibble(bit_string, index, value):
+    """
+    Sets the index-th nibble in bit_string. Returns the new bit string
+
+    Value should be a number between 0 and 0xf. Otherwise returns None
+
+    Zero indexed and index zero is the least significant bit
+    """
+
+    if value < 0 or value > 0xf:
+        return None
+
+    index *= 4
+
+    mask = 0xf << index
+    bit_string &= ~mask
+    bit_string ^= (value << index)
+
+    return bit_string
 
 
 
@@ -433,19 +502,19 @@ def validate_input():
         if i not in PBOX:
             sys.exit('Error: PBOX list doesn\'t contain ' + str(hex(i)) + '. PBOX list elements should contain all values between 0 and 0xf, with no duplicates')
 
-    if KEY1 < BitString(0) or KEY1 > BitString(0xffff):
+    if KEY1 < 0 or KEY1 > 0xffff:
         sys.exit('Error: KEY1 should be a value between 0 and 0xffff')
 
-    if KEY2 < BitString(0) or KEY2 > BitString(0xffff):
+    if KEY2 < 0 or KEY2 > 0xffff:
         sys.exit('Error: KEY2 should be a value between 0 and 0xffff')
 
-    if KEY3 < BitString(0) or KEY3 > BitString(0xffff):
+    if KEY3 < 0 or KEY3 > 0xffff:
         sys.exit('Error: KEY3 should be a value between 0 and 0xffff')
 
-    if KEY4 < BitString(0) or KEY4 > BitString(0xffff):
+    if KEY4 < 0 or KEY4 > 0xffff:
         sys.exit('Error: KEY4 should be a value between 0 and 0xffff')
 
-    if KEY5 < BitString(0) or KEY5 > BitString(0xffff):
+    if KEY5 < 0 or KEY5 > 0xffff:
         sys.exit('Error: KEY5 should be a value between 0 and 0xffff')
 
 def get_diff_dist_table_string(diff_dist_table):
@@ -463,7 +532,6 @@ def get_diff_dist_table_string(diff_dist_table):
                 string += f' {appearances}|'
             else:
                 string += f' {appearances} |'
-
 
         string += '\n+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n'
 
