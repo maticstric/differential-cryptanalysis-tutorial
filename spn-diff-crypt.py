@@ -3,8 +3,6 @@ import random
 import time
 import math
 
-#from BitString import BitString
-
 """
 This script was written for the Differential Cryptanalysis Tutorial.
 https://maticstric.github.io/differential-cryptanalysis-tutorial/
@@ -24,18 +22,35 @@ KEY3 = 0x452f
 KEY4 = 0x6ff1
 KEY5 = 0xb520
 
-NUM_CHOSEN_PLAINTEXTS = 1000
+C = 30 # constant for choosing number of plaintexts
 
 """ --------------------------------------------- """
 
 INV_SBOX = [SBOX.index(i) if i in SBOX else i for i in range(len(SBOX))]
 INV_PBOX = [PBOX.index(i) if i in PBOX else i for i in range(len(PBOX))]
 
+def generate_random_box():
+    box = [0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf]
+
+    random.shuffle(box)
+
+    return box
 
 
 def main():
-    random.seed(0)
+    #random.seed(4)
+    #global SBOX
+    #global PBOX
+    #global INV_SBOX
+    #global INV_PBOX
+
+    #SBOX = generate_random_box()
+    #PBOX = generate_random_box()
+    #INV_SBOX = [SBOX.index(i) if i in SBOX else i for i in range(len(SBOX))]
+    #INV_PBOX = [PBOX.index(i) if i in PBOX else i for i in range(len(PBOX))]
+
     validate_input()
+
     start = time.time()
 
     diff_dist_table = build_difference_distribution_table(SBOX)
@@ -53,11 +68,18 @@ def main():
     round_keys = [0, 0, 0, 0, 0]
 
     for round_num in range(3, -1, -1):
+        print(f'\n--- Breaking KEY{round_num + 2} ---')
+        print(f'Finding most probable differential trails for KEY{round_num + 2}...')
         most_probable_diff_trails = find_highly_probable_differential_trails(diff_dist_table, round_num)[:num_of_trails]
         round_keys[round_num + 1] = break_round_key(round_num, most_probable_diff_trails, round_keys)
-        print(hex(round_keys[round_num + 1]))
+
+    # Special case for the first key
+    round_keys[0] = break_first_round_key(round_keys)
 
     end = time.time()
+
+    for i in range(len(round_keys)):
+        print(hex(round_keys[i]))
 
     print(str(round(end - start, 2))) 
 
@@ -71,17 +93,22 @@ def break_round_key(round_num, most_probable_diff_trails, round_keys):
     by choosing ones which will break keybits we have not yet broken until
     all key bits are broken/SBOXes are used.
     """
+
     round_key = 0 # We'll be building this round key
     sboxes_already_used = [False, False, False, False]
 
     while not all(sboxes_already_used):
         useful_diff_trail = find_useful_diff_trail(round_num, most_probable_diff_trails, sboxes_already_used)
 
-        input_xor = useful_diff_trail[1]
-        output_xor = useful_diff_trail[2]
+        print(f'\tFound useful differential trail (probability {useful_diff_trail[1]}):')
+        print(f'\t\t{format(useful_diff_trail[2], "#06x")} -> {format(useful_diff_trail[3], "#06x")}')
+
+        probability = useful_diff_trail[1]
+        input_xor = useful_diff_trail[2]
+        output_xor = useful_diff_trail[3]
 
         breaking_key_bits = find_which_key_bits_will_be_broken(round_num, output_xor)
-        broken_key_bits = break_key_bits(round_num, input_xor, output_xor, breaking_key_bits, round_keys)
+        broken_key_bits = break_key_bits(round_num, probability, input_xor, output_xor, breaking_key_bits, round_keys)
 
         # Set the keybits which were broken
         for i in range(16):
@@ -93,9 +120,12 @@ def break_round_key(round_num, most_probable_diff_trails, round_keys):
             if get_nibble(output_xor,i) != 0:
                 sboxes_already_used[i] = True
 
+    print('\n--------')
+    print(f'KEY{round_num + 2} = {format(round_key, "#06x")}')
+    print('--------\n')
     return round_key
 
-def break_key_bits(round_num, input_xor, output_xor, breaking_key_bits, round_keys):
+def break_key_bits(round_num, probability, input_xor, output_xor, breaking_key_bits, round_keys):
     """
     Breaks bits of the round key specified by the breaking_key_bits array by
     generating random plaintexts.
@@ -108,7 +138,10 @@ def break_key_bits(round_num, input_xor, output_xor, breaking_key_bits, round_ke
     # We need some number of randomly chosen plaintexts; we use a constant.
     # A better way would be to create a function which chooses this number
     # based on the probability of the trail.
-    for i in range(NUM_CHOSEN_PLAINTEXTS):
+
+    num_chosen_plaintexts = round(C / probability)
+
+    for i in range(num_chosen_plaintexts):
         text1 = choose_random_plaintext()
         text2 = text1 ^ input_xor
 
@@ -119,6 +152,8 @@ def break_key_bits(round_num, input_xor, output_xor, breaking_key_bits, round_ke
 
         # This will modify the key_count_dict after key guesses
         guess_key_bits(round_num, text1, text2, output_xor, key_count_dict, breaking_key_bits, round_keys)
+
+    print(sorted(key_count_dict.items(), key=lambda x: x[1], reverse=True))
 
     # Extract the most likely key out of the dictonary
     most_probable_key = sorted(key_count_dict.items(), key=lambda x: x[1], reverse=True)[0][0]
@@ -166,6 +201,36 @@ def guess_key_bits(round_num, ciphertext1, ciphertext2, output_xor, key_count_di
             else:
                 key_count_dict[key_as_string] += 1
 
+def break_first_round_key(round_keys):
+    """
+    For the first key, we don't need anything special. Just decrypt a random
+    encrypted plaintext all the way to the key with the keys we've already
+    broken and then XOR that value with the original plaintext.
+    """
+
+    # Encrypt random plaintext
+    plaintext = choose_random_plaintext()
+    ciphertext = encrypt(plaintext, KEY1, KEY2, KEY3, KEY4, KEY5)
+
+    # Decrypt ciphertext all the way to last xor with the round_keys we found
+    ciphertext = add_round_key(ciphertext, round_keys[4])
+    ciphertext = substitute(ciphertext, INV_SBOX)
+
+    ciphertext = add_round_key(ciphertext, round_keys[3])
+    ciphertext = permutate(ciphertext, INV_PBOX)
+    ciphertext = substitute(ciphertext, INV_SBOX)
+
+    ciphertext = add_round_key(ciphertext, round_keys[2])
+    ciphertext = permutate(ciphertext, INV_PBOX)
+    ciphertext = substitute(ciphertext, INV_SBOX)
+
+    ciphertext = add_round_key(ciphertext, round_keys[1])
+    ciphertext = permutate(ciphertext, INV_PBOX)
+    ciphertext = substitute(ciphertext, INV_SBOX)
+
+    # Get the last key
+    return plaintext ^ ciphertext
+
 def partial_decryption(round_num, ciphertext1, ciphertext2, round_keys):
     """
     This function partially decrypts ciphertext1 and ciphertext2 using
@@ -212,7 +277,7 @@ def find_useful_diff_trail(round_num, most_probable_diff_trails, sboxes_already_
     """
 
     for diff_trail in most_probable_diff_trails:
-        output_xor = diff_trail[2]
+        output_xor = diff_trail[3]
 
         # Check if this diff_trail will use any sboxes which we haven't used already
         for i in range(len(sboxes_already_used)):
@@ -245,9 +310,9 @@ def find_highly_probable_differential_trails(diff_dist_table, round_num):
                     input_xor = set_nibble(input_xor, 2, j)
                     input_xor = set_nibble(input_xor, 3, i)
 
-                    output_xor, _, preference = find_differential_trail(input_xor, diff_dist_table, round_num)
+                    output_xor, probability, preference = find_differential_trail(input_xor, diff_dist_table, round_num)
 
-                    differential_trails.append((preference, input_xor, output_xor))
+                    differential_trails.append((preference, probability, input_xor, output_xor))
 
     differential_trails.sort(reverse=True)
 
