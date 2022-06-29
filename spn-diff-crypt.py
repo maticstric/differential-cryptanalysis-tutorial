@@ -7,8 +7,7 @@ import math
 This script was written for the Differential Cryptanalysis Tutorial.
 https://maticstric.github.io/differential-cryptanalysis-tutorial/
 
-Based on "Cryptography: Theory and Practice" by Douglas R. Stinson
-"""
+Based on "Cryptography: Theory and Practice" by Douglas R. Stinson """
 
 """ --- Feel free to edit the variables below --- """
 
@@ -22,33 +21,35 @@ KEY3 = 0x452f
 KEY4 = 0x6ff1
 KEY5 = 0xb520
 
-C = 30 # constant for choosing number of plaintexts
+C = 30 # Constant for choosing number of plaintexts
+
+MIN_NUM_OPTIONS = 3 # Constant for how many keybit options to look into at min
 
 """ --------------------------------------------- """
 
 INV_SBOX = [SBOX.index(i) if i in SBOX else i for i in range(len(SBOX))]
 INV_PBOX = [PBOX.index(i) if i in PBOX else i for i in range(len(PBOX))]
 
-def generate_random_box():
+def generate_random_box(myrandom):
     box = [0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf]
 
-    random.shuffle(box)
+    myrandom.shuffle(box)
 
     return box
 
+myrandom = random.Random(4)
+
+#SBOX = generate_random_box(myrandom)
+#PBOX = generate_random_box(myrandom)
+#INV_SBOX = [SBOX.index(i) if i in SBOX else i for i in range(len(SBOX))]
+#INV_PBOX = [PBOX.index(i) if i in PBOX else i for i in range(len(PBOX))]
+#
+#print(SBOX)
+#print(INV_SBOX)
+#print(PBOX)
+#print(INV_PBOX)
 
 def main():
-    #random.seed(4)
-    #global SBOX
-    #global PBOX
-    #global INV_SBOX
-    #global INV_PBOX
-
-    #SBOX = generate_random_box()
-    #PBOX = generate_random_box()
-    #INV_SBOX = [SBOX.index(i) if i in SBOX else i for i in range(len(SBOX))]
-    #INV_PBOX = [PBOX.index(i) if i in PBOX else i for i in range(len(PBOX))]
-
     validate_input()
 
     start = time.time()
@@ -70,8 +71,15 @@ def main():
     for round_num in range(3, -1, -1):
         print(f'\n--- Breaking KEY{round_num + 2} ---')
         print(f'Finding most probable differential trails for KEY{round_num + 2}...')
+
         most_probable_diff_trails = find_highly_probable_differential_trails(diff_dist_table, round_num)[:num_of_trails]
-        round_keys[round_num + 1] = break_round_key(round_num, most_probable_diff_trails, round_keys)
+
+        #for i in range(len(most_probable_diff_trails)):
+        #    print(f'{format(most_probable_diff_trails[i][2], "#06x")} -> {format(most_probable_diff_trails[i][3], "#06x")} ({most_probable_diff_trails[i][1]})')
+
+        round_key_possibilities = break_round_key(round_num, most_probable_diff_trails, round_keys)
+
+        round_keys[round_num + 1] = round_key_possibilities[0]
 
     # Special case for the first key
     round_keys[0] = break_first_round_key(round_keys)
@@ -92,15 +100,17 @@ def break_round_key(round_num, most_probable_diff_trails, round_keys):
     Breaks a whole round key given some highly probable differential trails
     by choosing ones which will break keybits we have not yet broken until
     all key bits are broken/SBOXes are used.
+
+    Returns the most probable round keys in the order of their probability.
     """
 
-    round_key = 0 # We'll be building this round key
     sboxes_already_used = [False, False, False, False]
+    partial_subkeys_to_combine = []
 
     while not all(sboxes_already_used):
         useful_diff_trail = find_useful_diff_trail(round_num, most_probable_diff_trails, sboxes_already_used)
 
-        print(f'\tFound useful differential trail (probability {useful_diff_trail[1]}):')
+        print(f'\tFound useful differential trail (probability {format(useful_diff_trail[1], ".4f")}):')
         print(f'\t\t{format(useful_diff_trail[2], "#06x")} -> {format(useful_diff_trail[3], "#06x")}')
 
         probability = useful_diff_trail[1]
@@ -110,34 +120,74 @@ def break_round_key(round_num, most_probable_diff_trails, round_keys):
         breaking_key_bits = find_which_key_bits_will_be_broken(round_num, output_xor)
         broken_key_bits = break_key_bits(round_num, probability, input_xor, output_xor, breaking_key_bits, round_keys)
 
-        # Set the keybits which were broken
-        for i in range(16):
-            if get_bit(breaking_key_bits, i) == 1:
-                round_key = set_bit(round_key, i, get_bit(broken_key_bits, i))
+        # broken_key_bits now has some likely candidates for the partial
+        # subkeys, ordered by their probabilities. At the end of the while
+        # loop, we'll combine them into likely candidates for the full key
+
+        partial_subkeys_to_combine.append(broken_key_bits)
 
         # Mark which sboxes this used up
         for i in range(4):
             if get_nibble(output_xor,i) != 0:
                 sboxes_already_used[i] = True
 
-    print('\n--------')
-    print(f'KEY{round_num + 2} = {format(round_key, "#06x")}')
-    print('--------\n')
-    return round_key
+    round_key_possibilities = combine_partial_subkeys(partial_subkeys_to_combine)
+
+    return round_key_possibilities
+
+def combine_partial_subkeys(partial_subkeys_to_combine):
+    """
+    Given a list of lists, each internal list containing condidates for some
+    partial subkeys, this function combines them into possible full round keys.
+
+    It does so in an ordered way: putting the most likely full round keys
+    to the beginning of the array. Since the partial subkey candidates
+    (internal lists) are already ordered by their own probabilities, we can
+    do this by ordering the full keys by the sum of the indicies of the
+    partial subkeys used to make up the full key.
+    """
+
+    full_keys = []
+
+    # Add the first partial subkey candidates to the full_keys array and keep
+    # track of their indicies
+    for i, ps in enumerate(partial_subkeys_to_combine[0]):
+        full_keys.append((i, ps))
+
+    partial_subkeys_to_combine = partial_subkeys_to_combine[1:]
+
+    while len(partial_subkeys_to_combine) != 0:
+        new_full_keys = []
+
+        for i, k in full_keys:
+            for j, ps in enumerate(partial_subkeys_to_combine[0]):
+                new_full_keys.append((i + j, k | ps))
+
+        full_keys = new_full_keys
+        
+        partial_subkeys_to_combine = partial_subkeys_to_combine[1:]
+
+    full_keys.sort()
+
+    # Just take the keys. Don't care about the indicies anymore
+    full_keys = [k for i, k in full_keys]
+
+    return full_keys
 
 def break_key_bits(round_num, probability, input_xor, output_xor, breaking_key_bits, round_keys):
     """
     Breaks bits of the round key specified by the breaking_key_bits array by
-    generating random plaintexts.
+    generating random plaintexts (i.e. gets a partial subkey).
 
-    Returns the most probable key for the specified bits.
+    Returns the most probable keybits for the specified bits, in the order of
+    their probability.
     """
 
     key_count_dict = {}
 
-    # We need some number of randomly chosen plaintexts; we use a constant.
-    # A better way would be to create a function which chooses this number
-    # based on the probability of the trail.
+    # We need some number of randomly chosen plaintexts. The simplest function
+    # for choosing this number is to divide some constant by the probability
+    # of the trail. The higher the probability, the fewer plaintexts are needed.
 
     num_chosen_plaintexts = round(C / probability)
 
@@ -153,13 +203,12 @@ def break_key_bits(round_num, probability, input_xor, output_xor, breaking_key_b
         # This will modify the key_count_dict after key guesses
         guess_key_bits(round_num, text1, text2, output_xor, key_count_dict, breaking_key_bits, round_keys)
 
-    print(sorted(key_count_dict.items(), key=lambda x: x[1], reverse=True))
+    # Extract the most likely keys out of the dictonary
+    most_probable_keys = sorted(key_count_dict.items(), key=lambda x: x[1], reverse=True)
+    most_probable_keys = most_probable_keys[:MIN_NUM_OPTIONS]
+    most_probable_keys = [int(k[0], 16) for k in most_probable_keys]
 
-    # Extract the most likely key out of the dictonary
-    most_probable_key = sorted(key_count_dict.items(), key=lambda x: x[1], reverse=True)[0][0]
-    most_probable_key = int(most_probable_key, 16)
-
-    return most_probable_key
+    return most_probable_keys
 
 def guess_key_bits(round_num, ciphertext1, ciphertext2, output_xor, key_count_dict, breaking_key_bits, round_keys):
     """
@@ -255,7 +304,7 @@ def partial_decryption(round_num, ciphertext1, ciphertext2, round_keys):
 def find_which_key_bits_will_be_broken(round_num, output_xor):
     """
     In order to guess key bits we need to know which bits to guess. This
-    function returns a BitString with 1 bits representing bits which we're
+    function returns a bit string with 1 bits representing bits which we're
     attempting to break given the output_xor and round_num.
     """
 
@@ -280,7 +329,7 @@ def find_useful_diff_trail(round_num, most_probable_diff_trails, sboxes_already_
         output_xor = diff_trail[3]
 
         # Check if this diff_trail will use any sboxes which we haven't used already
-        for i in range(len(sboxes_already_used)):
+        for i in range(4):
             if get_nibble(output_xor, i) != 0 and sboxes_already_used[i] == False: # Hit! We can use this one
                 return diff_trail
 
@@ -345,7 +394,7 @@ def find_differential_trail(input_xor, diff_dist_table, round_num):
                 max_count = max(diff_dist_table[get_nibble(current_xor, i)])
                 most_probable_output_xor = diff_dist_table[get_nibble(current_xor, i)].index(max_count)
 
-                probability *= max_count / len(diff_dist_table)
+                probability *= max_count / 16
 
                 current_xor = set_nibble(current_xor, i, most_probable_output_xor)
 
@@ -361,7 +410,6 @@ def find_differential_trail(input_xor, diff_dist_table, round_num):
     # final active SBOXes.
 
     num_final_active_sboxes = 0
-
     
     for i in range(4):
         if get_nibble(current_xor, i) > 0:
@@ -372,9 +420,9 @@ def find_differential_trail(input_xor, diff_dist_table, round_num):
     # 1 active SBOX: perfect
     # 2 active SBOXes: the key bits are broken within a couple of seconds. We 
     #                  won't adjust preference since it's fast enough and only
-    #                  1 active SBOX is very unlikely anyway
-    # 3 active SBOXes: could take ~10 sec so divide preference by some number
-    #                  to discourage using it. Using 4 because it works well.
+    #                  1 active SBOX is not likely anyway
+    # 3 active SBOXes: could take ~10 sec so divide preference by some constant
+    #                  to discourage using it.
     # 4 active SBOXes: will take a very long time so we never want to use them. 
     #                  We set preference to zero so we'll try to find 
     #                  alternatives with fewer active sboxes
@@ -605,7 +653,18 @@ def get_diff_dist_table_string(diff_dist_table):
 
     return string
 
+def print_hex_array(arr):
+    string = '['
 
+    for v in arr:
+        string += f'{format(v, "#06x")}, '
+
+    string = string[:-2]
+    string += ']'
+
+    print(string)
     
+
+
 if __name__=="__main__":
     main()
