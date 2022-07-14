@@ -70,7 +70,7 @@ def main():
 def confirm_key_guesses(possible_key_pairs):
     """
     Given all possible key pairs, checks which one encrypts plaintexts to the
-    correct ciphertexts. Returnes the final key guesses in this form:
+    correct ciphertexts. Returns the final key guesses in this form:
 
     (key1_guess, key2_guess)
     """
