@@ -187,10 +187,16 @@ h5 { font-size: 1.2em; }
   font-size: 13px;
 }
 
-#content #toy-dc-unfinished {
+#content #toy-dc-unfinished,
+#content #toy-dc-finished {
   width: 600px;
 }
 
-#content #toy-dc-unfinished #mid-text text {
+#content #toy-dc-unfinished #mid-text text,
+#content #toy-dc-finished #mid-text text {
   font-size: 12px;
+}
+
+#content #diff-trail {
+  width: 700px;
 }
