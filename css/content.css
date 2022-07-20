@@ -146,6 +146,10 @@ h5 { font-size: 1.2em; }
   border-bottom: none;
 }
 
+#content table#count-table {
+  width: 20em;
+}
+
 #content table.monospaced-table {
   font-family: monospace;
   text-align: center;
