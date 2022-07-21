@@ -179,7 +179,7 @@
     <section>
       <h3>Differential Cryptanalysis of the Toy Cipher</h3>
       <p>Much of the following is based on King’s webpage: “Differential Cryptanalysis Tutorial” {cite(king)} as well as Stinson’s textbook <i>Cryptography: Theory and Practice</i> {cite(stinson)}.</p>
-      <p>We must begin by defining which SBOX we’ll be using for the toy cipher. Remember that SBOXes are public knowledge and that, once the cipher is defined, they do not change. So, we’ll pick an arbitrary SBOX for our toy cipher.</p>
+      <p>We must begin by selecting which SBOX we’ll be using for the toy cipher. Remember that SBOXes are public knowledge and that, once the cipher is defined, they do not change. So, we’ll pick an arbitrary SBOX for our toy cipher.</p>
       <table class="monospaced-table" id="substitution">
         <tr>
           <th colspan="17">SBOX</th>
@@ -1229,7 +1229,7 @@
     <section>
       <h3>Differential Cryptanalysis of an SPN</h3>
       <p>This section is partly based on Howard M. Heys’s “A Tutorial on Linear and Differential Cryptanalysis” {cite(heys)}.</p>
-      <p>We begin by defining the SBOX and PBOX for the cipher. We’ll keep the SBOX from the previous section and the default PBOX from the figure above.</p>
+      <p>We begin by selecting the SBOX and PBOX for the cipher. We’ll keep the SBOX from the previous section and the default PBOX from the figure above.</p>
       <table class="monospaced-table" id="substitution">
         <tr>
           <th colspan="17">SBOX</th>
@@ -1718,16 +1718,16 @@
         </div>
       </div>
       <p>We start with two plaintexts which XOR to 0xb0b0. As they make their way through the key addition, their XOR doesn’t change.</p>
-      <p>Next they go through the SBOXes. The XOR in their second and fourth nibble is 0 (the plaintexts are equal there) so their XOR doesn’t change in those nibbles. The first and third nibble, however, each have an XOR of 0xb. Here, we use the difference distribution table to find the most probable SBOX output XOR for an input XOR of 0xb. In this case, we have a very likely output XOR of 0x2 which occurs 8/16 times (50%). We pick this output XOR for both SBOXes and keep going.</p>
+      <p>Next they go through the SBOXes. The SBOX input XOR in their second and fourth nibble is 0 (the plaintexts are equal there) so their XOR doesn’t change in those nibbles. The first and third nibble, however, each have an SBOX input XOR of 0xb. Remember, we cannot predict the SBOX output XOR given the input XOR with 100% certainty. However, we can use the difference distribution table to find the most probable SBOX output XOR for an input XOR of 0xb. In this case, we have a very likely output XOR of 0x2 which occurs 8/16 times (50%). We pick this output XOR for both SBOXes and keep going.</p>
       <p>Some vocabulary: an SBOX with a non-zero input XOR is called an <em class="highlight">active SBOX</em> for that trail. In the first round of the cipher for our differential trail, the first and third SBOXes were active.</p>
-      <p>As explained earlier, the XOR of the plaintexts as they go through the permutation can be calculated by simply puting the PBOX input XOR (0x2020) through the permutation, which leaves us with a value of 0x00a0 at position <i>w</i><sub>1</sub>.</p>
+      <p>As explained earlier, the XOR of the plaintexts as they go through the permutation can be calculated by simply puting the PBOX input XOR (which is now 0x2020) through the permutation, which leaves us with a value of 0x00a0 at position <i>w</i><sub>1</sub>.</p>
       <p>We now simply continue this process until we get to position <i>u</i><sub>4</sub> in the cipher. Why we stop there will be clear later.</p>
       <p>Now let’s talk about the probability of this full trail occuring. Remember that the only source of uncertainty comes from the SBOXes and, because of the difference distribution table, we know exactly how uncertain we are. For every active SBOX, we picked the most likely output XOR. To get the probability of the trail we simply multiply the probabilities of these output XORs occuring.</p>
       <p>This calculation only works under the assumption that these events are independent, which is not necessarily true. However, this method performs well in practice so we ignore any slight misscalculation. Just be aware that the probability we find is not the <em>true</em> probability of the trail but an approximation of it.</p>
       <p>As you can see in the figure above, the final probability of the whole trail occuring is 0.035 = 3.5%. This is an enormous bias. Remember what this is saying: given two plaintexts which XOR to 0xb0b0, there’s a 3.5% chance that their XOR at position <i>u</i><sub>4</sub> is 0x0808. We will now exploit this bias to break 8 bits of the fifth key.</p>
       <hr/>
       <p>First note that the bits which we will break are the bits coming out of the last round’s active SBOXes (for our trail this means bits 5–8 and 13–16).</p>
-      <p>We begin by encrypting two random plaintexts with an XOR of 0xb0b0 (remember that differential cryptanalysis is a chosen plaintext attack; we can choose whichever plaintexts we want). Now what we do is attempt to decrypt the message to the end of the differential trail (position <i>u</i><sub>4</sub>) by <em>guessing all possible key bits for bits 5–8 and 13–16</em>. This step is called <em class="highlight">partial decryption</em>. The reason we don’t need to consider key bits 1–4 and 9–12 is because they will not affect the bits 5–8 and 13–16 at <i>u</i><sub>4</sub>, which will be the only ones we care about. The key bits we are breaking are called the <em class="highlight">partial key</em> since they are only a part of the whole key, in our case 8 bits of it.</p>
+      <p>We begin by encrypting two random plaintexts which XOR to 0xb0b0 (remember that differential cryptanalysis is a chosen plaintext attack; we can choose whichever plaintexts we want). Now what we do is attempt to <em>decrypt</em> the message to the end of the differential trail (position <i>u</i><sub>4</sub>) by <em>guessing all possible key bits for bits 5–8 and 13–16</em>. This step is called <em class="highlight">partial decryption</em>. The reason we don’t need to consider key bits 1–4 and 9–12 is because they will not affect the bits 5–8 and 13–16 at <i>u</i><sub>4</sub>, which will be the only ones we care about. The key bits we are breaking are called the <em class="highlight">partial key</em> since they are only a part of the whole key, in our case 8 bits of it.</p>
       <p>Now comes the core of the method. We create a table that keeps track of a count (initialized to 0) for each of the partial keys. <em>Each time the two partially decrypted ciphertexts XOR to the trail’s final XOR (in our case 0x0808), we increment the value for the partial key which was used in the partial decryption.</em></p>
       <p>We then repeat this process for a large number of random plaintext pairs which XOR to 0xb0b0. The partial key with the largest value in the table is most likely the be the correct partial key, meaning we broke 8 bits of the fifth round key!</p>
       <p>Here’s an example of this table after running differential cryptanalysis on our trail, ordered by count. The fifth key was set as 0xb520. The first and third nibble are always set to 0 since we’re not breaking them:</p>
@@ -1804,7 +1804,7 @@
         <li>
           <p><b>How do we break the other round keys?</b> Breaking the other round keys is also fairly simple. We continue breaking them from the fifth key up.</p>
           <p>For the fourth, third, and second round key we first need to find a differential trail of appropriate length. For the fourth key the trail stops at position <i>u</i><sub>3</sub>, for the third at <i>u</i><sub>2</sub>, etc. You should notice that it’ll be easier to find ones with a bigger bias since the trails will be traveling through fever SBOXes. We must also remember to take permutation into account. It doesn’t change the process but it does affect which key bits are broken by an active SBOX. For example, in our cipher, if the first SBOX is active, we would actually be breaking bits 1, 5, 9, and 13.</p>
-          <p>Another important thing to note is that to break the fourth key we need to be able to partially decrypt the ciphertext all the way to position <i>u</i><sub>3</sub>. To do that however, we need the fifth key. In other words, we’re relying on our previous key guesses to break the other keys. If our key guess for the fifth key is incorrect, so will all our other key guesses.</p>
+          <p>Another important thing to note is that to break the fourth key we need to be able to partially decrypt the ciphertext all the way to position <i>u</i><sub>3</sub>. To do that however, we need the fifth key. In other words, we’re relying on our previous key guesses to break the other round keys. If our guess at the fifth key is incorrect, so will all our other round key guesses.</p>
           <p>Breaking the first key is trivial with simple XOR rules. Send one plaintext through the cipher, decrypt it to position <i>u</i><sub>1</sub> with round keys that are already broken, then simply XOR the original plaintext with this partially decrypted value to get the first round key.</p>
         </li>
         <li>
@@ -1815,7 +1815,7 @@
         <li>
           <p><b>How do we find good differential trails?</b> This is just a matter of brute force. You simply try all possible input XORs until you find a highly probable trail. On a small cipher like this even a personal laptop finds them practically instantly. Also note that you only need to find them once, so long as the cipher design remains unchanged.</p>
           <p>There is a catch though. Remember that the number of bits that are broken in a partial key depends on the number of active SBOXes at the end of the trail. Remember also that we need to loop through all possible key bits for the bits we’re breaking. If there are only two active SBOXes at the end of our trail, that means we need to loop through 2<sup>8</sup> possible partial keys for each plaintext pair. If all four SBOXes are active, we need to loop through 2<sup>16</sup> possible partial keys for each plaintext pair, which is 256 times slower.</p>
-          <p>In other words, if we want to minimize the time it takes to break the keys, we not only need to find a trail which is highly probable but one which has as few active SBOXes in the last round of the trail as possible.</p>
+          <p>In other words, if we want to minimize the time it takes to break the keys, we not only need to find a trail which is highly probable (so that fewer plaintext pairs will be needed), but one which has as few active SBOXes in the last round of the trail as possible.</p>
         </li>
       </ol>
     </section>
@@ -1827,6 +1827,11 @@
         <p>I have said enough to convince you that ciphers of this nature are readily soluble, and to give you some insight into the rationale of their development. But be assured that the specimen before us appertains to the very simplest species of cryptograph.</p>
         <cite>—Poe</cite>
       </blockquote>
+      <div class="visualization">
+        <div class="figure">
+          {{../images/aes.svg}}
+        </div>
+      </div>
     </header>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
   </section>

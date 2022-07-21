@@ -1,0 +1,315 @@
+<svg version="1.1" viewBox="-1 40 1300 670" xmlns="http://www.w3.org/2000/svg" id="aes">
+  <!-- original viewBox="0 0 960 905" -->
+
+  <g stroke="black" stroke-width="2.5">
+    <!-- round 0 key input -->
+    <line x1="30" y1="45" x2="30" y2="80" class="b0" />
+    <line x1="90" y1="45" x2="90" y2="80" class="b1" />
+    <line x1="150" y1="45" x2="150" y2="80" class="b2" />
+    <line x1="210" y1="45" x2="210" y2="80" class="b3" />
+                                   
+    <line x1="270" y1="45" x2="270" y2="80" class="b4" />
+    <line x1="330" y1="45" x2="330" y2="80" class="b5" />
+    <line x1="390" y1="45" x2="390" y2="80" class="b6" />
+    <line x1="450" y1="45" x2="450" y2="80" class="b7" />
+                                   
+    <line x1="510" y1="45" x2="510" y2="80" class="b8" />
+    <line x1="570" y1="45" x2="570" y2="80" class="b9" />
+    <line x1="630" y1="45" x2="630" y2="80" class="ba" />
+    <line x1="690" y1="45" x2="690" y2="80" class="bb" />
+                                   
+    <line x1="750" y1="45" x2="750" y2="80" class="bc" />
+    <line x1="810" y1="45" x2="810" y2="80" class="bd" />
+    <line x1="870" y1="45" x2="870" y2="80" class="be" />
+    <line x1="930" y1="45" x2="930" y2="80" class="bf" />
+
+    <!-- round 0 key -->
+    <rect x="0" y="80" width="960" height="35" fill="transparent" />
+
+    <!-- round 1 sbox input -->
+    <line x1="30" y1="115" x2="30" y2="150" class="b0" />
+    <line x1="90" y1="115" x2="90" y2="150" class="b1" />
+    <line x1="150" y1="115" x2="150" y2="150" class="b2" />
+    <line x1="210" y1="115" x2="210" y2="150" class="b3" />
+
+    <line x1="270" y1="115" x2="270" y2="150" class="b4" />
+    <line x1="330" y1="115" x2="330" y2="150" class="b5" />
+    <line x1="390" y1="115" x2="390" y2="150" class="b6" />
+    <line x1="450" y1="115" x2="450" y2="150" class="b7" />
+
+    <line x1="510" y1="115" x2="510" y2="150" class="b8" />
+    <line x1="570" y1="115" x2="570" y2="150" class="b9" />
+    <line x1="630" y1="115" x2="630" y2="150" class="ba" />
+    <line x1="690" y1="115" x2="690" y2="150" class="bb" />
+
+    <line x1="750" y1="115" x2="750" y2="150" class="bc" />
+    <line x1="810" y1="115" x2="810" y2="150" class="bd" />
+    <line x1="870" y1="115" x2="870" y2="150" class="be" />
+    <line x1="930" y1="115" x2="930" y2="150" class="bf" />
+
+    <!-- round 1 sbox -->
+    <rect x="5" y="150" width="50" height="35" fill="transparent" />
+    <rect x="65" y="150" width="50" height="35" fill="transparent" />
+    <rect x="125" y="150" width="50" height="35" fill="transparent" />
+    <rect x="185" y="150" width="50" height="35" fill="transparent" />
+
+    <rect x="245" y="150" width="50" height="35" fill="transparent" />
+    <rect x="305" y="150" width="50" height="35" fill="transparent" />
+    <rect x="365" y="150" width="50" height="35" fill="transparent" />
+    <rect x="425" y="150" width="50" height="35" fill="transparent" />
+
+    <rect x="485" y="150" width="50" height="35" fill="transparent" />
+    <rect x="545" y="150" width="50" height="35" fill="transparent" />
+    <rect x="605" y="150" width="50" height="35" fill="transparent" />
+    <rect x="665" y="150" width="50" height="35" fill="transparent" />
+
+    <rect x="725" y="150" width="50" height="35" fill="transparent" />
+    <rect x="785" y="150" width="50" height="35" fill="transparent" />
+    <rect x="845" y="150" width="50" height="35" fill="transparent" />
+    <rect x="905" y="150" width="50" height="35" fill="transparent" />
+
+    <!-- round 1 shift rows -->
+    <line x1="30" y1="185" x2="30" y2="270" class="b0 pbox" />
+    <line x1="90" y1="185" x2="810" y2="270" class="b1 pbox" />
+    <line x1="150" y1="185" x2="630" y2="270" class="b2 pbox" />
+    <line x1="210" y1="185" x2="450" y2="270" class="b3 pbox" />
+
+    <line x1="270" y1="185" x2="270" y2="270" class="b4 pbox" />
+    <line x1="330" y1="185" x2="90" y2="270" class="b5 pbox" />
+    <line x1="390" y1="185" x2="870" y2="270" class="b6 pbox" />
+    <line x1="450" y1="185" x2="690" y2="270" class="b7 pbox" />
+
+    <line x1="510" y1="185" x2="510" y2="270" class="b8 pbox" />
+    <line x1="570" y1="185" x2="330" y2="270" class="b9 pbox" />
+    <line x1="630" y1="185" x2="150" y2="270" class="ba pbox" />
+    <line x1="690" y1="185" x2="930" y2="270" class="bb pbox" />
+
+    <line x1="750" y1="185" x2="750" y2="270" class="bc pbox" />
+    <line x1="810" y1="185" x2="570" y2="270" class="bd pbox" />
+    <line x1="870" y1="185" x2="390" y2="270" class="be pbox" />
+    <line x1="930" y1="185" x2="210" y2="270" class="bf pbox" />
+
+    <!-- round 1 mix columns -->
+    <rect x="0" y="270" width="960" height="35" fill="transparent" />
+
+    <!-- round 2 key input -->
+    <line x1="30" y1="305" x2="30" y2="340" class="b0" />
+    <line x1="90" y1="305" x2="90" y2="340" class="b1" />
+    <line x1="150" y1="305" x2="150" y2="340" class="b2" />
+    <line x1="210" y1="305" x2="210" y2="340" class="b3" />
+
+    <line x1="270" y1="305" x2="270" y2="340" class="b4" />
+    <line x1="330" y1="305" x2="330" y2="340" class="b5" />
+    <line x1="390" y1="305" x2="390" y2="340" class="b6" />
+    <line x1="450" y1="305" x2="450" y2="340" class="b7" />
+
+    <line x1="510" y1="305" x2="510" y2="340" class="b8" />
+    <line x1="570" y1="305" x2="570" y2="340" class="b9" />
+    <line x1="630" y1="305" x2="630" y2="340" class="ba" />
+    <line x1="690" y1="305" x2="690" y2="340" class="bb" />
+
+    <line x1="750" y1="305" x2="750" y2="340" class="bc" />
+    <line x1="810" y1="305" x2="810" y2="340" class="bd" />
+    <line x1="870" y1="305" x2="870" y2="340" class="be" />
+    <line x1="930" y1="305" x2="930" y2="340" class="bf" />
+
+    <!-- round 2 key -->
+    <rect x="0" y="340" width="960" height="35" fill="transparent" />
+
+    <!-- round 2 sbox input -->
+    <line x1="30" y1="375" x2="30" y2="410" class="b0" />
+    <line x1="90" y1="375" x2="90" y2="410" class="b1" />
+    <line x1="150" y1="375" x2="150" y2="410" class="b2" />
+    <line x1="210" y1="375" x2="210" y2="410" class="b3" />
+
+    <line x1="270" y1="375" x2="270" y2="410" class="b4" />
+    <line x1="330" y1="375" x2="330" y2="410" class="b5" />
+    <line x1="390" y1="375" x2="390" y2="410" class="b6" />
+    <line x1="450" y1="375" x2="450" y2="410" class="b7" />
+
+    <line x1="510" y1="375" x2="510" y2="410" class="b8" />
+    <line x1="570" y1="375" x2="570" y2="410" class="b9" />
+    <line x1="630" y1="375" x2="630" y2="410" class="ba" />
+    <line x1="690" y1="375" x2="690" y2="410" class="bb" />
+
+    <line x1="750" y1="375" x2="750" y2="410" class="bc" />
+    <line x1="810" y1="375" x2="810" y2="410" class="bd" />
+    <line x1="870" y1="375" x2="870" y2="410" class="be" />
+    <line x1="930" y1="375" x2="930" y2="410" class="bf" />
+  
+    <!-- elision -->
+    <circle cx="480" cy="430" r="1.5"/>
+    <circle cx="480" cy="445" r="1.5"/>
+    <circle cx="480" cy="460" r="1.5"/>
+
+    <!-- round 10 sbox input -->
+    <line x1="30" y1="480" x2="30" y2="515" class="b0" />
+    <line x1="90" y1="480" x2="90" y2="515" class="b1" />
+    <line x1="150" y1="480" x2="150" y2="515" class="b2" />
+    <line x1="210" y1="480" x2="210" y2="515" class="b3" />
+
+    <line x1="270" y1="480" x2="270" y2="515" class="b4" />
+    <line x1="330" y1="480" x2="330" y2="515" class="b5" />
+    <line x1="390" y1="480" x2="390" y2="515" class="b6" />
+    <line x1="450" y1="480" x2="450" y2="515" class="b7" />
+
+    <line x1="510" y1="480" x2="510" y2="515" class="b8" />
+    <line x1="570" y1="480" x2="570" y2="515" class="b9" />
+    <line x1="630" y1="480" x2="630" y2="515" class="ba" />
+    <line x1="690" y1="480" x2="690" y2="515" class="bb" />
+
+    <line x1="750" y1="480" x2="750" y2="515" class="bc" />
+    <line x1="810" y1="480" x2="810" y2="515" class="bd" />
+    <line x1="870" y1="480" x2="870" y2="515" class="be" />
+    <line x1="930" y1="480" x2="930" y2="515" class="bf" />
+
+    <!-- round 10 sbox -->
+    <rect x="5" y="515" width="50" height="35" fill="transparent" />
+    <rect x="65" y="515" width="50" height="35" fill="transparent" />
+    <rect x="125" y="515" width="50" height="35" fill="transparent" />
+    <rect x="185" y="515" width="50" height="35" fill="transparent" />
+
+    <rect x="245" y="515" width="50" height="35" fill="transparent" />
+    <rect x="305" y="515" width="50" height="35" fill="transparent" />
+    <rect x="365" y="515" width="50" height="35" fill="transparent" />
+    <rect x="425" y="515" width="50" height="35" fill="transparent" />
+
+    <rect x="485" y="515" width="50" height="35" fill="transparent" />
+    <rect x="545" y="515" width="50" height="35" fill="transparent" />
+    <rect x="605" y="515" width="50" height="35" fill="transparent" />
+    <rect x="665" y="515" width="50" height="35" fill="transparent" />
+
+    <rect x="725" y="515" width="50" height="35" fill="transparent" />
+    <rect x="785" y="515" width="50" height="35" fill="transparent" />
+    <rect x="845" y="515" width="50" height="35" fill="transparent" />
+    <rect x="905" y="515" width="50" height="35" fill="transparent" />
+
+    <!-- round 10 shift rows -->
+    <line x1="30" y1="550" x2="30" y2="635" class="b0 pbox" />
+    <line x1="90" y1="550" x2="810" y2="635" class="b1 pbox" />
+    <line x1="150" y1="550" x2="630" y2="635" class="b2 pbox" />
+    <line x1="210" y1="550" x2="450" y2="635" class="b3 pbox" />
+
+    <line x1="270" y1="550" x2="270" y2="635" class="b4 pbox" />
+    <line x1="330" y1="550" x2="90" y2="635" class="b5 pbox" />
+    <line x1="390" y1="550" x2="870" y2="635" class="b6 pbox" />
+    <line x1="450" y1="550" x2="690" y2="635" class="b7 pbox" />
+
+    <line x1="510" y1="550" x2="510" y2="635" class="b8 pbox" />
+    <line x1="570" y1="550" x2="330" y2="635" class="b9 pbox" />
+    <line x1="630" y1="550" x2="150" y2="635" class="ba pbox" />
+    <line x1="690" y1="550" x2="930" y2="635" class="bb pbox" />
+
+    <line x1="750" y1="550" x2="750" y2="635" class="bc pbox" />
+    <line x1="810" y1="550" x2="570" y2="635" class="bd pbox" />
+    <line x1="870" y1="550" x2="390" y2="635" class="be pbox" />
+    <line x1="930" y1="550" x2="210" y2="635" class="bf pbox" />
+
+    <!-- round 10 key -->
+    <rect x="0" y="635" width="960" height="35" fill="transparent" />
+
+    <!-- round 10 key output -->
+    <line x1="30" y1="670" x2="30" y2="705" class="b0" />
+    <line x1="90" y1="670" x2="90" y2="705" class="b1" />
+    <line x1="150" y1="670" x2="150" y2="705" class="b2" />
+    <line x1="210" y1="670" x2="210" y2="705" class="b3" />
+
+    <line x1="270" y1="670" x2="270" y2="705" class="b4" />
+    <line x1="330" y1="670" x2="330" y2="705" class="b5" />
+    <line x1="390" y1="670" x2="390" y2="705" class="b6" />
+    <line x1="450" y1="670" x2="450" y2="705" class="b7" />
+
+    <line x1="510" y1="670" x2="510" y2="705" class="b8" />
+    <line x1="570" y1="670" x2="570" y2="705" class="b9" />
+    <line x1="630" y1="670" x2="630" y2="705" class="ba" />
+    <line x1="690" y1="670" x2="690" y2="705" class="bb" />
+
+    <line x1="750" y1="670" x2="750" y2="705" class="bc" />
+    <line x1="810" y1="670" x2="810" y2="705" class="bd" />
+    <line x1="870" y1="670" x2="870" y2="705" class="be" />
+    <line x1="930" y1="670" x2="930" y2="705" class="bf" />
+  </g>
+
+  <g>
+    <!-- K1 -->
+    <text x="472" y="103">K</text>
+    <text class="sub" x="484" y="107">1</text>
+    <!-- K2 -->
+    <text x="472" y="363">K</text>
+    <text class="sub" x="484" y="367">2</text>
+    <!-- K11 -->
+    <text x="472" y="658">K</text>
+    <text class="sub" x="484" y="664">11</text>
+
+    <!-- S1 -->
+    <text x="24" y="175">S</text>
+    <text x="84" y="175">S</text>
+    <text x="144" y="175">S</text>
+    <text x="204" y="175">S</text>
+                 
+    <text x="264" y="175">S</text>
+    <text x="324" y="175">S</text>
+    <text x="384" y="175">S</text>
+    <text x="444" y="175">S</text>
+                 
+    <text x="504" y="175">S</text>
+    <text x="564" y="175">S</text>
+    <text x="624" y="175">S</text>
+    <text x="684" y="175">S</text>
+                 
+    <text x="744" y="175">S</text>
+    <text x="804" y="175">S</text>
+    <text x="864" y="175">S</text>
+    <text x="924" y="175">S</text>
+
+    <!-- S10 -->
+    <text x="24" y="540">S</text>
+    <text x="84" y="540">S</text>
+    <text x="144" y="540">S</text>
+    <text x="204" y="540">S</text>
+                 
+    <text x="264" y="540">S</text>
+    <text x="324" y="540">S</text>
+    <text x="384" y="540">S</text>
+    <text x="444" y="540">S</text>
+                 
+    <text x="504" y="540">S</text>
+    <text x="564" y="540">S</text>
+    <text x="624" y="540">S</text>
+    <text x="684" y="540">S</text>
+                 
+    <text x="744" y="540">S</text>
+    <text x="804" y="540">S</text>
+    <text x="864" y="540">S</text>
+    <text x="924" y="540">S</text>
+
+    <!-- Mix columns -->
+    <text x="415" y="295">Mix Columns</text>
+
+    <!-- Initial round key addition -->
+    <text x="1070" y="93">Initial round</text>
+    <text x="1075" y="113">key addition</text>
+
+    <!-- Normal rounds -->
+    <text x="1024" y="238">This normal round is</text>
+    <text x="1020" y="258">repeated 9, 11, or 13</text>
+    <text x="1030" y="278">times, depending on</text>
+    <text x="1030" y="298">the size of the key</text>
+
+    <!-- Last round -->
+    <text x="1087" y="578">Last round</text>
+    <text x="1052" y="598">does not include</text>
+    <text x="1053" y="618">Mix Columns step</text>
+  </g>
+
+  <g stroke="black" stroke-width="2.5">
+    <path d="M 975 70 c 20 0, 0 27.5, 20 27.5" fill="none" />
+    <path d="M 975 125 c 20 0, 0 -27.5, 20 -27.5" fill="none" />
+
+    <path d="M 975 140 c 20 0, 0 122.5, 20 122.5" fill="none" />
+    <path d="M 975 385 c 20 0, 0 -122.5, 20 -122.5" fill="none" />
+
+    <path d="M 975 505 c 20 0, 0 87.5, 20 87.5" fill="none" />
+    <path d="M 975 680 c 20 0, 0 -87.5, 20 -87.5" fill="none" />
+  </g>
+</svg>

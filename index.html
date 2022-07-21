@@ -360,7 +360,7 @@
     <section>
       <h3>Differential Cryptanalysis of the Toy Cipher</h3>
       <p>Much of the following is based on King’s webpage: “Differential Cryptanalysis Tutorial” {cite(king)} as well as Stinson’s textbook <i>Cryptography: Theory and Practice</i> {cite(stinson)}.</p>
-      <p>We must begin by defining which SBOX we’ll be using for the toy cipher. Remember that SBOXes are public knowledge and that, once the cipher is defined, they do not change. So, we’ll pick an arbitrary SBOX for our toy cipher.</p>
+      <p>We must begin by selecting which SBOX we’ll be using for the toy cipher. Remember that SBOXes are public knowledge and that, once the cipher is defined, they do not change. So, we’ll pick an arbitrary SBOX for our toy cipher.</p>
       <table class="monospaced-table" id="substitution">
         <tr>
           <th colspan="17">SBOX</th>
@@ -2231,7 +2231,7 @@
     <section>
       <h3>Differential Cryptanalysis of an SPN</h3>
       <p>This section is partly based on Howard M. Heys’s “A Tutorial on Linear and Differential Cryptanalysis” {cite(heys)}.</p>
-      <p>We begin by defining the SBOX and PBOX for the cipher. We’ll keep the SBOX from the previous section and the default PBOX from the figure above.</p>
+      <p>We begin by selecting the SBOX and PBOX for the cipher. We’ll keep the SBOX from the previous section and the default PBOX from the figure above.</p>
       <table class="monospaced-table" id="substitution">
         <tr>
           <th colspan="17">SBOX</th>
@@ -3121,16 +3121,16 @@
         </div>
       </div>
       <p>We start with two plaintexts which XOR to 0xb0b0. As they make their way through the key addition, their XOR doesn’t change.</p>
-      <p>Next they go through the SBOXes. The XOR in their second and fourth nibble is 0 (the plaintexts are equal there) so their XOR doesn’t change in those nibbles. The first and third nibble, however, each have an XOR of 0xb. Here, we use the difference distribution table to find the most probable SBOX output XOR for an input XOR of 0xb. In this case, we have a very likely output XOR of 0x2 which occurs 8/16 times (50%). We pick this output XOR for both SBOXes and keep going.</p>
+      <p>Next they go through the SBOXes. The SBOX input XOR in their second and fourth nibble is 0 (the plaintexts are equal there) so their XOR doesn’t change in those nibbles. The first and third nibble, however, each have an SBOX input XOR of 0xb. Remember, we cannot predict the SBOX output XOR given the input XOR with 100% certainty. However, we can use the difference distribution table to find the most probable SBOX output XOR for an input XOR of 0xb. In this case, we have a very likely output XOR of 0x2 which occurs 8/16 times (50%). We pick this output XOR for both SBOXes and keep going.</p>
       <p>Some vocabulary: an SBOX with a non-zero input XOR is called an <em class="highlight">active SBOX</em> for that trail. In the first round of the cipher for our differential trail, the first and third SBOXes were active.</p>
-      <p>As explained earlier, the XOR of the plaintexts as they go through the permutation can be calculated by simply puting the PBOX input XOR (0x2020) through the permutation, which leaves us with a value of 0x00a0 at position <i>w</i><sub>1</sub>.</p>
+      <p>As explained earlier, the XOR of the plaintexts as they go through the permutation can be calculated by simply puting the PBOX input XOR (which is now 0x2020) through the permutation, which leaves us with a value of 0x00a0 at position <i>w</i><sub>1</sub>.</p>
       <p>We now simply continue this process until we get to position <i>u</i><sub>4</sub> in the cipher. Why we stop there will be clear later.</p>
       <p>Now let’s talk about the probability of this full trail occuring. Remember that the only source of uncertainty comes from the SBOXes and, because of the difference distribution table, we know exactly how uncertain we are. For every active SBOX, we picked the most likely output XOR. To get the probability of the trail we simply multiply the probabilities of these output XORs occuring.</p>
       <p>This calculation only works under the assumption that these events are independent, which is not necessarily true. However, this method performs well in practice so we ignore any slight misscalculation. Just be aware that the probability we find is not the <em>true</em> probability of the trail but an approximation of it.</p>
       <p>As you can see in the figure above, the final probability of the whole trail occuring is 0.035 = 3.5%. This is an enormous bias. Remember what this is saying: given two plaintexts which XOR to 0xb0b0, there’s a 3.5% chance that their XOR at position <i>u</i><sub>4</sub> is 0x0808. We will now exploit this bias to break 8 bits of the fifth key.</p>
       <hr/>
       <p>First note that the bits which we will break are the bits coming out of the last round’s active SBOXes (for our trail this means bits 5–8 and 13–16).</p>
-      <p>We begin by encrypting two random plaintexts with an XOR of 0xb0b0 (remember that differential cryptanalysis is a chosen plaintext attack; we can choose whichever plaintexts we want). Now what we do is attempt to decrypt the message to the end of the differential trail (position <i>u</i><sub>4</sub>) by <em>guessing all possible key bits for bits 5–8 and 13–16</em>. This step is called <em class="highlight">partial decryption</em>. The reason we don’t need to consider key bits 1–4 and 9–12 is because they will not affect the bits 5–8 and 13–16 at <i>u</i><sub>4</sub>, which will be the only ones we care about. The key bits we are breaking are called the <em class="highlight">partial key</em> since they are only a part of the whole key, in our case 8 bits of it.</p>
+      <p>We begin by encrypting two random plaintexts which XOR to 0xb0b0 (remember that differential cryptanalysis is a chosen plaintext attack; we can choose whichever plaintexts we want). Now what we do is attempt to <em>decrypt</em> the message to the end of the differential trail (position <i>u</i><sub>4</sub>) by <em>guessing all possible key bits for bits 5–8 and 13–16</em>. This step is called <em class="highlight">partial decryption</em>. The reason we don’t need to consider key bits 1–4 and 9–12 is because they will not affect the bits 5–8 and 13–16 at <i>u</i><sub>4</sub>, which will be the only ones we care about. The key bits we are breaking are called the <em class="highlight">partial key</em> since they are only a part of the whole key, in our case 8 bits of it.</p>
       <p>Now comes the core of the method. We create a table that keeps track of a count (initialized to 0) for each of the partial keys. <em>Each time the two partially decrypted ciphertexts XOR to the trail’s final XOR (in our case 0x0808), we increment the value for the partial key which was used in the partial decryption.</em></p>
       <p>We then repeat this process for a large number of random plaintext pairs which XOR to 0xb0b0. The partial key with the largest value in the table is most likely the be the correct partial key, meaning we broke 8 bits of the fifth round key!</p>
       <p>Here’s an example of this table after running differential cryptanalysis on our trail, ordered by count. The fifth key was set as 0xb520. The first and third nibble are always set to 0 since we’re not breaking them:</p>
@@ -3207,7 +3207,7 @@
         <li>
           <p><b>How do we break the other round keys?</b> Breaking the other round keys is also fairly simple. We continue breaking them from the fifth key up.</p>
           <p>For the fourth, third, and second round key we first need to find a differential trail of appropriate length. For the fourth key the trail stops at position <i>u</i><sub>3</sub>, for the third at <i>u</i><sub>2</sub>, etc. You should notice that it’ll be easier to find ones with a bigger bias since the trails will be traveling through fever SBOXes. We must also remember to take permutation into account. It doesn’t change the process but it does affect which key bits are broken by an active SBOX. For example, in our cipher, if the first SBOX is active, we would actually be breaking bits 1, 5, 9, and 13.</p>
-          <p>Another important thing to note is that to break the fourth key we need to be able to partially decrypt the ciphertext all the way to position <i>u</i><sub>3</sub>. To do that however, we need the fifth key. In other words, we’re relying on our previous key guesses to break the other keys. If our key guess for the fifth key is incorrect, so will all our other key guesses.</p>
+          <p>Another important thing to note is that to break the fourth key we need to be able to partially decrypt the ciphertext all the way to position <i>u</i><sub>3</sub>. To do that however, we need the fifth key. In other words, we’re relying on our previous key guesses to break the other round keys. If our guess at the fifth key is incorrect, so will all our other round key guesses.</p>
           <p>Breaking the first key is trivial with simple XOR rules. Send one plaintext through the cipher, decrypt it to position <i>u</i><sub>1</sub> with round keys that are already broken, then simply XOR the original plaintext with this partially decrypted value to get the first round key.</p>
         </li>
         <li>
@@ -3218,7 +3218,7 @@
         <li>
           <p><b>How do we find good differential trails?</b> This is just a matter of brute force. You simply try all possible input XORs until you find a highly probable trail. On a small cipher like this even a personal laptop finds them practically instantly. Also note that you only need to find them once, so long as the cipher design remains unchanged.</p>
           <p>There is a catch though. Remember that the number of bits that are broken in a partial key depends on the number of active SBOXes at the end of the trail. Remember also that we need to loop through all possible key bits for the bits we’re breaking. If there are only two active SBOXes at the end of our trail, that means we need to loop through 2<sup>8</sup> possible partial keys for each plaintext pair. If all four SBOXes are active, we need to loop through 2<sup>16</sup> possible partial keys for each plaintext pair, which is 256 times slower.</p>
-          <p>In other words, if we want to minimize the time it takes to break the keys, we not only need to find a trail which is highly probable but one which has as few active SBOXes in the last round of the trail as possible.</p>
+          <p>In other words, if we want to minimize the time it takes to break the keys, we not only need to find a trail which is highly probable (so that fewer plaintext pairs will be needed), but one which has as few active SBOXes in the last round of the trail as possible.</p>
         </li>
       </ol>
     </section>
@@ -3230,6 +3230,325 @@
         <p>I have said enough to convince you that ciphers of this nature are readily soluble, and to give you some insight into the rationale of their development. But be assured that the specimen before us appertains to the very simplest species of cryptograph.</p>
         <cite>—Poe</cite>
       </blockquote>
+      <div class="visualization">
+        <div class="figure">
+          <svg version="1.1" viewBox="-1 40 1300 670" xmlns="http://www.w3.org/2000/svg" id="aes">
+  <!-- original viewBox="0 0 960 905" -->
+
+  <g stroke="black" stroke-width="2.5">
+    <!-- round 0 key input -->
+    <line x1="30" y1="45" x2="30" y2="80" class="b0" />
+    <line x1="90" y1="45" x2="90" y2="80" class="b1" />
+    <line x1="150" y1="45" x2="150" y2="80" class="b2" />
+    <line x1="210" y1="45" x2="210" y2="80" class="b3" />
+                                   
+    <line x1="270" y1="45" x2="270" y2="80" class="b4" />
+    <line x1="330" y1="45" x2="330" y2="80" class="b5" />
+    <line x1="390" y1="45" x2="390" y2="80" class="b6" />
+    <line x1="450" y1="45" x2="450" y2="80" class="b7" />
+                                   
+    <line x1="510" y1="45" x2="510" y2="80" class="b8" />
+    <line x1="570" y1="45" x2="570" y2="80" class="b9" />
+    <line x1="630" y1="45" x2="630" y2="80" class="ba" />
+    <line x1="690" y1="45" x2="690" y2="80" class="bb" />
+                                   
+    <line x1="750" y1="45" x2="750" y2="80" class="bc" />
+    <line x1="810" y1="45" x2="810" y2="80" class="bd" />
+    <line x1="870" y1="45" x2="870" y2="80" class="be" />
+    <line x1="930" y1="45" x2="930" y2="80" class="bf" />
+
+    <!-- round 0 key -->
+    <rect x="0" y="80" width="960" height="35" fill="transparent" />
+
+    <!-- round 1 sbox input -->
+    <line x1="30" y1="115" x2="30" y2="150" class="b0" />
+    <line x1="90" y1="115" x2="90" y2="150" class="b1" />
+    <line x1="150" y1="115" x2="150" y2="150" class="b2" />
+    <line x1="210" y1="115" x2="210" y2="150" class="b3" />
+
+    <line x1="270" y1="115" x2="270" y2="150" class="b4" />
+    <line x1="330" y1="115" x2="330" y2="150" class="b5" />
+    <line x1="390" y1="115" x2="390" y2="150" class="b6" />
+    <line x1="450" y1="115" x2="450" y2="150" class="b7" />
+
+    <line x1="510" y1="115" x2="510" y2="150" class="b8" />
+    <line x1="570" y1="115" x2="570" y2="150" class="b9" />
+    <line x1="630" y1="115" x2="630" y2="150" class="ba" />
+    <line x1="690" y1="115" x2="690" y2="150" class="bb" />
+
+    <line x1="750" y1="115" x2="750" y2="150" class="bc" />
+    <line x1="810" y1="115" x2="810" y2="150" class="bd" />
+    <line x1="870" y1="115" x2="870" y2="150" class="be" />
+    <line x1="930" y1="115" x2="930" y2="150" class="bf" />
+
+    <!-- round 1 sbox -->
+    <rect x="5" y="150" width="50" height="35" fill="transparent" />
+    <rect x="65" y="150" width="50" height="35" fill="transparent" />
+    <rect x="125" y="150" width="50" height="35" fill="transparent" />
+    <rect x="185" y="150" width="50" height="35" fill="transparent" />
+
+    <rect x="245" y="150" width="50" height="35" fill="transparent" />
+    <rect x="305" y="150" width="50" height="35" fill="transparent" />
+    <rect x="365" y="150" width="50" height="35" fill="transparent" />
+    <rect x="425" y="150" width="50" height="35" fill="transparent" />
+
+    <rect x="485" y="150" width="50" height="35" fill="transparent" />
+    <rect x="545" y="150" width="50" height="35" fill="transparent" />
+    <rect x="605" y="150" width="50" height="35" fill="transparent" />
+    <rect x="665" y="150" width="50" height="35" fill="transparent" />
+
+    <rect x="725" y="150" width="50" height="35" fill="transparent" />
+    <rect x="785" y="150" width="50" height="35" fill="transparent" />
+    <rect x="845" y="150" width="50" height="35" fill="transparent" />
+    <rect x="905" y="150" width="50" height="35" fill="transparent" />
+
+    <!-- round 1 shift rows -->
+    <line x1="30" y1="185" x2="30" y2="270" class="b0 pbox" />
+    <line x1="90" y1="185" x2="810" y2="270" class="b1 pbox" />
+    <line x1="150" y1="185" x2="630" y2="270" class="b2 pbox" />
+    <line x1="210" y1="185" x2="450" y2="270" class="b3 pbox" />
+
+    <line x1="270" y1="185" x2="270" y2="270" class="b4 pbox" />
+    <line x1="330" y1="185" x2="90" y2="270" class="b5 pbox" />
+    <line x1="390" y1="185" x2="870" y2="270" class="b6 pbox" />
+    <line x1="450" y1="185" x2="690" y2="270" class="b7 pbox" />
+
+    <line x1="510" y1="185" x2="510" y2="270" class="b8 pbox" />
+    <line x1="570" y1="185" x2="330" y2="270" class="b9 pbox" />
+    <line x1="630" y1="185" x2="150" y2="270" class="ba pbox" />
+    <line x1="690" y1="185" x2="930" y2="270" class="bb pbox" />
+
+    <line x1="750" y1="185" x2="750" y2="270" class="bc pbox" />
+    <line x1="810" y1="185" x2="570" y2="270" class="bd pbox" />
+    <line x1="870" y1="185" x2="390" y2="270" class="be pbox" />
+    <line x1="930" y1="185" x2="210" y2="270" class="bf pbox" />
+
+    <!-- round 1 mix columns -->
+    <rect x="0" y="270" width="960" height="35" fill="transparent" />
+
+    <!-- round 2 key input -->
+    <line x1="30" y1="305" x2="30" y2="340" class="b0" />
+    <line x1="90" y1="305" x2="90" y2="340" class="b1" />
+    <line x1="150" y1="305" x2="150" y2="340" class="b2" />
+    <line x1="210" y1="305" x2="210" y2="340" class="b3" />
+
+    <line x1="270" y1="305" x2="270" y2="340" class="b4" />
+    <line x1="330" y1="305" x2="330" y2="340" class="b5" />
+    <line x1="390" y1="305" x2="390" y2="340" class="b6" />
+    <line x1="450" y1="305" x2="450" y2="340" class="b7" />
+
+    <line x1="510" y1="305" x2="510" y2="340" class="b8" />
+    <line x1="570" y1="305" x2="570" y2="340" class="b9" />
+    <line x1="630" y1="305" x2="630" y2="340" class="ba" />
+    <line x1="690" y1="305" x2="690" y2="340" class="bb" />
+
+    <line x1="750" y1="305" x2="750" y2="340" class="bc" />
+    <line x1="810" y1="305" x2="810" y2="340" class="bd" />
+    <line x1="870" y1="305" x2="870" y2="340" class="be" />
+    <line x1="930" y1="305" x2="930" y2="340" class="bf" />
+
+    <!-- round 2 key -->
+    <rect x="0" y="340" width="960" height="35" fill="transparent" />
+
+    <!-- round 2 sbox input -->
+    <line x1="30" y1="375" x2="30" y2="410" class="b0" />
+    <line x1="90" y1="375" x2="90" y2="410" class="b1" />
+    <line x1="150" y1="375" x2="150" y2="410" class="b2" />
+    <line x1="210" y1="375" x2="210" y2="410" class="b3" />
+
+    <line x1="270" y1="375" x2="270" y2="410" class="b4" />
+    <line x1="330" y1="375" x2="330" y2="410" class="b5" />
+    <line x1="390" y1="375" x2="390" y2="410" class="b6" />
+    <line x1="450" y1="375" x2="450" y2="410" class="b7" />
+
+    <line x1="510" y1="375" x2="510" y2="410" class="b8" />
+    <line x1="570" y1="375" x2="570" y2="410" class="b9" />
+    <line x1="630" y1="375" x2="630" y2="410" class="ba" />
+    <line x1="690" y1="375" x2="690" y2="410" class="bb" />
+
+    <line x1="750" y1="375" x2="750" y2="410" class="bc" />
+    <line x1="810" y1="375" x2="810" y2="410" class="bd" />
+    <line x1="870" y1="375" x2="870" y2="410" class="be" />
+    <line x1="930" y1="375" x2="930" y2="410" class="bf" />
+  
+    <!-- elision -->
+    <circle cx="480" cy="430" r="1.5"/>
+    <circle cx="480" cy="445" r="1.5"/>
+    <circle cx="480" cy="460" r="1.5"/>
+
+    <!-- round 10 sbox input -->
+    <line x1="30" y1="480" x2="30" y2="515" class="b0" />
+    <line x1="90" y1="480" x2="90" y2="515" class="b1" />
+    <line x1="150" y1="480" x2="150" y2="515" class="b2" />
+    <line x1="210" y1="480" x2="210" y2="515" class="b3" />
+
+    <line x1="270" y1="480" x2="270" y2="515" class="b4" />
+    <line x1="330" y1="480" x2="330" y2="515" class="b5" />
+    <line x1="390" y1="480" x2="390" y2="515" class="b6" />
+    <line x1="450" y1="480" x2="450" y2="515" class="b7" />
+
+    <line x1="510" y1="480" x2="510" y2="515" class="b8" />
+    <line x1="570" y1="480" x2="570" y2="515" class="b9" />
+    <line x1="630" y1="480" x2="630" y2="515" class="ba" />
+    <line x1="690" y1="480" x2="690" y2="515" class="bb" />
+
+    <line x1="750" y1="480" x2="750" y2="515" class="bc" />
+    <line x1="810" y1="480" x2="810" y2="515" class="bd" />
+    <line x1="870" y1="480" x2="870" y2="515" class="be" />
+    <line x1="930" y1="480" x2="930" y2="515" class="bf" />
+
+    <!-- round 10 sbox -->
+    <rect x="5" y="515" width="50" height="35" fill="transparent" />
+    <rect x="65" y="515" width="50" height="35" fill="transparent" />
+    <rect x="125" y="515" width="50" height="35" fill="transparent" />
+    <rect x="185" y="515" width="50" height="35" fill="transparent" />
+
+    <rect x="245" y="515" width="50" height="35" fill="transparent" />
+    <rect x="305" y="515" width="50" height="35" fill="transparent" />
+    <rect x="365" y="515" width="50" height="35" fill="transparent" />
+    <rect x="425" y="515" width="50" height="35" fill="transparent" />
+
+    <rect x="485" y="515" width="50" height="35" fill="transparent" />
+    <rect x="545" y="515" width="50" height="35" fill="transparent" />
+    <rect x="605" y="515" width="50" height="35" fill="transparent" />
+    <rect x="665" y="515" width="50" height="35" fill="transparent" />
+
+    <rect x="725" y="515" width="50" height="35" fill="transparent" />
+    <rect x="785" y="515" width="50" height="35" fill="transparent" />
+    <rect x="845" y="515" width="50" height="35" fill="transparent" />
+    <rect x="905" y="515" width="50" height="35" fill="transparent" />
+
+    <!-- round 10 shift rows -->
+    <line x1="30" y1="550" x2="30" y2="635" class="b0 pbox" />
+    <line x1="90" y1="550" x2="810" y2="635" class="b1 pbox" />
+    <line x1="150" y1="550" x2="630" y2="635" class="b2 pbox" />
+    <line x1="210" y1="550" x2="450" y2="635" class="b3 pbox" />
+
+    <line x1="270" y1="550" x2="270" y2="635" class="b4 pbox" />
+    <line x1="330" y1="550" x2="90" y2="635" class="b5 pbox" />
+    <line x1="390" y1="550" x2="870" y2="635" class="b6 pbox" />
+    <line x1="450" y1="550" x2="690" y2="635" class="b7 pbox" />
+
+    <line x1="510" y1="550" x2="510" y2="635" class="b8 pbox" />
+    <line x1="570" y1="550" x2="330" y2="635" class="b9 pbox" />
+    <line x1="630" y1="550" x2="150" y2="635" class="ba pbox" />
+    <line x1="690" y1="550" x2="930" y2="635" class="bb pbox" />
+
+    <line x1="750" y1="550" x2="750" y2="635" class="bc pbox" />
+    <line x1="810" y1="550" x2="570" y2="635" class="bd pbox" />
+    <line x1="870" y1="550" x2="390" y2="635" class="be pbox" />
+    <line x1="930" y1="550" x2="210" y2="635" class="bf pbox" />
+
+    <!-- round 10 key -->
+    <rect x="0" y="635" width="960" height="35" fill="transparent" />
+
+    <!-- round 10 key output -->
+    <line x1="30" y1="670" x2="30" y2="705" class="b0" />
+    <line x1="90" y1="670" x2="90" y2="705" class="b1" />
+    <line x1="150" y1="670" x2="150" y2="705" class="b2" />
+    <line x1="210" y1="670" x2="210" y2="705" class="b3" />
+
+    <line x1="270" y1="670" x2="270" y2="705" class="b4" />
+    <line x1="330" y1="670" x2="330" y2="705" class="b5" />
+    <line x1="390" y1="670" x2="390" y2="705" class="b6" />
+    <line x1="450" y1="670" x2="450" y2="705" class="b7" />
+
+    <line x1="510" y1="670" x2="510" y2="705" class="b8" />
+    <line x1="570" y1="670" x2="570" y2="705" class="b9" />
+    <line x1="630" y1="670" x2="630" y2="705" class="ba" />
+    <line x1="690" y1="670" x2="690" y2="705" class="bb" />
+
+    <line x1="750" y1="670" x2="750" y2="705" class="bc" />
+    <line x1="810" y1="670" x2="810" y2="705" class="bd" />
+    <line x1="870" y1="670" x2="870" y2="705" class="be" />
+    <line x1="930" y1="670" x2="930" y2="705" class="bf" />
+  </g>
+
+  <g>
+    <!-- K1 -->
+    <text x="472" y="103">K</text>
+    <text class="sub" x="484" y="107">1</text>
+    <!-- K2 -->
+    <text x="472" y="363">K</text>
+    <text class="sub" x="484" y="367">2</text>
+    <!-- K11 -->
+    <text x="472" y="658">K</text>
+    <text class="sub" x="484" y="664">11</text>
+
+    <!-- S1 -->
+    <text x="24" y="175">S</text>
+    <text x="84" y="175">S</text>
+    <text x="144" y="175">S</text>
+    <text x="204" y="175">S</text>
+                 
+    <text x="264" y="175">S</text>
+    <text x="324" y="175">S</text>
+    <text x="384" y="175">S</text>
+    <text x="444" y="175">S</text>
+                 
+    <text x="504" y="175">S</text>
+    <text x="564" y="175">S</text>
+    <text x="624" y="175">S</text>
+    <text x="684" y="175">S</text>
+                 
+    <text x="744" y="175">S</text>
+    <text x="804" y="175">S</text>
+    <text x="864" y="175">S</text>
+    <text x="924" y="175">S</text>
+
+    <!-- S10 -->
+    <text x="24" y="540">S</text>
+    <text x="84" y="540">S</text>
+    <text x="144" y="540">S</text>
+    <text x="204" y="540">S</text>
+                 
+    <text x="264" y="540">S</text>
+    <text x="324" y="540">S</text>
+    <text x="384" y="540">S</text>
+    <text x="444" y="540">S</text>
+                 
+    <text x="504" y="540">S</text>
+    <text x="564" y="540">S</text>
+    <text x="624" y="540">S</text>
+    <text x="684" y="540">S</text>
+                 
+    <text x="744" y="540">S</text>
+    <text x="804" y="540">S</text>
+    <text x="864" y="540">S</text>
+    <text x="924" y="540">S</text>
+
+    <!-- Mix columns -->
+    <text x="415" y="295">Mix Columns</text>
+
+    <!-- Initial round key addition -->
+    <text x="1070" y="93">Initial round</text>
+    <text x="1075" y="113">key addition</text>
+
+    <!-- Normal rounds -->
+    <text x="1024" y="238">This normal round is</text>
+    <text x="1020" y="258">repeated 9, 11, or 13</text>
+    <text x="1030" y="278">times, depending on</text>
+    <text x="1030" y="298">the size of the key</text>
+
+    <!-- Last round -->
+    <text x="1087" y="578">Last round</text>
+    <text x="1052" y="598">does not include</text>
+    <text x="1053" y="618">Mix Columns step</text>
+  </g>
+
+  <g stroke="black" stroke-width="2.5">
+    <path d="M 975 70 c 20 0, 0 27.5, 20 27.5" fill="none" />
+    <path d="M 975 125 c 20 0, 0 -27.5, 20 -27.5" fill="none" />
+
+    <path d="M 975 140 c 20 0, 0 122.5, 20 122.5" fill="none" />
+    <path d="M 975 385 c 20 0, 0 -122.5, 20 -122.5" fill="none" />
+
+    <path d="M 975 505 c 20 0, 0 87.5, 20 87.5" fill="none" />
+    <path d="M 975 680 c 20 0, 0 -87.5, 20 -87.5" fill="none" />
+  </g>
+</svg>
+        </div>
+      </div>
     </header>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
   </section>
