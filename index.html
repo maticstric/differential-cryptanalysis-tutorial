@@ -49,10 +49,10 @@
   </section>
   <section>
     <h2>Components of Block Ciphers</h2>
-    <p>This section is a short refresher on the components which make up the block ciphers we’ll be breaking. If you feel confident in your knowledge of key addition, SBOXes, and PBOXes, you are encouraged to skip this section.</p>
+    <p>This section is a short refresher on the components which make up the block ciphers we’ll be breaking. If you feel confident in your knowledge of key addition, substitution, and permutation, you are encouraged to skip this section.</p>
     <section>
       <h3>Block Ciphers</h3>
-      <p>Block ciphers are symmetric key encryption algorithms which operate on a fixed-length <em>block</em> of bits. They take a fixed-length block as input and output an encrypted block of the same length. Decryption is done by running the encypted block backwards through the cipher. There are many ways to construct block ciphers, but most are made up of a repeated sequence of three simple transformations: key addition, substitution, and permutation.</p>
+      <p>Block ciphers are symmetric key encryption algorithms which operate on a fixed-length <em>block</em> of bits. They take a fixed-length block as input and output an encrypted block of the same length. Decryption is done by running the encypted block backwards through the cipher. There are many ways to construct block ciphers, but many are made up of a repeated sequence of three simple transformations: key addition, substitution, and permutation.</p>
     </section>
     <section>
       <h3>Key Addition</h3>
@@ -3230,9 +3230,45 @@
         <p>I have said enough to convince you that ciphers of this nature are readily soluble, and to give you some insight into the rationale of their development. But be assured that the specimen before us appertains to the very simplest species of cryptograph.</p>
         <cite>—Poe</cite>
       </blockquote>
-      <div class="visualization">
-        <div class="figure">
-          <svg version="1.1" viewBox="-1 40 1300 670" xmlns="http://www.w3.org/2000/svg" id="aes">
+    </header>
+    <p>The Data Encryption Standard (DES) had used a key size of only 56 bits and, by the late 1990s, became vulnerable to brute-force attacks. Consequently, in September of 1997, the National Institute of Standards and Technology (NIST) sent a request to the cryptographic community to design “an unclassified, publicly disclosed encryption algorithm available royalty-free worldwide that is capable of protecting sensitive government information well into the next century” {cite(commerce)}. This was to be called the Advanced Encryption Standard (AES). The submitted candidate ciphers would then be thoroughly investigated by crytographers for any possible flaws in various categories such as security and performance.</p>
+    <p>One such candidate was the cipher <em class="highlight">Rijndael</em>, a portmanteau of the last names of its two developers, Belgian cryptographers Joan Daemen and Vincent Rijmen. Through a stringent and acute process which lasted until October 2000 and was praised by many people in the cryptographic community, Rijndael was selected as the AES.</p>
+    <p>Since differential cryptanalysis was made public in the early 1990s by Eli Biham and Adi Shamir, Rijndael (from now on called AES) had to be secure against this attack. In this section we’ll discuss how this was accomplished.</p>
+    <hr/>
+    <p>First let’s discuss the structure of AES. We’ll only be touching on the basics but all details can be found in the specification {cite(specification)}.</p>
+    <p>Luckily for us, AES is based on an SPN. It has a block size of 128 bits (16 bytes). The cipher key sizes and round numbers come in three varities depending on the required level of security:</p>
+    <table class="monospaced-table" id="aes">
+      <tr>
+        <th>Key Length</td>
+        <th>Number of Rounds</td>
+      </tr>
+      <tr>
+        <td>128 bits</td>
+        <td>10</td>
+      </tr>
+      <tr>
+        <td>192 bits</td>
+        <td>12</td>
+      </tr>
+        <td>256 bits</td>
+        <td>14</td>
+      <tr>
+      </tr>
+    </table>
+    <p>A <em class="highlight">key expansion</em> operation is then performed on this single cipher key (of 128, 192, or 256 bits) to generate 11, 13, or 15 total round keys, each with a length of 128 bits. These round keys are called the <em class="highlight">key schedule</em>.</p>
+    <p>The encryption then follows a very standard SPN structure. It begins with a single key addition. Then follows 9, 11, or 13 rounds of the following four operations:</p>
+    <ol>
+      <li><i>SubBytes</i>: a substitution of each byte. AES has an 8 bit SBOX (our SPN had a 4 bit SBOX)</li>
+      <li><i>ShiftRows</i>: a permutation of each byte. Unlike our SPN, AES’s PBOX works on bytes not bits</li>
+      <li><i>MixColumns</i>: a second and more complicated permutation of each bit, the details of which will not be discussed here</li>
+      <li><i>AddRoundKey</i>: a bitwise XOR with the next round key in the key schedule</li>
+    </ol>
+    <p>After these rounds comes a final round (making a total of 10, 12, or 14 rounds) which is the same as the previous ones but does not perform the <i>MixColumns</i> step.</p>
+    <p>Note that the words “rows” and “columns” are used because the 16 bytes of the AES block are represented in a 4×4 array. If you want to see the exact SBOX, PBOX, details of the MixColumns step, and details of the key expansion algorithm, they can all be found in sections 5.1.1, 5.1.2, 5.1.3, and 5.2 respectively {cite(specification)}.</p>
+    <p>Below you can see a visual representation of the cipher. Note that because of the big block size of AES, the lines do not represent bits as they did in the previous visualizations, but bytes.</p>
+    <div class="visualization">
+      <div class="figure">
+        <svg version="1.1" viewBox="-1 40 1300 670" xmlns="http://www.w3.org/2000/svg" id="aes">
   <!-- original viewBox="0 0 960 905" -->
 
   <g stroke="black" stroke-width="2.5">
@@ -3472,8 +3508,8 @@
     <text x="472" y="363">K</text>
     <text class="sub" x="484" y="367">2</text>
     <!-- K11 -->
-    <text x="472" y="658">K</text>
-    <text class="sub" x="484" y="664">11</text>
+    <text x="445" y="658">K</text>
+    <text class="sub" x="456" y="664">11/13/15</text>
 
     <!-- S1 -->
     <text x="24" y="175">S</text>
@@ -3547,16 +3583,20 @@
     <path d="M 975 680 c 20 0, 0 -87.5, 20 -87.5" fill="none" />
   </g>
 </svg>
-        </div>
       </div>
-    </header>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    </div>
+    <hr/>
+    <p>Now that we understand AES’s structure, let’s understand the motivation behind the design as it pertains to differential cryptanalysis. We will discuss this at a very high level. Some details can be found in the Rijndael proposal {cite(proposal)} but the authoritative source in this area is the 2002 book <i>The Design of Rijndael</i> by Daemen and Rijmen {cite(aes)}.</p>
   </section>
   <section>
     <h2>Bibliography</h2>
     <ol id="bibliography">
       <li id="biham">Biham, Eli and Adi Shamir. “Differential Cryptanalysis of DES-like Cryptosystems.” <i>Journal of Cryptology</i> 4, no. 1 (January 1991): 3–72. https://doi.org/10.1007/BF00630563.</li>
       <li id="coppersmith">Coppersmith, Don. “The Data Encryption Standard (DES) and its strength against attacks” <i>IBM Journal of Research and Development</i> 38, no. 3 (May 1994): 243–250. https://doi.org/10.1147/rd.383.0243.</li>
+      <li id="aes">Daemen, Joan and Vincent Rijmen. <i>The Design of Rijndael: AES—the Advanced Encryption Standard</i>. Springer-Verlag, 2002.</li>
+      <li id="commerce">Department of Commerce. “Announcing Request for Candidate Algorithm Nominations for the Advanced Encryption Standard.”  <i>Federal Register</i> 62, no. 177 (September 1997): 48051. https://csrc.nist.gov/news/1997/requesting-candidate-algorithm-nominations-for-aes.</li>
+      <li id="proposal">Federal Information Processing Standards. “AES Proposal: Rijndael.” (1999). https://csrc.nist.gov/csrc/media/projects/cryptographic-standards-and-guidelines/documents/aes-development/rijndael-ammended.pdf</li>
+      <li id="specification">Federal Information Processing Standards. “Specification for the Advanced Encryption Standard (AES).” (November 2001). https://csrc.nist.gov/csrc/media/publications/fips/197/final/documents/fips-197.pdf.</li>
       <li id="heys">Heys, Howard M. “A Tutorial on Linear and Differential Cryptanalysis.” <i>Cryptologia</i> 26, no. 3 (July 2002): 189–221. https://doi.org/10.1080/0161-110291890885.</li>
       <li id="king">King, Jon. “Differential Cryptanalysis Tutorial.” The Amazing King. http://theamazingking.com/crypto-diff.php.</li>
       <li id="stinson">Stinson, Douglas R. <i>Cryptography: Theory and Practice</i>. Chapman and Hall/CRC, 2006.</li>

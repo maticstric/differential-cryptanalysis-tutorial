@@ -150,6 +150,10 @@ h5 { font-size: 1.2em; }
   width: 20em;
 }
 
+#content table#aes {
+  width: 20em;
+}
+
 #content table.monospaced-table {
   font-family: monospace;
   text-align: center;
