@@ -80,10 +80,10 @@
     </section>
     <section>
       <h3>Substitution</h3>
-      <p>Substitution is the step in which some bits are directly substituted for others. We define how these bits are substituted with a substitution-box (SBOX). Let’s define a simple 4-bit SBOX:
+      <p>Substitution is the step in which some bits are directly substituted for others. We define how these bits are substituted with a substitution-box (S-box). Let’s define a simple 4-bit S-box:
       <table class="monospaced-table" id="substitution">
         <tr>
-          <th colspan="17">SBOX</th>
+          <th colspan="17">S-box</th>
         </tr>
         <tr>
           <th>Input:</th>
@@ -124,8 +124,8 @@
           <td>7</td>
         </tr>
       </table>
-      <p>Note that both the input and output are represented using hexadecimal notation. As an example, if the input to this SBOX is 1011 (0xb), then we’ll get an output of 1100 (0xc) by simply looking it up in the table.</p>
-      <p>The SBOX that a cipher uses is almost always released to the public. This is done in accordance with Kerckhoffs’s principle which says that a cryptosystem should be secure even if everything about it―with the exception of the secret keys―is public knowledge. Just because the SBOX is public and therefore easily reversible does not mean that substitution is pointless or insignificant. In fact, it is often the only part of a cipher which directly protects against differential cryptanalysis. Consequently, we’ll discuss substitution in much more depth throughout this tutorial.</p>
+      <p>Note that both the input and output are represented using hexadecimal notation. As an example, if the input to this S-box is 1011 (0xb), then we’ll get an output of 1100 (0xc) by simply looking it up in the table.</p>
+      <p>The S-box that a cipher uses is almost always released to the public. This is done in accordance with Kerckhoffs’s principle which says that a cryptosystem should be secure even if everything about it―with the exception of the secret keys―is public knowledge. Just because the S-box is public and therefore easily reversible does not mean that substitution is pointless or insignificant. In fact, it is often the only part of a cipher which directly protects against differential cryptanalysis. Consequently, we’ll discuss substitution in much more depth throughout this tutorial.</p>
     </section>
     <section>
       <h3>Permutation</h3>
@@ -149,9 +149,9 @@
           <td>1</td>
         </tr>
       </table>
-      <p>This PBOX says that the bit at position 0 will move to position 3, the bit at position 1 will move to position 0, the bit at position 2 will stay at position 2, and the bit at position 3 will move to position 1. For example, if we input the nibble 1001 into the PBOX, we will get an output of 0101. PBOXes, unlike SBOXes, are easy to represent visually:</p>
+      <p>This PBOX says that the bit at position 0 will move to position 3, the bit at position 1 will move to position 0, the bit at position 2 will stay at position 2, and the bit at position 3 will move to position 1. For example, if we input the nibble 1001 into the PBOX, we will get an output of 0101. PBOXes, unlike S-boxes, are easy to represent visually:</p>
       {{../images/pbox.svg}}
-      <p>Just like SBOXes, PBOXes are released to the public. Though SBOXes serve as the main protection against differential cryptanalysis, PBOXes also play a vital role which we will discuss later.</p>
+      <p>Just like S-boxes, PBOXes are released to the public. Though S-boxes serve as the main protection against differential cryptanalysis, PBOXes also play a vital role which we will discuss later.</p>
       <p>
     </section>
   </section>
@@ -166,12 +166,12 @@
     <p>Let’s begin by breaking the simplest block cipher worth breaking which we’ll call the “toy cipher.” The toy cipher is <em>just</em> complicated enough to make differential cryptanalysis a valid method to break it, but no more. Note that it is trivial to break the toy cipher by bruteforce. Nevertheless, it will serve as a great introduction to the main concepts behind differential cryptanalysis.</p>
     <section>
       <h3>Toy Cipher Definition</h3>
-      <p>The toy cipher has a block size of 4 bits (also known as a nibble), meaning that we’ll input 4 bits into the cipher and it will return 4 bits of ciphertext. The toy cipher has a 4-bit SBOX and two separate 4-bit keys (<i>k</i><sub>1</sub> and <i>k</i><sub>2</sub>).</p>
+      <p>The toy cipher has a block size of 4 bits (also known as a nibble), meaning that we’ll input 4 bits into the cipher and it will return 4 bits of ciphertext. The toy cipher has a 4-bit S-box and two separate 4-bit keys (<i>k</i><sub>1</sub> and <i>k</i><sub>2</sub>).</p>
       <p>Now let’s look at how we can encrypt a nibble with the toy cipher. There are three steps:</p>
       <ol>
         <li>We XOR the plaintext with <i>k</i><sub>1</sub></li>
-        <li>Feed that result into the SBOX</li>
-        <li>XOR the output of the SBOX with <i>k</i><sub>2</sub></li>
+        <li>Feed that result into the S-box</li>
+        <li>XOR the output of the S-box with <i>k</i><sub>2</sub></li>
       </ol>
       <p>These simple steps give us the final ciphertext. The cipher is much easier to understand visually so look to the figure below. The values underlined with purple can be changed, so play around with them to see how the cipher is affected. The red lines represent the 1s and the black lines the 0s as the nibble makes its way through the cipher. Also note the labels <i>x</i>, <i>u</i>, <i>v</i>, and <i>y</i> on the left (<i>x</i> is the value of the plaintext, <i>u</i> is the value after the first key addition, etc.). Those labels will make it easier to discuss the cipher when we get to differential cryptanalysis so keep them in mind.</p>
       {{toy-visualization.html}}
@@ -179,10 +179,10 @@
     <section>
       <h3>Differential Cryptanalysis of the Toy Cipher</h3>
       <p>Much of the following is based on King’s webpage: “Differential Cryptanalysis Tutorial” {cite(king)} as well as Stinson’s textbook <i>Cryptography: Theory and Practice</i> {cite(stinson)}.</p>
-      <p>We must begin by selecting which SBOX we’ll be using for the toy cipher. Remember that SBOXes are public knowledge and that, once the cipher is defined, they do not change. So, we’ll pick an arbitrary SBOX for our toy cipher.</p>
+      <p>We must begin by selecting which S-box we’ll be using for the toy cipher. Remember that S-boxes are public knowledge and that, once the cipher is defined, they do not change. So, we’ll pick an arbitrary S-box for our toy cipher.</p>
       <table class="monospaced-table" id="substitution">
         <tr>
-          <th colspan="17">SBOX</th>
+          <th colspan="17">S-box</th>
         </tr>
         <tr>
           <th>Input:</th>
@@ -224,7 +224,7 @@
         </tr>
       </table>
       <p>Differential cryptanalysis stems from the analysis of the XOR of two plaintexts as they travel through the cipher. The reason XOR is used is because it tells us where two plaintexts differ. If their XOR at some bit position is 1, then those two plaintexts differ at that bit position.</p>
-      <p>For now, instead of focusing on the cipher as a whole, we’ll simply analyze the SBOX. Let’s first choose an XOR value to analyze: 1011. We can make a table of all possible pairs of SBOX inputs, call them <i>x</i> and <i>x</i><sup>*</sup>, which XOR to 1011 (in other words, all inputs which differ in the first, third, and fourth bit positions).</p>
+      <p>For now, instead of focusing on the cipher as a whole, we’ll simply analyze the S-box. Let’s first choose an XOR value to analyze: 1011. We can make a table of all possible pairs of S-box inputs, call them <i>x</i> and <i>x</i><sup>*</sup>, which XOR to 1011 (in other words, all inputs which differ in the first, third, and fourth bit positions).</p>
       <table class="monospaced-table" id="xor-input-table">
         <tr>
           <th><i>x</i></th>
@@ -312,7 +312,7 @@
           <td>1011</td>
         </tr>
       </table>
-      <p>Now, let’s consider the XOR of the SBOX <em>outputs</em> of both <i>x</i> and <i>x</i><sup>*</sup>. Let’s name those outputs <i>y</i> and <i>y</i><sup>*</sup> respectively. In other words, if we put the input <i>x</i> through the SBOX we defined earlier, we’ll get <i>y</i>, and if we input <i>x</i><sup>*</sup>, we’ll get <i>y</i><sup>*</sup>.</p>
+      <p>Now, let’s consider the XOR of the S-box <em>outputs</em> of both <i>x</i> and <i>x</i><sup>*</sup>. Let’s name those outputs <i>y</i> and <i>y</i><sup>*</sup> respectively. In other words, if we put the input <i>x</i> through the S-box we defined earlier, we’ll get <i>y</i>, and if we input <i>x</i><sup>*</sup>, we’ll get <i>y</i><sup>*</sup>.</p>
       <table class="monospaced-table" id="xor-input-output-table">
         <tr>
           <th><i>x</i></th>
@@ -451,7 +451,7 @@
           <td>0101</td>
         </tr>
       </table>
-      <p>Here we see the heart of differential cryptanalysis. Examine the values of <i>y</i> ⊕ <i>y</i><sup>*</sup> and notice the repetitions. Let’s create another table to see how many times each value appears in the SBOX output XORs.</p>
+      <p>Here we see the heart of differential cryptanalysis. Examine the values of <i>y</i> ⊕ <i>y</i><sup>*</sup> and notice the repetitions. Let’s create another table to see how many times each value appears in the S-box output XORs.</p>
       <table class="monospaced-table" id="xor-appearances-table">
         <tr>
           <th>Output XOR</th>
@@ -522,8 +522,8 @@
           <td class="highlight">2</td>
         </tr>
       </table>
-      <p>Consider what this table is really saying. If we pick two random plaintexts which XOR to 1011, put each of them through the SBOX, and then XOR those SBOX outputs, 8 out of 16 times, they will XOR to 0010. They will XOR to 0111 2 out of 16 times. They will never XOR to 1010. This bias towards certain XORs is what makes differential cryptanalysis possible.</p>
-      <p>So far we’ve only considered the input XOR of 1011. We can repeat the same process for every possible input XOR and build what is called a <em class="highlight">difference distribution table</em> for the given SBOX. The rows in this table represent the SBOX input XOR, the columns represent the SBOX output XOR, and the cell values are the number of appearances of that output XOR given the input XOR. Note that the XORs are represented in hexadecimal instead of binary (e.g. you can find the previous example of 1011 in the row labeled b).</p>
+      <p>Consider what this table is really saying. If we pick two random plaintexts which XOR to 1011, put each of them through the S-box, and then XOR those S-box outputs, 8 out of 16 times, they will XOR to 0010. They will XOR to 0111 2 out of 16 times. They will never XOR to 1010. This bias towards certain XORs is what makes differential cryptanalysis possible.</p>
+      <p>So far we’ve only considered the input XOR of 1011. We can repeat the same process for every possible input XOR and build what is called a <em class="highlight">difference distribution table</em> for the given S-box. The rows in this table represent the S-box input XOR, the columns represent the S-box output XOR, and the cell values are the number of appearances of that output XOR given the input XOR. Note that the XORs are represented in hexadecimal instead of binary (e.g. you can find the previous example of 1011 in the row labeled b).</p>
       <table class="monospaced-table" id="difference-distribution-table">
         <tr>
           <th>Input</th>
@@ -854,7 +854,7 @@
         </tr>
       </table>
       <hr/>
-      <p>This table gives us probabilities for what happens to the XOR of two plaintexts as they individually travel through the SBOX. However, besides the SBOX, the cipher also includes key addition. So, before we get to breaking the keys, we must consider what happens to the XOR of two plaintexts as we put them through key addition.</p>
+      <p>This table gives us probabilities for what happens to the XOR of two plaintexts as they individually travel through the S-box. However, besides the S-box, the cipher also includes key addition. So, before we get to breaking the keys, we must consider what happens to the XOR of two plaintexts as we put them through key addition.</p>
       <p>Let’s consider two plaintexts:</p>
       <table class="monospaced-table math">
         <tr>
@@ -922,8 +922,8 @@
           </td>
         </tr>
       </table>
-      <p>This is an incredibly useful realization. Given the XOR of two plaintexts, we can predict with 100% certainty what their XOR will be after key addition—it will always stay the same. Remember that with the SBOX, the best prediction we have is only 50%, and many are much worse than that.</p>
-      <p>The fact that keys become essentially useless when we use this attack should convince us that we’re on the right track. This is also why SBOXes are an absolutely <em>essential</em> part of many ciphers. You will see in the next section that even when we also consider permutations, SBOXes are still the only protection against attacks like differential cryptanalysis.</p>
+      <p>This is an incredibly useful realization. Given the XOR of two plaintexts, we can predict with 100% certainty what their XOR will be after key addition—it will always stay the same. Remember that with the S-box, the best prediction we have is only 50%, and many are much worse than that.</p>
+      <p>The fact that keys become essentially useless when we use this attack should convince us that we’re on the right track. This is also why S-boxes are an absolutely <em>essential</em> part of many ciphers. You will see in the next section that even when we also consider permutations, S-boxes are still the only protection against attacks like differential cryptanalysis.</p>
       <hr/>
       <p>Now we can begin breaking the keys.</p>
       <p>Because differential cryptanalysis is a chosen plaintext attack we’ll need to encrypt plaintexts in order to break the keys. For that, however, we need to choose which keys will be used for encryption. For now let’s assume that <i>k</i><sub>1</sub> = 0xb and <i>k</i><sub>2</sub> = 0xd. Of course, when differential cryptanalysis is used in the real world the keys are unknown to the attackers. But some keys <em>need</em> to be chosen and this is just a tutorial so we might as well know them beforehand.</p>
@@ -938,7 +938,7 @@
       <p>Now let’s see how this good pair will travel through the cipher. Above is a figure showing what is being explained here. We’ll be referencing the letters on the sides of the figure.</p>
       <p>We know that at <i>x</i> the value on the left is 0x6, the value on the right is 0x3, and their XOR is 0x5. We also know that at <i>y</i> the value on the left is 0x4, the value on the right is 0xe, and their XOR is 0xa. These are all values which we’ve hand picked. Now, what is the XOR at <i>u</i>? As explained earlier, the XOR doesn’t change over key addition, so it remains at 0x5. Since the XOR at <i>y</i> is 0xa, we can follow the same logic and conclude that the XOR at <i>v</i> must also be 0xa.</p>
       <p>But what are the values at <i>u</i> and <i>v</i>?</p>
-      <p>Assuming the keys are unknown to us, there’s no easy way to tell. However, we do know that whatever the values at <i>u</i> are, they must XOR to 0x5 and whatever the values at <i>v</i> are, they must XOR to 0xa. Well, what are the possible inputs to an SBOX which XOR to 0x5 and whose corresponding SBOX outputs XOR to 0xa? We’ve already calculated them when making the difference distribution table! The calculation was not shown previously (we only saw the one for an SBOX input XOR of 0xb) so let’s see it now:</p>
+      <p>Assuming the keys are unknown to us, there’s no easy way to tell. However, we do know that whatever the values at <i>u</i> are, they must XOR to 0x5 and whatever the values at <i>v</i> are, they must XOR to 0xa. Well, what are the possible inputs to an S-box which XOR to 0x5 and whose corresponding S-box outputs XOR to 0xa? We’ve already calculated them when making the difference distribution table! The calculation was not shown previously (we only saw the one for an S-box input XOR of 0xb) so let’s see it now:</p>
       <table class="monospaced-table" id="xor-input-output-table-0x5">
         <tr>
           <th><i>x</i></th>
@@ -1077,7 +1077,7 @@
           <td>0001</td>
         </tr>
       </table>
-      <p>The highlighted rows give us the four possible SBOX input pairs which XOR to 0x5, whose respective outputs XOR to 0xa. With this information, we can update the previous figure:</p>
+      <p>The highlighted rows give us the four possible S-box input pairs which XOR to 0x5, whose respective outputs XOR to 0xa. With this information, we can update the previous figure:</p>
       <div class="visualization">
         <div class="figure">
           {{../images/toy-dc-finished.svg}}
@@ -1185,14 +1185,14 @@
     <hr/>
     <p>Let’s do a quick review of the steps we took to get here:</p>
     <ul>
-      <li>We started by making the difference distribution table for the given SBOX</li>
+      <li>We started by making the difference distribution table for the given S-box</li>
       <li>We then randomly picked a differential characteristic with a non-zero probability</li>
       <li>We found a plaintext-ciphertext pair which matched that differential characteristic</li>
       <li>Using that good pair we narrowed down the values at <i>u</i> and <i>v</i> to only four possibilities</li>
       <li>Those also narrowed down the possible key combinations to four</li>
       <li>Since we already knew which one was correct, we just picked it out. Had we not known, we would have had to verify all four combinations with some plaintext-ciphertext pairs</li>
     </ul>
-    <p>All of these steps are implemented in a Python script available in the <a href="https://github.com/maticstric/differential-cryptanalysis-tutorial/blob/master/toy-cipher-diff-crypt.py">GitHub repository</a>. You are <em>highly</em> encouraged to check it out, as it was made to accompany this tutorial and follows the exact same steps that we’ve taken. You can change the SBOX, key combinations, see some of the implementation details which were not discussed, and play around with the code in order to gain a deeper understading of this section.</p>
+    <p>All of these steps are implemented in a Python script available in the <a href="https://github.com/maticstric/differential-cryptanalysis-tutorial/blob/master/toy-cipher-diff-crypt.py">GitHub repository</a>. You are <em>highly</em> encouraged to check it out, as it was made to accompany this tutorial and follows the exact same steps that we’ve taken. You can change the S-box, key combinations, see some of the implementation details which were not discussed, and play around with the code in order to gain a deeper understading of this section.</p>
     <hr/>
     <p>Though the toy cipher served as a great introduction to many of the concepts and vocabulary of differential cryptanalysis, it’s called the <em>toy</em> cipher for a reason. It is so easily broken by brute force that these steps seem unnecessarily complicated. In the next section, you will see a more realistic application of differential cryptanalysis to break a non-trivial cipher.</p>
     <hr/>
@@ -1214,11 +1214,11 @@
     <p>This section expands on the knowledge gained in the previous. We will discuss how differential cryptanalysis can be applied to more complicated ciphers which resemble the Advanced Encryption Standard (AES). Though the heart of the method will remain the same, the complexity of these ciphers will require the introduction of some new concepts.</p>
     <section>
       <h3>SPN Definition</h3>
-      <p>A substitution-permutation network (SPN) is any kind of cipher which uses both substitution and permutation together with key addition. Because an SPN is so general (it can have any block size, SBOX size, number of rounds, etc.) and because differential cryptanalysis depends a lot on the structure of the cipher, we’ll be focusing on a particular SPN. Nevertheless, these steps could be taken for any kind of SPN.</p>
+      <p>A substitution-permutation network (SPN) is any kind of cipher which uses both substitution and permutation together with key addition. Because an SPN is so general (it can have any block size, S-box size, number of rounds, etc.) and because differential cryptanalysis depends a lot on the structure of the cipher, we’ll be focusing on a particular SPN. Nevertheless, these steps could be taken for any kind of SPN.</p>
       <p>We will be using an SPN with a block size of 16 bits. It will have a total of four rounds. Each round, with the exception of the fourth, will consist of the following operations:</p>
       <ol>
         <li>Key addition with a 16 bit key</li>
-        <li>We will then consider the 16 bits as 4 nibbles and put each of those nibbles through a 4-bit SBOX</li>
+        <li>We will then consider the 16 bits as 4 nibbles and put each of those nibbles through a 4-bit S-box</li>
         <li>Lastly we will permutate the block with a 16-bit PBOX</li>
       </ol>
       <p>The fourth round will be the same as the previous, but without the permutation (because it actually provides no additional security). We will also end the cipher with one last key addition.</p>
@@ -1229,10 +1229,10 @@
     <section>
       <h3>Differential Cryptanalysis of an SPN</h3>
       <p>This section is partly based on Howard M. Heys’s “A Tutorial on Linear and Differential Cryptanalysis” {cite(heys)}.</p>
-      <p>We begin by selecting the SBOX and PBOX for the cipher. We’ll keep the SBOX from the previous section and the default PBOX from the figure above.</p>
+      <p>We begin by selecting the S-box and PBOX for the cipher. We’ll keep the S-box from the previous section and the default PBOX from the figure above.</p>
       <table class="monospaced-table" id="substitution">
         <tr>
-          <th colspan="17">SBOX</th>
+          <th colspan="17">S-box</th>
         </tr>
         <tr>
           <th>Input:</th>
@@ -1316,7 +1316,7 @@
           <td>f</td>
         </tr>
       </table>
-      <p>The first step, just like before, is to calculate the difference distribution table. Since we’re using the same SBOX, it remains unchanged from the previous section.</p>
+      <p>The first step, just like before, is to calculate the difference distribution table. Since we’re using the same S-box, it remains unchanged from the previous section.</p>
       <table class="monospaced-table" id="difference-distribution-table">
         <tr>
           <th>Input</th>
@@ -1701,12 +1701,12 @@
           </td>                   
         </tr>                     
       </table>
-      <p>The significance of this might not be immediately obvious, but remember that the actual values of <i>x</i> and <i>x</i><sup>*</sup> are essentially impossible to guess, which makes computing permutate(<i>x</i>) ⊕ permutate(<i>x</i><sup>*</sup>) difficult. The value of <i>x</i> ⊕ <i>x</i><sup>*</sup>, on the other hand, is what we’ve been keeping track of this whole time! The PBOX, like the SBOX, is public knowledge so computing permutate(<i>x</i> ⊕ <i>x</i><sup>*</sup>) is very easy.</p>
+      <p>The significance of this might not be immediately obvious, but remember that the actual values of <i>x</i> and <i>x</i><sup>*</sup> are essentially impossible to guess, which makes computing permutate(<i>x</i>) ⊕ permutate(<i>x</i><sup>*</sup>) difficult. The value of <i>x</i> ⊕ <i>x</i><sup>*</sup>, on the other hand, is what we’ve been keeping track of this whole time! The PBOX, like the S-box, is public knowledge so computing permutate(<i>x</i> ⊕ <i>x</i><sup>*</sup>) is very easy.</p>
       <hr/>
       <p>Now that we have discussed all three components let’s quickly review how the XOR interacts with them:</p>
       <ul>
         <li>Key addition: the XOR of two plaintexts <em>does not</em> change over key addition. We can therefore predict the output XOR with 100% certainty.</li>
-        <li>Substitution: the XOR of two plaintext <em>does</em> change over substitution. However, it does so probabilistically based on the input XOR and the difference distribution table of the SBOX, which gives us some ability to predict it.</li>
+        <li>Substitution: the XOR of two plaintext <em>does</em> change over substitution. However, it does so probabilistically based on the input XOR and the difference distribution table of the S-box, which gives us some ability to predict it.</li>
         <li>Permutation: the XOR of two plaintext <em>does</em> change over permutation. However, we can predict it with 100% certainty by simply sending the input XOR through the PBOX.</li>
       </ul>
       <hr/>
@@ -1718,15 +1718,15 @@
         </div>
       </div>
       <p>We start with two plaintexts which XOR to 0xb0b0. As they make their way through the key addition, their XOR doesn’t change.</p>
-      <p>Next they go through the SBOXes. The SBOX input XOR in their second and fourth nibble is 0 (the plaintexts are equal there) so their XOR doesn’t change in those nibbles. The first and third nibble, however, each have an SBOX input XOR of 0xb. Remember, we cannot predict the SBOX output XOR given the input XOR with 100% certainty. However, we can use the difference distribution table to find the most probable SBOX output XOR for an input XOR of 0xb. In this case, we have a very likely output XOR of 0x2 which occurs 8/16 times (50%). We pick this output XOR for both SBOXes and keep going.</p>
-      <p>Some vocabulary: an SBOX with a non-zero input XOR is called an <em class="highlight">active SBOX</em> for that trail. In the first round of the cipher for our differential trail, the first and third SBOXes were active.</p>
+      <p>Next they go through the S-boxes. The S-box input XOR in their second and fourth nibble is 0 (the plaintexts are equal there) so their XOR doesn’t change in those nibbles. The first and third nibble, however, each have an S-box input XOR of 0xb. Remember, we cannot predict the S-box output XOR given the input XOR with 100% certainty. However, we can use the difference distribution table to find the most probable S-box output XOR for an input XOR of 0xb. In this case, we have a very likely output XOR of 0x2 which occurs 8/16 times (50%). We pick this output XOR for both S-boxes and keep going.</p>
+      <p>Some vocabulary: an S-box with a non-zero input XOR is called an <em class="highlight">active S-box</em> for that trail. In the first round of the cipher for our differential trail, the first and third S-boxes were active.</p>
       <p>As explained earlier, the XOR of the plaintexts as they go through the permutation can be calculated by simply puting the PBOX input XOR (which is now 0x2020) through the permutation, which leaves us with a value of 0x00a0 at position <i>w</i><sub>1</sub>.</p>
       <p>We now simply continue this process until we get to position <i>u</i><sub>4</sub> in the cipher. Why we stop there will be clear later.</p>
-      <p>Now let’s talk about the probability of this full trail occuring. Remember that the only source of uncertainty comes from the SBOXes and, because of the difference distribution table, we know exactly how uncertain we are. For every active SBOX, we picked the most likely output XOR. To get the probability of the trail we simply multiply the probabilities of these output XORs occuring.</p>
+      <p>Now let’s talk about the probability of this full trail occuring. Remember that the only source of uncertainty comes from the S-boxes and, because of the difference distribution table, we know exactly how uncertain we are. For every active S-box, we picked the most likely output XOR. To get the probability of the trail we simply multiply the probabilities of these output XORs occuring.</p>
       <p>This calculation only works under the assumption that these events are independent, which is not necessarily true. However, this method performs well in practice so we ignore any slight misscalculation. Just be aware that the probability we find is not the <em>true</em> probability of the trail but an approximation of it.</p>
       <p>As you can see in the figure above, the final probability of the whole trail occuring is 0.035 = 3.5%. This is an enormous bias. Remember what this is saying: given two plaintexts which XOR to 0xb0b0, there’s a 3.5% chance that their XOR at position <i>u</i><sub>4</sub> is 0x0808. We will now exploit this bias to break 8 bits of the fifth key.</p>
       <hr/>
-      <p>First note that the bits which we will break are the bits coming out of the last round’s active SBOXes (for our trail this means bits 5–8 and 13–16).</p>
+      <p>First note that the bits which we will break are the bits coming out of the last round’s active S-boxes (for our trail this means bits 5–8 and 13–16).</p>
       <p>We begin by encrypting two random plaintexts which XOR to 0xb0b0 (remember that differential cryptanalysis is a chosen plaintext attack; we can choose whichever plaintexts we want). Now what we do is attempt to <em>decrypt</em> the message to the end of the differential trail (position <i>u</i><sub>4</sub>) by <em>guessing all possible key bits for bits 5–8 and 13–16</em>. This step is called <em class="highlight">partial decryption</em>. The reason we don’t need to consider key bits 1–4 and 9–12 is because they will not affect the bits 5–8 and 13–16 at <i>u</i><sub>4</sub>, which will be the only ones we care about. The key bits we are breaking are called the <em class="highlight">partial key</em> since they are only a part of the whole key, in our case 8 bits of it.</p>
       <p>Now comes the core of the method. We create a table that keeps track of a count (initialized to 0) for each of the partial keys. <em>Each time the two partially decrypted ciphertexts XOR to the trail’s final XOR (in our case 0x0808), we increment the value for the partial key which was used in the partial decryption.</em></p>
       <p>We then repeat this process for a large number of random plaintext pairs which XOR to 0xb0b0. The partial key with the largest value in the table is most likely the be the correct partial key, meaning we broke 8 bits of the fifth round key!</p>
@@ -1795,15 +1795,15 @@
       <ol>
         <li>
           <p><b>Why does this work?</b> The basic intuition behind the method is this: if the partial key used for partial <em>decryption</em> was the same key used for the inital <em>encryption</em> (remember, the encryption is done with the correct keys), then we would expect the differential trail to “hold.” In other words, if the partial key guess is correct we would still expect the XOR to be 0x0808 at position <i>u</i><sub>4</sub> with a very high probability (about 3.5% in our case). The count for that partial key would then be incremented.</p>
-          <p>If the partial key used for partial decryption <em>does not</em> match the key used for encryption, then that expectation is broken. The value at <i>v</i><sub>4</sub> would be fairly random, meaning that when we put that value through the inverse SBOX to decrypt it to <i>u</i><sub>4</sub>, we would no longer expect the value to be 0x0808 (it could still happen of course, but that would be mostly down to random chance). The count for that partial key would then <em>not</em> be incremented.</p>
+          <p>If the partial key used for partial decryption <em>does not</em> match the key used for encryption, then that expectation is broken. The value at <i>v</i><sub>4</sub> would be fairly random, meaning that when we put that value through the inverse S-box to decrypt it to <i>u</i><sub>4</sub>, we would no longer expect the value to be 0x0808 (it could still happen of course, but that would be mostly down to random chance). The count for that partial key would then <em>not</em> be incremented.</p>
           <p>As we repeat this for many plaintext pairs we expect that the true partial key will have the highest count because of the 3.5% bias.</p>
         </li>
         <li>
-          <p><b>How do we break the other 8 bits of the fifth round key?</b> Breaking the other 8 bits of the fifth key is very simple: we just need to find a differential trail with different SBOXes active in the last round. If we find a highly probable differential trail with an active first SBOX, then we’ll be able to break bits 1–4. Note that it’s ok if that trail also has other SBOXes active for parts of the key that we’ve already broken. It will just break them again.</p>
+          <p><b>How do we break the other 8 bits of the fifth round key?</b> Breaking the other 8 bits of the fifth key is very simple: we just need to find a differential trail with different S-boxes active in the last round. If we find a highly probable differential trail with an active first S-box, then we’ll be able to break bits 1–4. Note that it’s ok if that trail also has other S-boxes active for parts of the key that we’ve already broken. It will just break them again.</p>
         </li>
         <li>
           <p><b>How do we break the other round keys?</b> Breaking the other round keys is also fairly simple. We continue breaking them from the fifth key up.</p>
-          <p>For the fourth, third, and second round key we first need to find a differential trail of appropriate length. For the fourth key the trail stops at position <i>u</i><sub>3</sub>, for the third at <i>u</i><sub>2</sub>, etc. You should notice that it’ll be easier to find ones with a bigger bias since the trails will be traveling through fever SBOXes. We must also remember to take permutation into account. It doesn’t change the process but it does affect which key bits are broken by an active SBOX. For example, in our cipher, if the first SBOX is active, we would actually be breaking bits 1, 5, 9, and 13.</p>
+          <p>For the fourth, third, and second round key we first need to find a differential trail of appropriate length. For the fourth key the trail stops at position <i>u</i><sub>3</sub>, for the third at <i>u</i><sub>2</sub>, etc. You should notice that it’ll be easier to find ones with a bigger bias since the trails will be traveling through fever S-boxes. We must also remember to take permutation into account. It doesn’t change the process but it does affect which key bits are broken by an active S-box. For example, in our cipher, if the first S-box is active, we would actually be breaking bits 1, 5, 9, and 13.</p>
           <p>Another important thing to note is that to break the fourth key we need to be able to partially decrypt the ciphertext all the way to position <i>u</i><sub>3</sub>. To do that however, we need the fifth key. In other words, we’re relying on our previous key guesses to break the other round keys. If our guess at the fifth key is incorrect, so will all our other round key guesses.</p>
           <p>Breaking the first key is trivial with simple XOR rules. Send one plaintext through the cipher, decrypt it to position <i>u</i><sub>1</sub> with round keys that are already broken, then simply XOR the original plaintext with this partially decrypted value to get the first round key.</p>
         </li>
@@ -1814,8 +1814,8 @@
         </li>
         <li>
           <p><b>How do we find good differential trails?</b> This is just a matter of brute force. You simply try all possible input XORs until you find a highly probable trail. On a small cipher like this even a personal laptop finds them practically instantly. Also note that you only need to find them once, so long as the cipher design remains unchanged.</p>
-          <p>There is a catch though. Remember that the number of bits that are broken in a partial key depends on the number of active SBOXes at the end of the trail. Remember also that we need to loop through all possible key bits for the bits we’re breaking. If there are only two active SBOXes at the end of our trail, that means we need to loop through 2<sup>8</sup> possible partial keys for each plaintext pair. If all four SBOXes are active, we need to loop through 2<sup>16</sup> possible partial keys for each plaintext pair, which is 256 times slower.</p>
-          <p>In other words, if we want to minimize the time it takes to break the keys, we not only need to find a trail which is highly probable (so that fewer plaintext pairs will be needed), but one which has as few active SBOXes in the last round of the trail as possible.</p>
+          <p>There is a catch though. Remember that the number of bits that are broken in a partial key depends on the number of active S-boxes at the end of the trail. Remember also that we need to loop through all possible key bits for the bits we’re breaking. If there are only two active S-boxes at the end of our trail, that means we need to loop through 2<sup>8</sup> possible partial keys for each plaintext pair. If all four S-boxes are active, we need to loop through 2<sup>16</sup> possible partial keys for each plaintext pair, which is 256 times slower.</p>
+          <p>In other words, if we want to minimize the time it takes to break the keys, we not only need to find a trail which is highly probable (so that fewer plaintext pairs will be needed), but one which has as few active S-boxes in the last round of the trail as possible.</p>
         </li>
       </ol>
     </section>
@@ -1855,13 +1855,13 @@
     <p>A <em class="highlight">key expansion</em> operation is then performed on this single cipher key (of 128, 192, or 256 bits) to generate 11, 13, or 15 total round keys, each with a length of 128 bits. These round keys are called the <em class="highlight">key schedule</em>.</p>
     <p>The encryption then follows a very standard SPN structure. It begins with a single key addition. Then follows 9, 11, or 13 rounds of the following four operations:</p>
     <ol>
-      <li><i>SubBytes</i>: a substitution of each byte. AES has an 8 bit SBOX (our SPN had a 4 bit SBOX)</li>
+      <li><i>SubBytes</i>: a substitution of each byte. AES has an 8 bit S-box (our SPN had a 4 bit S-box)</li>
       <li><i>ShiftRows</i>: a permutation of each byte. Unlike our SPN, AES’s PBOX works on bytes not bits</li>
       <li><i>MixColumns</i>: a second and more complicated permutation of each bit, the details of which will not be discussed here</li>
       <li><i>AddRoundKey</i>: a bitwise XOR with the next round key in the key schedule</li>
     </ol>
     <p>After these rounds comes a final round (making a total of 10, 12, or 14 rounds) which is the same as the previous ones but does not perform the <i>MixColumns</i> step.</p>
-    <p>Note that the words “rows” and “columns” are used because the 16 bytes of the AES block are represented in a 4×4 array. If you want to see the exact SBOX, PBOX, details of the MixColumns step, and details of the key expansion algorithm, they can all be found within the specification in sections 5.1.1, 5.1.2, 5.1.3, and 5.2 respectively {cite(specification)}.</p>
+    <p>Note that the words “rows” and “columns” are used because the 16 bytes of the AES block are represented in a 4×4 array. If you want to see the exact S-box, PBOX, details of the MixColumns step, and details of the key expansion algorithm, they can all be found within the specification in sections 5.1.1, 5.1.2, 5.1.3, and 5.2 respectively {cite(specification)}.</p>
     <p>Below you can see a visual representation of the cipher. Note that because of the big block size of AES, the lines do not represent bits as they did in the previous visualizations, but bytes.</p>
     <div class="visualization">
       <div class="figure">
@@ -1871,16 +1871,16 @@
     <hr/>
     <p>Now that we understand AES’s structure, let’s understand the motivation behind the design as it pertains to differential cryptanalysis. We will only discuss this at a very high level. If you want something more detailed, you can first look in the Rijndael proposal {cite(proposal)} but the authoritative source in this area is the 2002 book <i>The Design of Rijndael</i> by Daemen and Rijmen {cite(aes)}, which dives much deeper into the mathematics.</p>
     <p>There are two main reasons why AES is mathematically immune to differential cryptanalysis.</p>
-    <p>The first and most obvious way to protect against differential cryptanalysis is carefully choosing a differentially unbiased SBOX. The larger the values in a difference distribution table for the SBOX, the higher the trail probability will be. And the higher the trail probability, the fewer chosen plaintexts we can choose to get an accurate partial key guess.</p>
-    <p>Therefore, the AES SBOX was selected very carefully. The maximum value in the difference distribution table for the AES SBOX is 4. This means that the <em>highest</em> possible probability for guessing an SBOX’s output XOR given its input XOR is 4/256 or 1.56%. Remember that our SBOX used for the SPN had a value of 8 in the SBOX, meaning the associated percentage was 8/16 or 50%. For reference, the DES SBOXes’ largest value is 16 {cite(biham)}. The DES SBOX has a 6 bit input so the associated percentage is 16/64 or 25%. You can see that even by this very simple metric, AES is more secure.</p>
-    <p>However, the SBOX design is not the chief reason for AES’s security. In fact, the designers make this claim in their proposal:</p>
+    <p>The first and most obvious way to protect against differential cryptanalysis is carefully choosing a differentially unbiased S-box. The larger the values in a difference distribution table for the S-box, the higher the trail probability will be. And the higher the trail probability, the fewer chosen plaintexts we can choose to get an accurate partial key guess.</p>
+    <p>Therefore, the AES S-box was selected very carefully. The maximum value in the difference distribution table for the AES S-box is 4. This means that the <em>highest</em> possible probability for guessing an S-box’s output XOR given its input XOR is 4/256 or 1.56%. Remember that our S-box used for the SPN had a value of 8 in the S-box, meaning the associated percentage was 8/16 or 50%. For reference, the DES S-boxes’ largest value is 16 {cite(biham)}. The DES S-box has a 6 bit input so the associated percentage is 16/64 or 25%. You can see that even by this very simple metric, AES is more secure.</p>
+    <p>However, the S-box design is not the chief reason for AES’s security. In fact, the designers make this claim in their proposal:</p>
     <blockquote>
       <p>In the case of suspicion of a trapdoor being built into the cipher, the current S-box might be replaced by another one. … Even an S-box that is “average” in this respect is likely to provide enough resistance against differential and linear cryptanalysis. {cite(proposal)}</p>
     </blockquote>
     <p>In constrast to this, when Biham and Shamir were analyzing DES during their discovery of differential cryptanalysis, they noted that “even a minimal change of one entry in one of the DES S boxes can make DES easier to break” {cite(biham)}.</p>
     <p>The reason the AES authors were so confident in their design is because the second main protection of AES against differential cryptanalysis comes not from substitution, but from its two permutation steps.</p>
-    <p>The permutation of AES was designed according to the “wide trail” strategy, first devised by Daemen in his Ph.D. thesis {cite(daemen)}. The basic idea is straightforward: try to activate as many SBOXes as possible by making the differential trail wide. As we saw in our SPN example, every time another SBOX is activated, the probability of the trail gets smaller. AES permutation was designed in such a way that its authors were able to mathematically prove that “the number of active S-boxes in a four-round differential trail … is lower bounded by 25” {cite(aes)}.</p>
-    <p>In other words, a four-round differential trail is mathematically guaranteed to activate at least 25 SBOXes. Even if all of those SBOXes had the maximum bias of 1.56%, the trail’s probability would already be 0.0156<sup>25</sup> = 6.73 × 10<sup>-46</sup>, a bias far too small to be exploited. And this is after only four rounds of the cipher, to say nothing of the full 10, 12, or 14 rounds. This is a very important result and one which gurantees the security of AES against differential cryptanalysis. The proof of this result can be found in <i>The Design of Rijndael</i> {cite(aes)}.</p>
+    <p>The permutation of AES was designed according to the “wide trail” strategy, first devised by Daemen in his Ph.D. thesis {cite(daemen)}. The basic idea is straightforward: try to activate as many S-boxes as possible by making the differential trail wide. As we saw in our SPN example, every time another S-box is activated, the probability of the trail gets smaller. AES permutation was designed in such a way that its authors were able to mathematically prove that “the number of active S-boxes in a four-round differential trail … is lower bounded by 25” {cite(aes)}.</p>
+    <p>In other words, a four-round differential trail is mathematically guaranteed to activate at least 25 S-boxes. Even if all of those S-boxes had the maximum bias of 1.56%, the trail’s probability would already be 0.0156<sup>25</sup> = 6.73 × 10<sup>-46</sup>, a bias far too small to be exploited. And this is after only four rounds of the cipher, to say nothing of the full 10, 12, or 14 rounds. This is a very important result and one which gurantees the security of AES against differential cryptanalysis. The proof of this result can be found in <i>The Design of Rijndael</i> {cite(aes)}.</p>
   </section>
   <section>
     <h2>Bibliography</h2>
