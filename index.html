@@ -151,10 +151,10 @@
     </section>
     <section>
       <h3>Permutation</h3>
-      <p>Permutation is a step in which we change the position of the bits. We define how these bits are permutated with a permutation-box (PBOX). Let’s define a simple 4-bit PBOX:</p>
+      <p>Permutation is a step in which we change the position of the bits. We define how these bits are permutated with a permutation-box (P-box). Let’s define a simple 4-bit P-box:</p>
       <table class="monospaced-table" id="permutation-4">
         <tr>
-          <th colspan="17">PBOX</th>
+          <th colspan="17">P-box</th>
         </tr>
         <tr>
           <th>Input:</th>
@@ -171,7 +171,7 @@
           <td>1</td>
         </tr>
       </table>
-      <p>This PBOX says that the bit at position 0 will move to position 3, the bit at position 1 will move to position 0, the bit at position 2 will stay at position 2, and the bit at position 3 will move to position 1. For example, if we input the nibble 1001 into the PBOX, we will get an output of 0101. PBOXes, unlike S-boxes, are easy to represent visually:</p>
+      <p>This P-box says that the bit at position 0 will move to position 3, the bit at position 1 will move to position 0, the bit at position 2 will stay at position 2, and the bit at position 3 will move to position 1. For example, if we input the nibble 1001 into the P-box, we will get an output of 0101. P-boxes, unlike S-boxes, are easy to represent visually:</p>
       <svg version="1.1" viewBox="60 30 90 125" xmlns="http://www.w3.org/2000/svg" id="pbox-svg">
   <!-- original viewBox="0 0 200 200" -->
   <g stroke="black">
@@ -188,7 +188,7 @@
     <text x="60" y="150">0 1 0 1</text>
   </g>
 </svg>
-      <p>Just like S-boxes, PBOXes are released to the public. Though S-boxes serve as the main protection against differential cryptanalysis, PBOXes also play a vital role which we will discuss later.</p>
+      <p>Just like S-boxes, P-boxes are released to the public. Though S-boxes serve as the main protection against differential cryptanalysis, P-boxes also play a vital role which we will discuss later.</p>
       <p>
     </section>
   </section>
@@ -1729,7 +1729,7 @@
       <ol>
         <li>Key addition with a 16 bit key</li>
         <li>We will then consider the 16 bits as 4 nibbles and put each of those nibbles through a 4-bit S-box</li>
-        <li>Lastly we will permutate the block with a 16-bit PBOX</li>
+        <li>Lastly we will permutate the block with a 16-bit P-box</li>
       </ol>
       <p>The fourth round will be the same as the previous, but without the permutation (because it actually provides no additional security). We will also end the cipher with one last key addition.</p>
       <p>This means that we will need five 16-bit keys. The total number of key bits we need to break is therefore 80. A simple brutefore is beyond most computers as this means there are 2<sup>80</sup> = 1.21 × 10<sup>24</sup> possible key combinations. It should be apparent that breaking a cipher like this isn’t trivial. At first glance it might even seem very secure, but we will show how we can use differential cryptanalysis to break it easily.</p>
@@ -2149,7 +2149,7 @@
     </table>
     <table class="pbox">
       <tr>
-        <th colspan="17">PBOX</th>
+        <th colspan="17">P-box</th>
       </tr>
       <tr>
         <th>Input:</th>
@@ -2221,7 +2221,7 @@
       </tr>
     </table>
     <div class="error-messages">
-      <p class="pbox-error" style="display: none;">PBOX is invalid. Make sure to only include hexadecimal digits (0 to f) and that the PBOX is one-to-one (i.e. there are no duplicates in the output).</p>
+      <p class="pbox-error" style="display: none;">P-box is invalid. Make sure to only include hexadecimal digits (0 to f) and that the P-box is one-to-one (i.e. there are no duplicates in the output).</p>
       <p class="sbox-error" style="display: none;">S-box is invalid. Make sure to only include hexadecimal digits (0 to f) and that the S-box is one-to-one (i.e. there are no duplicates in the output).</p>
     </div>
   </div>
@@ -2231,7 +2231,7 @@
     <section>
       <h3>Differential Cryptanalysis of an SPN</h3>
       <p>This section is partly based on Howard M. Heys’s “A Tutorial on Linear and Differential Cryptanalysis” {cite(heys)}.</p>
-      <p>We begin by selecting the S-box and PBOX for the cipher. We’ll keep the S-box from the previous section and the default PBOX from the figure above.</p>
+      <p>We begin by selecting the S-box and P-box for the cipher. We’ll keep the S-box from the previous section and the default P-box from the figure above.</p>
       <table class="monospaced-table" id="substitution">
         <tr>
           <th colspan="17">S-box</th>
@@ -2277,7 +2277,7 @@
       </table>
       <table class="monospaced-table" id="permutation-16">
         <tr>
-          <th colspan="17">PBOX</th>
+          <th colspan="17">P-box</th>
         </tr>
         <tr>
           <th>Input:</th>
@@ -2668,7 +2668,7 @@
           </td>
         </tr>
       </table>
-      <p>Now let’s send both of these plaintexts through the PBOX:</p>
+      <p>Now let’s send both of these plaintexts through the P-box:</p>
       <table class="monospaced-table math">
         <tr>
           <td>
@@ -2686,7 +2686,7 @@
           </td>
         </tr>
       </table>
-      <p>We can see that, unlike key addition, the XOR value before the permutation operation is different than the XOR of the value after the permutation, which could make things difficult. However, what happens if we send the XOR value before the permutation through the PBOX?</p>
+      <p>We can see that, unlike key addition, the XOR value before the permutation operation is different than the XOR of the value after the permutation, which could make things difficult. However, what happens if we send the XOR value before the permutation through the P-box?</p>
       <table class="monospaced-table math">
         <tr>
           <td>
@@ -2695,7 +2695,7 @@
         </tr>
       </table>
       <p>You should see that both permutate(<i>x</i>) ⊕ permutate(<i>x</i><sup>*</sup>) and permutate(<i>x</i> ⊕ <i>x</i><sup>*</sup>) come out to the same value.</p>
-      <p>For some intuition as to why this is true, notice that both of the plaintexts will travel through the same PBOX. If their XOR is 1 at some bit position, it will remain 1 after applying the permutation. It will just move to a different bit position determined by the PBOX. The same logic applies for when their XOR is 0. Therefore, while the XOR doesn’t remain the same, if we know the input XOR (which, remember, we can guess with significant certainty) we can predict the output XOR with 100% certainty by simply putting the XOR through the permutation. One way of writing this more mathematically is:</p>
+      <p>For some intuition as to why this is true, notice that both of the plaintexts will travel through the same P-box. If their XOR is 1 at some bit position, it will remain 1 after applying the permutation. It will just move to a different bit position determined by the P-box. The same logic applies for when their XOR is 0. Therefore, while the XOR doesn’t remain the same, if we know the input XOR (which, remember, we can guess with significant certainty) we can predict the output XOR with 100% certainty by simply putting the XOR through the permutation. One way of writing this more mathematically is:</p>
       <table class="monospaced-table math">
         <tr>
           <td>
@@ -2703,13 +2703,13 @@
           </td>                   
         </tr>                     
       </table>
-      <p>The significance of this might not be immediately obvious, but remember that the actual values of <i>x</i> and <i>x</i><sup>*</sup> are essentially impossible to guess, which makes computing permutate(<i>x</i>) ⊕ permutate(<i>x</i><sup>*</sup>) difficult. The value of <i>x</i> ⊕ <i>x</i><sup>*</sup>, on the other hand, is what we’ve been keeping track of this whole time! The PBOX, like the S-box, is public knowledge so computing permutate(<i>x</i> ⊕ <i>x</i><sup>*</sup>) is very easy.</p>
+      <p>The significance of this might not be immediately obvious, but remember that the actual values of <i>x</i> and <i>x</i><sup>*</sup> are essentially impossible to guess, which makes computing permutate(<i>x</i>) ⊕ permutate(<i>x</i><sup>*</sup>) difficult. The value of <i>x</i> ⊕ <i>x</i><sup>*</sup>, on the other hand, is what we’ve been keeping track of this whole time! The P-box, like the S-box, is public knowledge so computing permutate(<i>x</i> ⊕ <i>x</i><sup>*</sup>) is very easy.</p>
       <hr/>
       <p>Now that we have discussed all three components let’s quickly review how the XOR interacts with them:</p>
       <ul>
         <li>Key addition: the XOR of two plaintexts <em>does not</em> change over key addition. We can therefore predict the output XOR with 100% certainty.</li>
         <li>Substitution: the XOR of two plaintext <em>does</em> change over substitution. However, it does so probabilistically based on the input XOR and the difference distribution table of the S-box, which gives us some ability to predict it.</li>
-        <li>Permutation: the XOR of two plaintext <em>does</em> change over permutation. However, we can predict it with 100% certainty by simply sending the input XOR through the PBOX.</li>
+        <li>Permutation: the XOR of two plaintext <em>does</em> change over permutation. However, we can predict it with 100% certainty by simply sending the input XOR through the P-box.</li>
       </ul>
       <hr/>
       <p>We will now introduce the concept of differential trails (sometimes also called differential characteristics), which expand the idea of differential characteristics we talked about in the previous section. Differential trails are simply a way to keep track of the most likely XOR as two plaintexts make their way through muliple rounds of key addition, substitution, and permutation. The best way to understand it is via an example.</p>
@@ -3123,7 +3123,7 @@
       <p>We start with two plaintexts which XOR to 0xb0b0. As they make their way through the key addition, their XOR doesn’t change.</p>
       <p>Next they go through the S-boxes. The S-box input XOR in their second and fourth nibble is 0 (the plaintexts are equal there) so their XOR doesn’t change in those nibbles. The first and third nibble, however, each have an S-box input XOR of 0xb. Remember, we cannot predict the S-box output XOR given the input XOR with 100% certainty. However, we can use the difference distribution table to find the most probable S-box output XOR for an input XOR of 0xb. In this case, we have a very likely output XOR of 0x2 which occurs 8/16 times (50%). We pick this output XOR for both S-boxes and keep going.</p>
       <p>Some vocabulary: an S-box with a non-zero input XOR is called an <em class="highlight">active S-box</em> for that trail. In the first round of the cipher for our differential trail, the first and third S-boxes were active.</p>
-      <p>As explained earlier, the XOR of the plaintexts as they go through the permutation can be calculated by simply puting the PBOX input XOR (which is now 0x2020) through the permutation, which leaves us with a value of 0x00a0 at position <i>w</i><sub>1</sub>.</p>
+      <p>As explained earlier, the XOR of the plaintexts as they go through the permutation can be calculated by simply puting the P-box input XOR (which is now 0x2020) through the permutation, which leaves us with a value of 0x00a0 at position <i>w</i><sub>1</sub>.</p>
       <p>We now simply continue this process until we get to position <i>u</i><sub>4</sub> in the cipher. Why we stop there will be clear later.</p>
       <p>Now let’s talk about the probability of this full trail occuring. Remember that the only source of uncertainty comes from the S-boxes and, because of the difference distribution table, we know exactly how uncertain we are. For every active S-box, we picked the most likely output XOR. To get the probability of the trail we simply multiply the probabilities of these output XORs occuring.</p>
       <p>This calculation only works under the assumption that these events are independent, which is not necessarily true. However, this method performs well in practice so we ignore any slight misscalculation. Just be aware that the probability we find is not the <em>true</em> probability of the trail but an approximation of it.</p>
@@ -3259,12 +3259,12 @@
     <p>The encryption then follows a very standard SPN structure. It begins with a single key addition. Then follows 9, 11, or 13 rounds of the following four operations:</p>
     <ol>
       <li><i>SubBytes</i>: a substitution of each byte. AES has an 8 bit S-box (our SPN had a 4 bit S-box)</li>
-      <li><i>ShiftRows</i>: a permutation of each byte. Unlike our SPN, AES’s PBOX works on bytes not bits</li>
+      <li><i>ShiftRows</i>: a permutation of each byte. Unlike our SPN, AES’s P-box works on bytes not bits</li>
       <li><i>MixColumns</i>: a second and more complicated permutation of each bit, the details of which will not be discussed here</li>
       <li><i>AddRoundKey</i>: a bitwise XOR with the next round key in the key schedule</li>
     </ol>
     <p>After these rounds comes a final round (making a total of 10, 12, or 14 rounds) which is the same as the previous ones but does not perform the <i>MixColumns</i> step.</p>
-    <p>Note that the words “rows” and “columns” are used because the 16 bytes of the AES block are represented in a 4×4 array. If you want to see the exact S-box, PBOX, details of the MixColumns step, and details of the key expansion algorithm, they can all be found within the specification in sections 5.1.1, 5.1.2, 5.1.3, and 5.2 respectively {cite(specification)}.</p>
+    <p>Note that the words “rows” and “columns” are used because the 16 bytes of the AES block are represented in a 4×4 array. If you want to see the exact S-box, P-box, details of the MixColumns step, and details of the key expansion algorithm, they can all be found within the specification in sections 5.1.1, 5.1.2, 5.1.3, and 5.2 respectively {cite(specification)}.</p>
     <p>Below you can see a visual representation of the cipher. Note that because of the big block size of AES, the lines do not represent bits as they did in the previous visualizations, but bytes.</p>
     <div class="visualization">
       <div class="figure">
