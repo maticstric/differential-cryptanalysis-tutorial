@@ -1861,7 +1861,7 @@
       <li><i>AddRoundKey</i>: a bitwise XOR with the next round key in the key schedule</li>
     </ol>
     <p>After these rounds comes a final round (making a total of 10, 12, or 14 rounds) which is the same as the previous ones but does not perform the <i>MixColumns</i> step.</p>
-    <p>Note that the words “rows” and “columns” are used because the 16 bytes of the AES block are represented in a 4×4 array. If you want to see the exact SBOX, PBOX, details of the MixColumns step, and details of the key expansion algorithm, they can all be found in sections 5.1.1, 5.1.2, 5.1.3, and 5.2 respectively {cite(specification)}.</p>
+    <p>Note that the words “rows” and “columns” are used because the 16 bytes of the AES block are represented in a 4×4 array. If you want to see the exact SBOX, PBOX, details of the MixColumns step, and details of the key expansion algorithm, they can all be found within the specification in sections 5.1.1, 5.1.2, 5.1.3, and 5.2 respectively {cite(specification)}.</p>
     <p>Below you can see a visual representation of the cipher. Note that because of the big block size of AES, the lines do not represent bits as they did in the previous visualizations, but bytes.</p>
     <div class="visualization">
       <div class="figure">
@@ -1869,13 +1869,25 @@
       </div>
     </div>
     <hr/>
-    <p>Now that we understand AES’s structure, let’s understand the motivation behind the design as it pertains to differential cryptanalysis. We will discuss this at a very high level. Some details can be found in the Rijndael proposal {cite(proposal)} but the authoritative source in this area is the 2002 book <i>The Design of Rijndael</i> by Daemen and Rijmen {cite(aes)}.</p>
+    <p>Now that we understand AES’s structure, let’s understand the motivation behind the design as it pertains to differential cryptanalysis. We will only discuss this at a very high level. If you want something more detailed, you can first look in the Rijndael proposal {cite(proposal)} but the authoritative source in this area is the 2002 book <i>The Design of Rijndael</i> by Daemen and Rijmen {cite(aes)}, which dives much deeper into the mathematics.</p>
+    <p>There are two main reasons why AES is mathematically immune to differential cryptanalysis.</p>
+    <p>The first and most obvious way to protect against differential cryptanalysis is carefully choosing a differentially unbiased SBOX. The larger the values in a difference distribution table for the SBOX, the higher the trail probability will be. And the higher the trail probability, the fewer chosen plaintexts we can choose to get an accurate partial key guess.</p>
+    <p>Therefore, the AES SBOX was selected very carefully. The maximum value in the difference distribution table for the AES SBOX is 4. This means that the <em>highest</em> possible probability for guessing an SBOX’s output XOR given its input XOR is 4/256 or 1.56%. Remember that our SBOX used for the SPN had a value of 8 in the SBOX, meaning the associated percentage was 8/16 or 50%. For reference, the DES SBOXes’ largest value is 16 {cite(biham)}. The DES SBOX has a 6 bit input so the associated percentage is 16/64 or 25%. You can see that even by this very simple metric, AES is more secure.</p>
+    <p>However, the SBOX design is not the chief reason for AES’s security. In fact, the designers make this claim in their proposal:</p>
+    <blockquote>
+      <p>In the case of suspicion of a trapdoor being built into the cipher, the current S-box might be replaced by another one. … Even an S-box that is “average” in this respect is likely to provide enough resistance against differential and linear cryptanalysis. {cite(proposal)}</p>
+    </blockquote>
+    <p>In constrast to this, when Biham and Shamir were analyzing DES during their discovery of differential cryptanalysis, they noted that “even a minimal change of one entry in one of the DES S boxes can make DES easier to break” {cite(biham)}.</p>
+    <p>The reason the AES authors were so confident in their design is because the second main protection of AES against differential cryptanalysis comes not from substitution, but from its two permutation steps.</p>
+    <p>The permutation of AES was designed according to the “wide trail” strategy, first devised by Daemen in his Ph.D. thesis {cite(daemen)}. The basic idea is straightforward: try to activate as many SBOXes as possible by making the differential trail wide. As we saw in our SPN example, every time another SBOX is activated, the probability of the trail gets smaller. AES permutation was designed in such a way that its authors were able to mathematically prove that “the number of active S-boxes in a four-round differential trail … is lower bounded by 25” {cite(aes)}.</p>
+    <p>In other words, a four-round differential trail is mathematically guaranteed to activate at least 25 SBOXes. Even if all of those SBOXes had the maximum bias of 1.56%, the trail’s probability would already be 0.0156<sup>25</sup> = 6.73 × 10<sup>-46</sup>, a bias far too small to be exploited. And this is after only four rounds of the cipher, to say nothing of the full 10, 12, or 14 rounds. This is a very important result and one which gurantees the security of AES against differential cryptanalysis. The proof of this result can be found in <i>The Design of Rijndael</i> {cite(aes)}.</p>
   </section>
   <section>
     <h2>Bibliography</h2>
     <ol id="bibliography">
       <li id="biham">Biham, Eli and Adi Shamir. “Differential Cryptanalysis of DES-like Cryptosystems.” <i>Journal of Cryptology</i> 4, no. 1 (January 1991): 3–72. https://doi.org/10.1007/BF00630563.</li>
       <li id="coppersmith">Coppersmith, Don. “The Data Encryption Standard (DES) and its strength against attacks” <i>IBM Journal of Research and Development</i> 38, no. 3 (May 1994): 243–250. https://doi.org/10.1147/rd.383.0243.</li>
+      <li id="daemen">Daemen, Joan. “Cipher and Hash Function Design Strategies Based on Linear and Differential Cryptanalysis.” PhD diss. Katholieke Universiteit Leuve, 1995. https://cs.ru.nl/~joan/papers/JDA_Thesis_1995.pdf.</li>
       <li id="aes">Daemen, Joan and Vincent Rijmen. <i>The Design of Rijndael: AES—the Advanced Encryption Standard</i>. Springer-Verlag, 2002.</li>
       <li id="commerce">Department of Commerce. “Announcing Request for Candidate Algorithm Nominations for the Advanced Encryption Standard.”  <i>Federal Register</i> 62, no. 177 (September 1997): 48051. https://csrc.nist.gov/news/1997/requesting-candidate-algorithm-nominations-for-aes.</li>
       <li id="proposal">Federal Information Processing Standards. “AES Proposal: Rijndael.” (1999). https://csrc.nist.gov/csrc/media/projects/cryptographic-standards-and-guidelines/documents/aes-development/rijndael-ammended.pdf</li>
