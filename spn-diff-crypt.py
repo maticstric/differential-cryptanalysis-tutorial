@@ -21,33 +21,20 @@ KEY3 = 0x452f
 KEY4 = 0x6ff1
 KEY5 = 0xb520
 
-C = 30 # Constant for choosing number of plaintexts
+# Constant for choosing number of plaintexts.
+# num_of_plaintexts = C / trail_probability
+C = 30
 
-MIN_NUM_OPTIONS = 3 # Constant for how many keybit options to look into at min
+# Constant for how many options for partial key bits to look into at min.
+# Not to be confused with the number of options for the full key which will be
+# larger than this number since the partial key bits can be combined in many
+# different ways
+MIN_NUM_OPTIONS = 3
 
 """ --------------------------------------------- """
 
 INV_SBOX = [SBOX.index(i) if i in SBOX else i for i in range(len(SBOX))]
 INV_PBOX = [PBOX.index(i) if i in PBOX else i for i in range(len(PBOX))]
-
-def generate_random_box(myrandom):
-    box = [0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf]
-
-    myrandom.shuffle(box)
-
-    return box
-
-myrandom = random.Random(2)
-
-SBOX = generate_random_box(myrandom)
-PBOX = generate_random_box(myrandom)
-INV_SBOX = [SBOX.index(i) if i in SBOX else i for i in range(len(SBOX))]
-INV_PBOX = [PBOX.index(i) if i in PBOX else i for i in range(len(PBOX))]
-
-print(SBOX)
-print(INV_SBOX)
-print(PBOX)
-print(INV_PBOX)
 
 def main():
     validate_input()
@@ -122,7 +109,6 @@ def main():
                             print('  KEY' + str(i + 1) + ' = ' + format(round_keys[i], '#06x'))
                         print('*****************')
 
-
                         return
 
 
@@ -149,7 +135,6 @@ def confirm_key_guesses(round_keys):
     return True
 
 def break_round_key(round_num, useful_diff_trails, round_keys):
-    #TODO: WRONG COMMENT
     """
     Breaks a whole round key given some highly probable differential trails
     by choosing ones which will break keybits we have not yet broken until
@@ -166,21 +151,15 @@ def break_round_key(round_num, useful_diff_trails, round_keys):
         input_xor = useful_diff_trail[2]
         output_xor = useful_diff_trail[3]
 
-        #print('---')
-        #print(useful_diff_trail)
         breaking_key_bits = find_which_key_bits_will_be_broken(round_num, output_xor)
-        #print(format(breaking_key_bits, '#06x'))
         broken_key_bits = break_key_bits(round_num, probability, input_xor, output_xor, breaking_key_bits, round_keys)
-
-        #for b in broken_key_bits:
-        #    print(format(b, '#06x'))
 
         # broken_key_bits now has some likely candidates for the partial
         # subkeys, ordered by their probabilities. At the end of the while
         # loop, we'll combine them into likely candidates for the full key
 
         # If we got some key bits which have already been broken by a previous
-        # trail, ignore those key bits
+        # trail, ignore those key bits so we don't overwrite them
         for i in range(len(broken_key_bits)):
             broken_key_bits[i] = broken_key_bits[i] & (~total_key_bits_broken & 0xffff)
         
@@ -196,7 +175,6 @@ def break_round_key(round_num, useful_diff_trails, round_keys):
     return round_key_possibilities
 
 def combine_partial_subkeys(partial_subkeys_to_combine):
-    #TODO: WRONG COMMENT
     """
     Given a list of lists, each internal list containing candidates for some
     partial subkeys, this function combines them into possible full round keys.
@@ -206,13 +184,6 @@ def combine_partial_subkeys(partial_subkeys_to_combine):
     (internal lists) are already ordered by their own probabilities, we can
     do this by ordering the full keys by the sum of the indicies of the
     partial subkeys used to make up the full key.
-
-    partial_subkeys_to_combine is a list
-                # We only want to overwrite the key if the new partial subkey
-                # breaks bits which we didn't break before. This happens since
-                # two diff trails might break some of the same keybits so we
-                # have to choose which one is "correct". We just choose the
-                # first one to break those bits.
     """
 
     full_keys = []
