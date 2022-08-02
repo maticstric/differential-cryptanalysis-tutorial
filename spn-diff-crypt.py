@@ -54,12 +54,20 @@ def main():
     print('FOUND')
 
     print('\nFinding good combinations of differential trails which will break each round key... ', end='', flush=True)
-    # Find good combinations of diff trails which will break each round key
+    # Find good combinations of diff trails which will break each full round key
     useful_diff_trails_3 = find_differential_trails_to_break_full_key(3, most_probable_diff_trails_3)
     useful_diff_trails_2 = find_differential_trails_to_break_full_key(2, most_probable_diff_trails_2)
     useful_diff_trails_1 = find_differential_trails_to_break_full_key(1, most_probable_diff_trails_1)
     useful_diff_trails_0 = find_differential_trails_to_break_full_key(0, most_probable_diff_trails_0)
-    print('FOUND')
+
+    print(f'\n--- KEY5 Trails ---')
+    for dt in useful_diff_trails_3: print(f'{format(dt[2], "#06x")} -> {format(dt[3], "#06x")} (probability {dt[1]})')
+    print(f'\n--- KEY4 Trails ---')
+    for dt in useful_diff_trails_2: print(f'{format(dt[2], "#06x")} -> {format(dt[3], "#06x")} (probability {dt[1]})')
+    print(f'\n--- KEY3 Trails ---')
+    for dt in useful_diff_trails_1: print(f'{format(dt[2], "#06x")} -> {format(dt[3], "#06x")} (probability {dt[1]})')
+    print(f'\n--- KEY2 Trails ---')
+    for dt in useful_diff_trails_0: print(f'{format(dt[2], "#06x")} -> {format(dt[3], "#06x")} (probability {dt[1]})')
 
     # We'll be building up this arrray of round keys
     round_keys = [0, 0, 0, 0, 0]
@@ -144,7 +152,7 @@ def break_round_key(round_num, useful_diff_trails, round_keys):
     """
 
     total_key_bits_broken = 0
-    partial_subkeys_to_combine = []
+    partial_keys_to_combine = []
 
     for useful_diff_trail in useful_diff_trails:
         probability = useful_diff_trail[1]
@@ -155,7 +163,7 @@ def break_round_key(round_num, useful_diff_trails, round_keys):
         broken_key_bits = break_key_bits(round_num, probability, input_xor, output_xor, breaking_key_bits, round_keys)
 
         # broken_key_bits now has some likely candidates for the partial
-        # subkeys, ordered by their probabilities. At the end of the while
+        # keys, ordered by their probabilities. At the end of the while
         # loop, we'll combine them into likely candidates for the full key
 
         # If we got some key bits which have already been broken by a previous
@@ -168,36 +176,36 @@ def break_round_key(round_num, useful_diff_trails, round_keys):
 
         total_key_bits_broken |= breaking_key_bits
 
-        partial_subkeys_to_combine.append(broken_key_bits)
+        partial_keys_to_combine.append(broken_key_bits)
 
-    round_key_possibilities = combine_partial_subkeys(partial_subkeys_to_combine)
+    round_key_possibilities = combine_partial_keys(partial_keys_to_combine)
 
     return round_key_possibilities
 
-def combine_partial_subkeys(partial_subkeys_to_combine):
+def combine_partial_keys(partial_keys_to_combine):
     """
     Given a list of lists, each internal list containing candidates for some
-    partial subkeys, this function combines them into possible full round keys.
+    partial keys, this function combines them into possible full round keys.
 
     It does so in an ordered way: putting the most likely full round keys
-    to the beginning of the array. Since the partial subkey candidates
+    to the beginning of the array. Since the partial key candidates
     (internal lists) are already ordered by their own probabilities, we can
     do this by ordering the full keys by the sum of the indicies of the
-    partial subkeys used to make up the full key.
+    partial keys used to make up the full key.
     """
 
     full_keys = []
 
-    for partial_subkey_values in partial_subkeys_to_combine:
+    for partial_key_values in partial_keys_to_combine:
         new_full_keys = []
 
         if len(full_keys) == 0:
-            for i, partial_subkey_value in enumerate(partial_subkey_values):
-                new_full_keys.append((i, partial_subkey_value))
+            for i, partial_key_value in enumerate(partial_key_values):
+                new_full_keys.append((i, partial_key_value))
         else:
             for i, key in full_keys:
-                for j, partial_subkey_value in enumerate(partial_subkey_values):
-                    new_full_keys.append((i + j, partial_subkey_value | key))
+                for j, partial_key_value in enumerate(partial_key_values):
+                    new_full_keys.append((i + j, partial_key_value | key))
 
         full_keys = new_full_keys
 
@@ -211,7 +219,7 @@ def combine_partial_subkeys(partial_subkeys_to_combine):
 def break_key_bits(round_num, probability, input_xor, output_xor, breaking_key_bits, round_keys):
     """
     Breaks bits of the round key specified by the breaking_key_bits array by
-    generating random plaintexts (i.e. gets a partial subkey).
+    generating random plaintexts (i.e. gets a partial key).
 
     Returns the most probable keybits for the specified bits, in the order of
     their probability.
