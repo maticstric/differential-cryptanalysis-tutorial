@@ -1702,7 +1702,7 @@
       <li>Those also narrowed down the possible key combinations to four</li>
       <li>Since we already knew which one was correct, we just picked it out. Had we not known, we would have had to verify all four combinations with some plaintext-ciphertext pairs</li>
     </ul>
-    <p>All of these steps are implemented in a Python script available in the <a href="https://github.com/maticstric/differential-cryptanalysis-tutorial/blob/master/toy-cipher-diff-crypt.py">GitHub repository</a>. You are <em>highly</em> encouraged to check it out, as it was made to accompany this tutorial and follows the exact same steps that we’ve taken. You can change the S-box, key combinations, see some of the implementation details which were not discussed, and play around with the code in order to gain a deeper understading of this section.</p>
+    <p>All of these steps are implemented in a Python script available in the <a href="https://github.com/maticstric/differential-cryptanalysis-tutorial/blob/master/python/toy-cipher-diff-crypt.py">GitHub repository</a>. You are <em>highly</em> encouraged to check it out, as it was made to accompany this tutorial and follows the exact same steps that we’ve taken. You can change the S-box, key combinations, see some of the implementation details which were not discussed, and play around with the code in order to gain a deeper understading of this section.</p>
     <hr/>
     <p>Though the toy cipher served as a great introduction to many of the concepts and vocabulary of differential cryptanalysis, it’s called the <em>toy</em> cipher for a reason. It is so easily broken by brute force that these steps seem unnecessarily complicated. In the next section, you will see a more realistic application of differential cryptanalysis to break a non-trivial cipher.</p>
     <hr/>
@@ -3221,6 +3221,27 @@
           <p>In other words, if we want to minimize the time it takes to break the keys, we not only need to find a trail which is highly probable (so that fewer plaintext pairs will be needed), but one which has as few active S-boxes in the last round of the trail as possible.</p>
         </li>
       </ol>
+      <hr/>
+      <p>Let’s do a quick review of the steps:</p>
+      <ul>
+        <li>We started by making the difference distribution table for the given S-box</li>
+        <li>We then found a highly probable differential trail ending at position <i>u</i><sub>4</sub> in the cipher</li>
+        <li>We found the key bits attached to the trail’s last active S-boxes. These are the key bits we’ll be breaking</li>
+        <li>Then, we send in a plaintext pair which XORs to the initial XOR of the trail we chose</li>
+        <li>We encrypt those two plaintexts (differential cryptanalysis is a chosen plaintext attack)</li>
+        <li>We partially decrypt both ciphertexts to position <i>u</i><sub>4</sub> by looping through all possible partial key values for the bits we’re breaking</li>
+        <li>Each time the two partially decrypted ciphertexts XOR to the trail’s final XOR, we increment a value in a table for the partial key which was used in the partial decryption</li>
+        <li>We repeat this process for many plaintext pairs</li>
+        <li>Using a different differential trail, we break the other key bits of the fifth key</li>
+        <li>Using shorter differential trails and the broken fifth key, we break the other round keys</li>
+      </ul>
+      <p>As with the toy cipher, these steps have been implemented in a Python script that you are <em>highly</em> encouraged to check out. You can change the S-box, P-box, key combinations, number of chosen plaintexts, see some of the implementation details which were not discussed, and play around with the code in order to gain a deeper understading of this section.</p>
+      <p>There are two scripts: <a href="https://github.com/maticstric/differential-cryptanalysis-tutorial/blob/master/python/spn-diff-crypt-simple.py">spn-diff-crypt-simple.py</a> and <a href="https://github.com/maticstric/differential-cryptanalysis-tutorial/blob/master/python/spn-diff-crypt.py">spn-diff-crypt.py</a>. Both scripts implement the steps described in this tutorial. The difference is in how the partial keys are picked out of the table. spn-diff-crypt-simple.py just picks the partial key with the highest count in the table. spn-diff-crypt.py takes the first few (specified by MIN_OPTIONS variable) partial key candidates to account for the fact that differential cryptanalysis is probabilistic. It then combines those partial key candidates into many round key candidates. All this makes the code harder to follow, even though its core stays exactly the same.</p>
+      <p>You’re encouraged to start with spn-diff-crypt-simple.py to get a basic understanding of the code and then move on to spn-diff-crypt.py if you want a slightly more realistic application.</p>
+      <hr/>
+      <p>This concludes the differential cryptanalysis tutorial. If you want more discussion of differential cryptanalysis check out Heys’s “A Tutorial on Linear and Differential Cryptanalysis” {cite(heys)}, a more advanced and fast-paced tutorial. It could serve as a great resource for confirming your understanding as well as getting some new information, particularly in sections 4.5 and 5.</p>
+      <p>Another shorter resource is the differential cryptanalysis section in Stinson’s textbook <i>Cryptography: Theory and Practice</i> {cite(stinson)}, which is a good review of the main points.</p>
+      <p>If you’re still hungry for more, move on to the next section where we discuss how modern ciphers protect themselves against differential cryptanalysis.</p>
     </section>
   </section>
   <section>
@@ -3231,8 +3252,8 @@
         <cite>—Poe</cite>
       </blockquote>
     </header>
-    <p>The Data Encryption Standard (DES) had used a key size of only 56 bits and, by the late 1990s, became vulnerable to brute-force attacks. Consequently, in September of 1997, the National Institute of Standards and Technology (NIST) sent a request to the cryptographic community to design “an unclassified, publicly disclosed encryption algorithm available royalty-free worldwide that is capable of protecting sensitive government information well into the next century” {cite(commerce)}. This was to be called the Advanced Encryption Standard (AES). The submitted candidate ciphers would then be thoroughly investigated by crytographers for any possible flaws in various categories such as security and performance, until a candidate was chosen to become the AES.</p>
-    <p>One such candidate was the cipher <em class="highlight">Rijndael</em>, a portmanteau of the last names of its two developers, Belgian cryptographers Joan Daemen and Vincent Rijmen. Through a stringent and acute process which lasted until October 2000 and was praised by many people in the cryptographic community, Rijndael was selected as the AES.</p>
+    <p>The Data Encryption Standard (DES) had used a key size of only 56 bits and, by the late 1990s, became vulnerable to brute-force attacks. Consequently, in September of 1997, the National Institute of Standards and Technology (NIST) sent a request to the cryptographic community to design “an unclassified, publicly disclosed encryption algorithm available royalty-free worldwide that is capable of protecting sensitive government information well into the next century” {cite(commerce)}. This was to be called the Advanced Encryption Standard (AES). The submitted candidate ciphers would then be thoroughly investigated by crytographers for any possible flaws in various categories, such as security and performance, until a candidate was chosen to become the AES.</p>
+    <p>One such candidate was the cipher <em class="highlight">Rijndael</em>, a portmanteau of the last names of its two developers, Belgian cryptographers Joan Daemen and Vincent Rijmen. Through a stringent process which lasted until October 2000 and was praised by many people in the cryptographic community, Rijndael was selected as the AES.</p>
     <p>Since differential cryptanalysis was made public in the early 1990s by Eli Biham and Adi Shamir, Rijndael (from now on called AES) had to be secure against this attack. In this section we’ll discuss how this was accomplished.</p>
     <hr/>
     <p>First let’s discuss the structure of AES. We’ll only be touching on the basics but all details can be found in the specification {cite(specification)}.</p>
@@ -3264,7 +3285,7 @@
       <li><i>AddRoundKey</i>: a bitwise XOR with the next round key in the key schedule</li>
     </ol>
     <p>After these rounds comes a final round (making a total of 10, 12, or 14 rounds) which is the same as the previous ones but does not perform the <i>MixColumns</i> step.</p>
-    <p>Note that the words “rows” and “columns” are used because the 16 bytes of the AES block are represented in a 4×4 array. If you want to see the exact S-box, P-box, details of the MixColumns step, and details of the key expansion algorithm, they can all be found within the specification in sections 5.1.1, 5.1.2, 5.1.3, and 5.2 respectively {cite(specification)}.</p>
+    <p>Note that the words “rows” and “columns” are used because the 16 bytes of the AES block are represented in a 4×4 array. If you want to see the exact S-box, P-box, details of the <i>MixColumns</i> step, and details of the key expansion algorithm, they can all be found within the specification in sections 5.1.1, 5.1.2, 5.1.3, and 5.2 respectively {cite(specification)}.</p>
     <p>Below you can see a visual representation of the cipher. Note that because of the big block size of AES, the lines do not represent bits, as they did in the previous visualizations, but bytes.</p>
     <div class="visualization">
       <div class="figure">
