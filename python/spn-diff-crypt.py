@@ -29,7 +29,7 @@ C = 30
 # Not to be confused with the number of options for the full key which will be
 # larger than this number since the partial key bits can be combined in many
 # different ways
-MIN_NUM_OPTIONS = 3
+MIN_OPTIONS = 3
 
 """ --------------------------------------------- """
 
@@ -53,7 +53,7 @@ def main():
     most_probable_diff_trails_0 = find_highly_probable_differential_trails(diff_dist_table, 0)
     print('FOUND')
 
-    print('\nFinding good combinations of differential trails which will break each round key... ', end='', flush=True)
+    print('\nFinding good combinations of differential trails which will break each round key...')
     # Find good combinations of diff trails which will break each full round key
     useful_diff_trails_3 = find_differential_trails_to_break_full_key(3, most_probable_diff_trails_3)
     useful_diff_trails_2 = find_differential_trails_to_break_full_key(2, most_probable_diff_trails_2)
@@ -247,7 +247,7 @@ def break_key_bits(round_num, probability, input_xor, output_xor, breaking_key_b
 
     # Extract the most likely keys out of the dictonary
     most_probable_keys = sorted(key_count_dict.items(), key=lambda x: x[1], reverse=True)
-    most_probable_keys = most_probable_keys[:MIN_NUM_OPTIONS]
+    most_probable_keys = most_probable_keys[:MIN_OPTIONS]
     most_probable_keys = [int(k[0], 16) for k in most_probable_keys]
 
     return most_probable_keys
