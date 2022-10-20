@@ -210,7 +210,8 @@
         <li>Feed that result into the S-box</li>
         <li>XOR the output of the S-box with <i>k</i><sub>2</sub></li>
       </ol>
-      <p>These simple steps give us the final ciphertext. The cipher is much easier to understand visually so look to the figure below. The values underlined with purple can be changed, so play around with them to see how the cipher is affected. The red lines represent the 1s and the black lines the 0s as the nibble makes its way through the cipher. Also note the labels <i>x</i>, <i>u</i>, <i>v</i>, and <i>y</i> on the left (<i>x</i> is the value of the plaintext, <i>u</i> is the value after the first key addition, etc.). Those labels will make it easier to discuss the cipher when we get to differential cryptanalysis so keep them in mind.</p>
+      <p>These simple steps give us the final ciphertext. The cipher is much easier to understand visually so look to the figure below. The red lines represent the 1s and the black lines the 0s as the nibble makes its way through the cipher. Also note the labels <i>x</i>, <i>u</i>, <i>v</i>, and <i>y</i> on the left (<i>x</i> is the value of the plaintext, <i>u</i> is the value after the first key addition, etc.). Those labels will make it easier to discuss the cipher when we get to differential cryptanalysis so keep them in mind.<p>
+      <p>The values underlined with purple can be changed, so play around with them in the figure below to see how the cipher is affected:</p>
       <div class="visualization" id="toy-visualization">
   <div class="figure">
     <div class="plaintext">
@@ -360,7 +361,7 @@
     <section>
       <h3>Differential Cryptanalysis of the Toy Cipher</h3>
       <p>Much of the following is based on King’s webpage: “Differential Cryptanalysis Tutorial” {cite(king)} as well as Stinson’s textbook <i>Cryptography: Theory and Practice</i> {cite(stinson)}.</p>
-      <p>We must begin by selecting which S-box we’ll be using for the toy cipher. Remember that S-boxes are public knowledge and that, once the cipher is defined, they do not change. So, we’ll pick an arbitrary S-box for our toy cipher.</p>
+      <p>We must begin by selecting which S-box we’ll be using for the toy cipher. Remember that S-boxes are public knowledge and that, once the cipher is defined, they do not change. So, we’ll pick an arbitrary S-box for our toy cipher:</p>
       <table class="monospaced-table" id="substitution">
         <tr>
           <th colspan="17">S-box</th>
@@ -405,7 +406,7 @@
         </tr>
       </table>
       <p>Differential cryptanalysis stems from the analysis of the XOR of two plaintexts as they travel through the cipher. XOR is used because it tells us where two plaintexts differ. If their XOR at some bit position is 1, then those two plaintexts differ at that bit position.</p>
-      <p>For now, instead of focusing on the cipher as a whole, we’ll simply analyze the S-box. Let’s first choose an XOR value to analyze: 1011. We can make a table of all possible pairs of S-box inputs, call them <i>x</i> and <i>x</i><sup>*</sup>, which XOR to 1011 (in other words, all inputs which differ in the first, third, and fourth bit positions).</p>
+      <p>For now, instead of focusing on the cipher as a whole, we’ll simply analyze the S-box. Let’s first choose an XOR value to analyze: 1011. We can make a table of all possible pairs of S-box inputs, call them <i>x</i> and <i>x</i><sup>*</sup>, which XOR to 1011 (in other words, all inputs which differ in the first, third, and fourth bit positions):</p>
       <table class="monospaced-table" id="xor-input-table">
         <tr>
           <th><i>x</i></th>
@@ -493,7 +494,7 @@
           <td>1011</td>
         </tr>
       </table>
-      <p>Now, let’s consider the XOR of the S-box <em>outputs</em> of both <i>x</i> and <i>x</i><sup>*</sup>. Let’s name those outputs <i>y</i> and <i>y</i><sup>*</sup> respectively. In other words, if we put the input <i>x</i> through the S-box we defined earlier, we’ll get <i>y</i>, and if we input <i>x</i><sup>*</sup>, we’ll get <i>y</i><sup>*</sup>.</p>
+      <p>Now, let’s consider the XOR of the S-box <em>outputs</em> of both <i>x</i> and <i>x</i><sup>*</sup>. Let’s name those outputs <i>y</i> and <i>y</i><sup>*</sup> respectively. In other words, if we put the input <i>x</i> through the S-box we defined earlier, we’ll get <i>y</i>, and if we input <i>x</i><sup>*</sup>, we’ll get <i>y</i><sup>*</sup>. Let’s add these to our previous table:</p>
       <table class="monospaced-table" id="xor-input-output-table">
         <tr>
           <th><i>x</i></th>
@@ -632,7 +633,7 @@
           <td>0101</td>
         </tr>
       </table>
-      <p>Here we see the heart of differential cryptanalysis. Examine the values of <i>y</i> ⊕ <i>y</i><sup>*</sup> and notice the repetitions. Let’s create another table to see how many times each value appears in the S-box output XORs.</p>
+      <p>Here we see the heart of differential cryptanalysis. Examine the values of <i>y</i> ⊕ <i>y</i><sup>*</sup> and notice the repetitions. Let’s create another table to see how many times each value appears in the S-box output XORs:</p>
       <table class="monospaced-table" id="xor-appearances-table">
         <tr>
           <th>Output XOR</th>
@@ -704,7 +705,7 @@
         </tr>
       </table>
       <p>Consider what this table is really saying. If we pick two random plaintexts which XOR to 1011, put each of them through the S-box, and then XOR those S-box outputs, 8 out of 16 times, they will XOR to 0010. They will XOR to 0111 2 out of 16 times. They will never XOR to 1010. This bias towards certain XORs is what makes differential cryptanalysis possible.</p>
-      <p>So far we’ve only considered the input XOR of 1011. We can repeat the same process for every possible input XOR and build what is called a <em class="highlight">difference distribution table</em> for the given S-box. The rows in this table represent the S-box input XOR, the columns represent the S-box output XOR, and the cell values are the number of appearances of that output XOR given the input XOR. Note that the XORs are represented in hexadecimal instead of binary (e.g. you can find the previous example of 1011 in the row labeled b).</p>
+      <p>So far we’ve only considered the input XOR of 1011. We can repeat the same process for every possible input XOR and build what is called a <em class="highlight">difference distribution table</em> for the given S-box. The rows in this table represent the S-box input XOR, the columns represent the S-box output XOR, and the cell values are the number of appearances of that output XOR given the input XOR. Note that the XORs are represented in hexadecimal instead of binary (e.g. you can find the previous example of 1011 in the row labeled b). Now let’s see the difference distribution table for our original SBOX:</p>
       <table class="monospaced-table" id="difference-distribution-table">
         <tr>
           <th>Input</th>
@@ -1111,6 +1112,7 @@
       <p>The first step is to pick a <em class="highlight">differential characteristic</em> (this is just an input and output XOR pair). Let’s just choose a random one that has a non-zero value in the difference distribution table: 0x5 ➝ 0xa.</p>
       <p>Next, we must find a pair of plaintexts that XOR to 0x5 and whose associated ciphertexts XOR to 0xa. Such a pair is called a <em class="highlight">good pair</em> for that given differential characteristic. You will see how a good pair is useful in a second.</p>
       <p>Assuming <i>k</i><sub>1</sub> = 0xb and <i>k</i><sub>2</sub> = 0xd, one good pair is 0x6 and 0x3. They XOR to 0x5. They encrypt to 0x4 and 0xe respectively, and 0x4 ⊕ 0xe = 0xa. This matches our differential characteristic. You can confirm this using the toy cipher visualization at the beginning of this section or by hand.</p>
+      <p>Now let’s see how this good pair will travel through the cipher. Below is a figure showing what is being explained in the following paragraph. We’ll also be referencing the letters on the sides of the figure:</p>
       <div class="visualization">
         <div class="figure">
           <svg version="1.1" viewBox="51 10 540 290" xmlns="http://www.w3.org/2000/svg" id="toy-dc-unfinished">
@@ -1278,7 +1280,6 @@
 </svg>
         </div>
       </div>
-      <p>Now let’s see how this good pair will travel through the cipher. Above is a figure showing what is being explained here. We’ll be referencing the letters on the sides of the figure.</p>
       <p>We know that at <i>x</i> the value on the left is 0x6, the value on the right is 0x3, and their XOR is 0x5. We also know that at <i>y</i> the value on the left is 0x4, the value on the right is 0xe, and their XOR is 0xa. These are all values that we’ve handpicked. Now, what is the XOR at <i>u</i>? As explained earlier, the XOR doesn’t change over key addition, so it remains at 0x5. Since the XOR at <i>y</i> is 0xa, we can follow the same logic and conclude that the XOR at <i>v</i> must also be 0xa.</p>
       <p>But what are the values at <i>u</i> and <i>v</i>?</p>
       <p>Assuming the keys are unknown to us, there’s no easy way to tell. However, we do know that whatever the values at <i>u</i> are, they must XOR to 0x5 and whatever the values at <i>v</i> are, they must XOR to 0xa. Well, what are the possible inputs to an S-box that XOR to 0x5 and whose corresponding S-box outputs XOR to 0xa? We’ve already calculated them when making the difference distribution table! The calculation was not shown previously (we only saw the one for an S-box input XOR of 0xb) so let’s see it now:</p>
@@ -1733,7 +1734,8 @@
       </ol>
       <p>The fourth round will be the same as the previous, but without the permutation (because it provides no additional security). We will also end the cipher with one last key addition.</p>
       <p>This means that we will need five 16-bit keys. The total number of key bits we need to break is therefore 80. A simple brute force is beyond most computers as this means there are 2<sup>80</sup> = 1.21 × 10<sup>24</sup> possible key combinations. It should be apparent that breaking a cipher like this isn’t trivial. However, we will show how we can use differential cryptanalysis to break it easily.</p>
-      <p>As with the toy cipher, this SPN is easier to understand if you look to the figure below. Remember that the values underlined with purple can be modified. The labels on the side are similar to the ones for the toy cipher with a few changes: we use subscripts to indicate the round number and a new label <i>w</i> is added for the value after the permutation.</p>
+      <p>As with the toy cipher, this SPN is easier to understand if you look to the figure below. The labels on the side are similar to the ones for the toy cipher with a few changes: we use subscripts to indicate the round number and a new label <i>w</i> is added for the value after the permutation.</p>
+      <p>The values underlined with purple can be modified, so play around with them in the figure below to see how the cipher is affected:</p>
       <div class="visualization" id="spn-visualization">
   <div class="figure">
     <div class="plaintext">
@@ -2231,7 +2233,7 @@
     <section>
       <h3>Differential Cryptanalysis of an SPN</h3>
       <p>This section is partly based on Howard M. Heys’s “A Tutorial on Linear and Differential Cryptanalysis” {cite(heys)}.</p>
-      <p>We begin by selecting the S-box and P-box for the cipher. We’ll keep the S-box from the previous section and the default P-box from the figure above.</p>
+      <p>We begin by selecting the S-box and P-box for the cipher. We’ll keep the S-box from the previous section and the default P-box from the figure above:</p>
       <table class="monospaced-table" id="substitution">
         <tr>
           <th colspan="17">S-box</th>
@@ -2318,7 +2320,7 @@
           <td>f</td>
         </tr>
       </table>
-      <p>The first step, just like before, is to calculate the difference distribution table. Since we’re using the same S-box, it remains unchanged from the previous section.</p>
+      <p>The first step, just like before, is to calculate the difference distribution table. Since we’re using the same S-box, it remains unchanged from the previous section:</p>
       <table class="monospaced-table" id="difference-distribution-table">
         <tr>
           <th>Input</th>
@@ -2713,7 +2715,7 @@
       </ul>
       <hr/>
       <p>We will now introduce the concept of differential trails (sometimes also called differential characteristics), which expands the idea of differential characteristics we talked about in the previous section. Differential trails are simply a way to keep track of the most likely XOR as two plaintexts make their way through multiple rounds of key addition, substitution, and permutation. The best way to understand it is via an example.</p>
-      <p>We begin by picking an input XOR to the cipher: 0xb0b0. Why we picked this input XOR in particular will be explained later on. Below is a figure showing the differential trail explained in the following paragraph. Note that the red lines in the figure do not represent ones in a plaintext but <em>ones in the XOR of two plaintexts as they travel through the cipher</em>.</p>
+      <p>We begin by picking an input XOR to the cipher: 0xb0b0. Why we picked this input XOR in particular will be explained later on. Below is a figure showing the differential trail explained in the following paragraph. Note that the red lines in the figure do not represent ones in a plaintext but <em>ones in the XOR of two plaintexts as they travel through the cipher</em>:</p>
       <div class="visualization">
         <div class="figure">
           <svg version="1.1" viewBox="40 15 963 845" xmlns="http://www.w3.org/2000/svg" id="diff-trail">
@@ -3286,7 +3288,7 @@
     </ol>
     <p>After these rounds comes a final round (making a total of 10, 12, or 14 rounds) which is the same as the previous ones but does not perform the <i>MixColumns</i> step.</p>
     <p>Note that the words “rows” and “columns” are used because the 16 bytes of the AES block are represented in a 4×4 array. If you want to see the exact S-box, P-box, details of the <i>MixColumns</i> step, and details of the key expansion algorithm, they can all be found within the specification in sections 5.1.1, 5.1.2, 5.1.3, and 5.2 respectively {cite(specification)}.</p>
-    <p>Below you can see a visual representation of the cipher. Note that because of the big block size of AES, the lines do not represent bits, as they did in the previous visualizations, but bytes.</p>
+    <p>Below you can see a visual representation of the cipher. Note that because of the big block size of AES, the lines do not represent bits, as they did in the previous visualizations, but bytes:</p>
     <div class="visualization">
       <div class="figure">
         <svg version="1.1" viewBox="-1 40 1300 670" xmlns="http://www.w3.org/2000/svg" id="aes">
