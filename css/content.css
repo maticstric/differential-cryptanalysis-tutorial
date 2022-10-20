@@ -20,7 +20,8 @@ h5 { font-size: 1.2em; }
 }
 
 #content p + p {
-  text-indent: 2em;
+  /*text-indent: 2em;*/
+  margin-top: 1em;
 }
 
 #content a {
@@ -28,11 +29,11 @@ h5 { font-size: 1.2em; }
 }
 
 #content hr {
-	border: none;
-	border-top: 2px solid;
-	height: 0;
-	margin: 2em auto;
-	width: 50%;
+  border: none;
+  border-top: 2px solid;
+  height: 0;
+  margin: 2em auto;
+  width: 50%;
 }
 
 #content span.section-num {
@@ -65,16 +66,16 @@ h5 { font-size: 1.2em; }
 
 #content > section > header > blockquote > cite,
 #content > section > footer > blockquote > cite {
-	display: block;
+  display: block;
   margin-top: 1em;
   text-align: right;
-	font-style: normal;
+  font-style: normal;
 }
 
 #content > section > header > blockquote > p,
 #content > section > footer > blockquote > p {
   text-align: justify;
-	font-style: italic;
+font-style: italic;
 }
 
 #content table#xor {
