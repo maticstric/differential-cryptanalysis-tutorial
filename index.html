@@ -49,10 +49,15 @@
   </section>
   <section>
     <h2>Components of Block Ciphers</h2>
-    <p>This section is a short refresher on the components which make up the block ciphers we’ll be breaking. If you feel confident in your knowledge of key addition, substitution, and permutation, you are encouraged to skip this section.</p>
+    <p>This section is a short refresher cryptography in general and on the components that make up the block ciphers we’ll be breaking. If you feel confident in your knowledge of block encryption, especially key addition, substitution, and permutation, you are encouraged to skip this section.</p>
     <section>
       <h3>Block Ciphers</h3>
-      <p>Block ciphers are symmetric key encryption algorithms that operate on a fixed-length <em>block</em> of bits. They take a fixed-length block as input and output an encrypted block of the same length. Decryption is done by running the encrypted block backward through the cipher. There are many ways to construct block ciphers, but many are made up of a repeated sequence of three simple transformations: key addition, substitution, and permutation.</p>
+      <p><em>Encryption</em> is a process by which a message that everyone can read (a plaintext) is converted into a hidden message (a ciphertext), that one can only read by having access to a secret key. The transformation of a plaintext into a ciphertext is called encryption. <em>Decryption</em> is simply the opposite process (the transformation of a ciphertext back into a plaintext). Since the age of computers, plaintexts and ciphertexts have almost always been represented by a binary string.</p>
+      <p>A <em>cipher</em> is the algorithm that defines this transformation (both encryption and decryption). There are many different kinds of ciphers, but they all generally fall into a few different categories.</p>
+      <p>A cipher can be either <em>symmetric</em> (the same key is used for encryption and decryption) or <em>asymmetric</em> (one key is used for encryption and another one for decryption).</p>
+      <p>Another common category of cipher is a block cipher. Block ciphers operate on a fixed-length <em>block</em> of bits. They take a fixed-length block as input and output an encrypted block of the same length. Decryption is done by running the encrypted block backward through the cipher. This is in contrast to stream ciphers in which each bit is encrypted separately as it comes in.</p>
+      <p>Cryptanalysis is the study of ciphers, specifically aimed at finding weaknesses that would allow an attacker to gain access to the plaintext without knowing the secret key. Finding such a weakness is called <em>breaking</em> the cipher. The history of cryptography is full of conflicts between the cipher designer and the cryptanalyst, each working to outdo one another.</p>
+      <p>Differential cryptanalysis is a method that can break some symmetric key block ciphers, so those will be the focus of this refresher and of the tutorial as a whole. There are many ways to construct block ciphers, but many are made up of a repeated sequence of three simple transformations: key addition, substitution, and permutation.</p>
     </section>
     <section>
       <h3>Key Addition</h3>
@@ -188,7 +193,7 @@
     <text x="60" y="150">0 1 0 1</text>
   </g>
 </svg>
-      <p>Just like S-boxes, P-boxes are released to the public. Though S-boxes serve as the main protection against differential cryptanalysis, P-boxes also play a vital role which we will discuss later.</p>
+      <p>Just like S-boxes, P-boxes are released to the public. Though S-boxes serve as the main protection against differential cryptanalysis, P-boxes also play a vital role which will be discussed in Section 6 of this tutorial.</p>
       <p>
     </section>
   </section>
