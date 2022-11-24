@@ -1713,8 +1713,8 @@
       <p>Now that we have discussed all three components let’s quickly review how the XOR interacts with them:</p>
       <ul>
         <li>Key addition: the XOR of two plaintexts <em>does not</em> change over key addition. We can therefore predict the output XOR with 100% certainty.</li>
-        <li>Substitution: the XOR of two plaintext <em>does</em> change over substitution. However, it does so probabilistically based on the input XOR and the difference distribution table of the S-box, which gives us some ability to predict it.</li>
-        <li>Permutation: the XOR of two plaintext <em>does</em> change over permutation. However, we can predict it with 100% certainty by simply sending the input XOR through the P-box.</li>
+        <li>Substitution: the XOR of two plaintexts <em>does</em> change over substitution. However, it does so probabilistically based on the input XOR and the difference distribution table of the S-box, which gives us some ability to predict it.</li>
+        <li>Permutation: the XOR of two plaintexts <em>does</em> change over permutation. However, we can predict it with 100% certainty by simply sending the input XOR through the P-box.</li>
       </ul>
       <hr/>
       <p>We will now introduce the concept of differential trails (sometimes also called differential characteristics), which expands the idea of differential characteristics we talked about in the previous section. Differential trails are simply a way to keep track of the most likely XOR as two plaintexts make their way through multiple rounds of key addition, substitution, and permutation. The best way to understand it is via an example.</p>
@@ -1810,7 +1810,7 @@
         </li>
         <li>
           <p><b>How do we break the other round keys?</b> Breaking the other round keys is also fairly simple. We continue breaking them from the fifth key up.</p>
-          <p>For the fourth, third, and second round key we first need to find a differential trail of appropriate length. For the fourth key, the trail stops at position <i>u</i><sub>3</sub>, for the third, at <i>u</i><sub>2</sub>, etc. You should notice that it’ll be easier to find ones with a bigger bias since the trails will be traveling through fever S-boxes. We must also remember to take permutation into account. It doesn’t change the process but it does affect which key bits are broken by an active S-box. For example, in our cipher, if the first S-box is active, we would actually be breaking bits 1, 5, 9, and 13.</p>
+          <p>For the fourth, third, and second round key we first need to find a differential trail of appropriate length. For the fourth key, the trail stops at position <i>u</i><sub>3</sub>, for the third, at <i>u</i><sub>2</sub>, etc. You should notice that it’ll be easier to find ones with a bigger bias since the trails will be traveling through fewer S-boxes. We must also remember to take permutation into account. It doesn’t change the process but it does affect which key bits are broken by an active S-box. For example, in our cipher, if the first S-box is active, we would actually be breaking bits 1, 5, 9, and 13.</p>
           <p>Another important thing to note is that to break the fourth key we need to be able to partially decrypt the ciphertext all the way to position <i>u</i><sub>3</sub>. To do that, however, we need the fifth key. In other words, we’re relying on our previous key guesses to break the other round keys. If our guess at the fifth key is incorrect, so will all our other round key guesses.</p>
           <p>Breaking the first key is trivial with simple XOR rules. Send one plaintext through the cipher, decrypt it to position <i>u</i><sub>1</sub> with round keys that are already broken, then simply XOR the original plaintext with this partially decrypted value to get the first round key.</p>
         </li>
